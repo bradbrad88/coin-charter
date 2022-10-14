@@ -1,0 +1,22 @@
+{
+  "name": "coin-charter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "cd client && webpack",
+    "dev": "cd client && webpack-dev-server --open",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bradbrad88/coin-charter.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bradbrad88/coin-charter/issues"
+  },
+  "homepage": "https://github.com/bradbrad88/coin-charter#readme"
+}
