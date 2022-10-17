@@ -3,15 +3,19 @@ import Homepage from "pages/Homepage";
 import Friends from "pages/Friends";
 import Dashboard from "pages/Dashboard";
 import Charts from "pages/Charts";
+import Header from "common/Header";
 
 const App = () => {
   return (
-    <Routes>
-      <Route index element={<Homepage />} />
-      <Route path="friends" element={<Friends />} />
-      <Route path="dashboard" element={<Dashboard />} />
-      <Route path="charts" element={<Charts />} />
-    </Routes>
+    <div>
+      <Header />
+      <Routes>
+        <Route index element={<Homepage />} />
+        <Route path="friends" element={<Friends />} />
+        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="charts" element={<Charts />} />
+      </Routes>
+    </div>
   );
 };
 
