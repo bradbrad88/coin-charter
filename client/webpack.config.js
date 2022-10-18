@@ -17,6 +17,7 @@ module.exports = {
     path: path.resolve(__dirname, "dist"),
     filename: "bundle.js",
   },
+
   target: "web",
   devServer: {
     port: "3000",
@@ -26,15 +27,17 @@ module.exports = {
     watchFiles: ["src/**/*.{js,ts,tsx,jsx}", "public/**/*"],
     open: true,
     hot: "only",
+    historyApiFallback: true,
   },
   resolve: {
-    extensions: [".tsx", ".ts", ".js"],
+    extensions: [".tsx", ".ts", ".js", ".jsx"],
     alias: {
       src: path.resolve(__dirname, "src/"),
-      components: path.resolve(__dirname, "src/components/"),
+      pages: path.resolve(__dirname, "src/pages/"),
       hooks: path.resolve(__dirname, "src/hooks/"),
-      contexts: path.resolve(__dirname, "src/contexts/"),
-      assets: path.resolve(__dirname, "src/assets/"),
+      contexts: path.resolve(__dirname, "src/components/contexts/"),
+      common: path.resolve(__dirname, "src/components/common/"),
+      features: path.resolve(__dirname, "src/components/features/"),
     },
   },
   module: {

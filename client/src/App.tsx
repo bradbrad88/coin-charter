@@ -1,5 +1,22 @@
+import { Routes, Route } from "react-router-dom";
+import Homepage from "pages/Homepage";
+import Friends from "pages/Friends";
+import Dashboard from "pages/Dashboard";
+import Charts from "pages/Charts";
+import Header from "common/Header";
+
 const App = () => {
-  return <div></div>;
+  return (
+    <div>
+      <Header />
+      <Routes>
+        <Route index element={<Homepage />} />
+        <Route path="friends" element={<Friends />} />
+        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="charts" element={<Charts />} />
+      </Routes>
+    </div>
+  );
 };
 
 export default App;
