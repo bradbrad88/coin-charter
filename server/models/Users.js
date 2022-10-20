@@ -5,6 +5,7 @@ const { Schema, model } = require("mongoose");
 
 // coins favourites can be subdoc of Users
 // Favourite coins schema
+
 const favouriteCoinSchema = new Schema({
   coinName: {
     type: String,
@@ -74,3 +75,4 @@ userSchema.virtual("favCoinCount").get(function () {
 const Users = model("users", userSchema);
 
 module.exports = Users;
+

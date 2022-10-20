@@ -1,3 +1,4 @@
+
 const router = require("express").Router();
 const chartRoutes = require("./chartRoute");
 const commentRoutes = require("./commentRoute");
@@ -12,3 +13,4 @@ router.use("/users", userRoutes);
 router.use("/coins", coinRoutes);
 
 module.exports = router;
+
