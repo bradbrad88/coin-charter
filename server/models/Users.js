@@ -24,6 +24,11 @@ const userSchema = new Schema(
       trim: true,
       maxLength: [15, "Too long, needs to be under 15 characters"],
     },
+    subTitle: {
+      type: String,
+      required: false,
+      maxLength: [24, "Too long, needs to be under 24 characters"],
+    },
     // optional if we want email and then can add email validator
     email: {
       type: String,
@@ -75,4 +80,3 @@ userSchema.virtual("favCoinCount").get(function () {
 const Users = model("users", userSchema);
 
 module.exports = Users;
-
