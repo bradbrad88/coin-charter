@@ -18,3 +18,5 @@ const userSeed = [
     favCoins: ["BTC"],
   },
 ];
+
+module.exports = { userSeed };
