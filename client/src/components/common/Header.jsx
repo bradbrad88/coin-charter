@@ -11,6 +11,7 @@ const Header = () => {
         <NavItem path={"/"} title={"Home"} />
         <NavItem path={"/friends"} title={"Friends"} />
         <NavItem path={"/charts"} title={"Charts"} />
+        <NavItem path={"/dashboard"} title={"Dashboard"} />
       </nav>
     </div>
   );
