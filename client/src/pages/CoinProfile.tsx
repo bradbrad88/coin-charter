@@ -1,9 +1,11 @@
 import CoinProfileCard from "../components/features/coinProfile/CoinProfileCard";
+import CoinComments from "../components/features/coinProfile/CoinComments";
 
 const CoinProfile = () => {
   return (
-    <div>
+    <div className="flex">
       <CoinProfileCard />
+      <CoinComments />
     </div>
   );
 };
