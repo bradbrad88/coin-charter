@@ -1,6 +1,6 @@
 const ProfileCard = () => {
   return (
-    <div className="grid grid-cols-[1fr,_2fr] w-[500px] p-5 rounded-sm gap-5 shadow-lg shadow-gray-400 m-5">
+    <div className="grid grid-cols-[1fr,_2fr] w-[500px] p-5 rounded-sm gap-5 shadow-lg shadow-gray-400 mt-20 ml-72">
       <div className="">
         <img
           src="https://source.unsplash.com/random/?person/"
