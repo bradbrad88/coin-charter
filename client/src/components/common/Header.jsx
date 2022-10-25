@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
-    <div className="flex justify-between bg-orange-300 p-5">
+    <div className="flex justify-between p-5 border mt-8">
       <Link to={"/"}>
-        <h1 className="text-5xl">Header</h1>
+        <h1 className="text-5xl pl-72">Coin Charter</h1>
       </Link>
-      <nav className="self-end flex gap-5">
+      <nav className="self-end flex gap-5 pr-72">
         <NavItem path={"/"} title={"Home"} />
         <NavItem path={"/friends"} title={"Friends"} />
         <NavItem path={"/charts"} title={"Charts"} />

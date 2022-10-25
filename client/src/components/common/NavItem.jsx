@@ -5,7 +5,7 @@ const NavItem = ({ title, path }) => {
   const active = location.pathname.split("/")[1] === path.replace("/", "");
   return (
     <Link
-      className={`hover:text-orange-600 transition-colors ${
+      className={`hover:text-indigo-600 hover:opacity-80 transition-colors ${
         active ? "text-xl" : ""
       }`}
       to={path}
