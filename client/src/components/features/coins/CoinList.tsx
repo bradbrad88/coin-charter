@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import useFetch, { Config } from "hooks/useFetch";
+import { Sparklines, SparklinesLine } from "react-sparklines";
 import Table, { HeaderObject } from "common/Table";
 import Favourite from "src/components/common/Favourite";
 import { formatCurrency, formatPercentage } from "src/utils/strings";
@@ -32,6 +33,7 @@ interface CoinMarketType {
   atl_date: string;
   roi: { times: number; currency: string; percentage: number } | null;
   last_updated: string;
+  sparkline_in_7d?: { price: number[] };
 }
 
 const CoinList = () => {
@@ -97,7 +99,17 @@ const CoinList = () => {
       alignRight: true,
     },
     {
-      title: "24hr Price Change",
+      title: "7d Sparkline",
+      processor(item) {
+        return (
+          <Sparklines data={item.sparkline_in_7d?.price || []}>
+            <SparklinesLine color="green" style={{ fill: "none" }} />
+          </Sparklines>
+        );
+      },
+    },
+    {
+      title: "24hr",
       processor(item) {
         return (
           <NumberHighlight
