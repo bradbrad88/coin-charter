@@ -11,12 +11,11 @@ const App = () => {
     <div>
       <Header />
       <Routes>
-        {/* <Route index element={<Homepage />} /> */}
+        <Route index element={<Homepage />} />
         <Route path="friends" element={<Friends />} />
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="charts" element={<Charts />} />
         // !!! DELETE AFTER DONE THE ACTUAL PAGE DONE UP
-        <Route index element={<CoinProfile />} />
       </Routes>
     </div>
   );
