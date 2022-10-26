@@ -1,4 +1,10 @@
-const CoinProfileCard = () => {
+import { CoinType } from "pages/CoinProfile";
+
+interface PropTypes {
+  coin: CoinType;
+}
+
+const CoinProfileCard = ({ coin }: PropTypes) => {
   return (
     <div className="flex flex-col rounded-sm gap-5 shadow-lg shadow-gray-400 m-5 p-5 w-[600px] h-[400px]">
       <div className="flex items-end justify-start gap-3">

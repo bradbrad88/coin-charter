@@ -6,7 +6,7 @@ import Favourite from "src/components/common/Favourite";
 import { formatCurrency, formatPercentage } from "src/utils/strings";
 import NumberHighlight from "common/NumberHighlight";
 
-interface CoinMarketType {
+export interface CoinMarketType {
   id: string;
   symbol: string;
   name: string;
@@ -61,7 +61,7 @@ const CoinList = () => {
   }, []);
 
   const urlGetter = (item: CoinMarketType) => {
-    return item.id;
+    return `/coin/${item.id}`;
   };
 
   const headers: HeaderObject<CoinMarketType>[] = [

@@ -15,7 +15,8 @@ const App = () => {
         <Route path="friends" element={<Friends />} />
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="charts" element={<Charts />} />
-        // !!! DELETE AFTER DONE THE ACTUAL PAGE DONE UP
+        {/* temporary in here while dev */}
+        <Route path="coin/:coinId" element={<CoinProfile />} />
       </Routes>
     </div>
   );
