@@ -14,6 +14,8 @@ const favouriteCoinSchema = new Schema({
   // Might need a coin id for reference to all coins that might be given from the third party api, not sure
 });
 
+// need to add in profile picture for user, think it's a string with img url
+
 // Users schema
 const userSchema = new Schema(
   {
@@ -24,6 +26,7 @@ const userSchema = new Schema(
       trim: true,
       maxLength: [15, "Too long, needs to be under 15 characters"],
     },
+    // need to add in password and add in validators
     subTitle: {
       type: String,
       required: false,
