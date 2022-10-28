@@ -26,7 +26,13 @@ const userSchema = new Schema(
       trim: true,
       maxLength: [15, "Too long, needs to be under 15 characters"],
     },
-    // need to add in password and add in validators
+    password: {
+      type: String,
+      unique: false,
+      required: true,
+      minLength: [8, "Password too short, 8 minimum."],
+      maxLength: [15, "Password too long, 15 maximum."],
+    },
     subTitle: {
       type: String,
       required: false,
