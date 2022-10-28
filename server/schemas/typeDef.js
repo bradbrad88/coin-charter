@@ -29,6 +29,14 @@ const typeDefs = gql`
     coinCharts: [Charts]
   }
 
+  type Charts {
+    _id: ID
+    coinId: Coins
+    coinName: String
+    chartDescription: String
+    chartComments: [Comments]
+  }
+
   type Query {
     users: [Users]
     comments: [Comments]
