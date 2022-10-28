@@ -21,6 +21,14 @@ const typeDefs = gql`
     username: Users
   }
 
+  type Coins {
+    _id: ID
+    coinName: String
+    coinId: String
+    coinComments: [Comments]
+    coinCharts: [Charts]
+  }
+
   type Query {
     users: [Users]
     comments: [Comments]
