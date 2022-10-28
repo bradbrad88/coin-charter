@@ -6,6 +6,7 @@ const typeDefs = gql`
   type Users {
     _id: ID
     username: String
+    password: String
     subTitle: String
     email: String
     bio: String
@@ -49,7 +50,7 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    
+
   }
 `;
 
