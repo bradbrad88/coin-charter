@@ -47,6 +47,10 @@ const typeDefs = gql`
     coin(coin: ID!): Coins
     chart(chart: ID!): Charts
   }
+
+  type Mutation {
+    
+  }
 `;
 
 module.exports = typeDefs;
