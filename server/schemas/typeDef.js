@@ -18,6 +18,7 @@ const typeDefs = gql`
     _id: ID
     commentText: String
     createdAt: Date
+    username: Users
   }
 
   type Query {
