@@ -1,6 +1,12 @@
 const { Charts, Coins, Comments, Users } = require("../models");
 
-//! DONT FOGET TO POPULATE WITH SUBDOCS FOR MOST
+// TODO add in sorting filters
+
+// ? can make into seperate folders
+
+// https://www.mongodb.com/community/forums/t/graphql-and-mongoose-relationship/106136
+// * info about the relationships for resolvers
+
 const resolvers = {
   Query: {
     users: async () => {
@@ -38,7 +44,14 @@ const resolvers = {
         .populate({ path: "comments", populate: "users" });
     },
   },
-  Mutation: {},
+  Mutation: {
+    addUser: async (parent, { username, password, subTitle, email, bio }) => {
+      return Users.create({ username, password, subTitle, email, bio });
+    },
+    removeUser: async (parent, { userId }) => {
+      return Users.findOneAndDelete({ _id: userId });
+    },
+  },
 };
 
 module.exports = resolvers;
