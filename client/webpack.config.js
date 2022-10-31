@@ -21,6 +21,9 @@ module.exports = {
   target: "web",
   devServer: {
     port: "3000",
+    proxy: {
+      "/graphql": "http://localhost:3001",
+    },
     static: {
       directory: path.join(__dirname, "public"),
     },
