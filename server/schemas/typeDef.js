@@ -3,54 +3,60 @@ const { gql } = require("apollo-server-express");
 // TODO create a scalar for date type
 
 const typeDefs = gql`
-  type Users {
+  type User {
     _id: ID
     username: String
     password: String
     subTitle: String
     email: String
     bio: String
-    comments: [Comments]
-    friends: [Users]
+    comments: [Comment]
+    friends: [User]
     favCoins: [String]
   }
 
-  type Comments {
+  type Comment {
     _id: ID
     commentText: String
-    createdAt: Date
-    username: Users
+    createdAt: String
+    username: User
   }
 
-  type Coins {
+  type Coin {
     _id: ID
     coinName: String
     coinId: String
-    coinComments: [Comments]
-    coinCharts: [Charts]
+    coinComments: [Comment]
+    coinCharts: [Chart]
   }
 
-  type Charts {
+  type Chart {
     _id: ID
-    coinId: Coins
+    coinId: Coin
     coinName: String
     chartDescription: String
-    chartComments: [Comments]
+    chartComments: [Comment]
   }
 
   type Query {
-    users: [Users]
-    comments: [Comments]
-    coins: [Coins]
-    charts: [Charts]
-    user(user: ID!): Users
-    comment(comment: ID!): Comments
-    coin(coin: ID!): Coins
-    chart(chart: ID!): Charts
+    users: [User]
+    comments: [Comment]
+    coins: [Coin]
+    charts: [Chart]
+    user(user: ID!): User
+    comment(comment: ID!): Comment
+    coin(coin: ID!): Coin
+    chart(chart: ID!): Chart
   }
 
   type Mutation {
-
+    addUser(
+      username: String!
+      password: String!
+      subTitle: String!
+      email: String!
+      bio: String
+    ): User
   }
 `;
 
