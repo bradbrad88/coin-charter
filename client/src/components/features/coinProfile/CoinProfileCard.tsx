@@ -5,8 +5,6 @@ interface PropTypes {
 }
 
 const CoinProfileCard = ({ coin }: PropTypes) => {
-  // TODO need to make a function that will determine what color the text and arrow is based on if the price is up or down and need to do it to determine the direction of the arrow
-
   const dataTimeFrame = [
     {
       timeframe: "1h",
@@ -78,10 +76,6 @@ const CoinProfileCard = ({ coin }: PropTypes) => {
             USD ${coin.market_data.current_price.usd}
           </h2>
           {priceDifference("24h", coin.market_data.price_change_percentage_24h)}
-          {/* <small className={`text-green-500`}>
-            24h: {coin.market_data.market_cap_change_percentage_24}%{" "}
-            <i className="fa-sharp fa-solid fa-arrow-up text-green-500"></i>
-          </small> */}
         </div>
 
         <div className="flex flex-col gap-5">
