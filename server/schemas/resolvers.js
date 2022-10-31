@@ -48,9 +48,9 @@ const resolvers = {
     addUser: async (parent, { username, password, subTitle, email, bio }) => {
       return Users.create({ username, password, subTitle, email, bio });
     },
-    removeUser: async (parent, { userId }) => {
-      return Users.findOneAndDelete({ _id: userId });
-    },
+    // removeUser: async (parent, { userId }) => {
+    //   return Users.findOneAndDelete({ _id: userId });
+    // },
   },
 };
 
