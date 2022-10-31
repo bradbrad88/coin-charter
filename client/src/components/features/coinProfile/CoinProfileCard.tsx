@@ -29,17 +29,29 @@ const CoinProfileCard = ({ coin }: PropTypes) => {
   const priceDifference = (timeframe: string, data: number) => {
     const greenOrRed = data > 0 ? "green" : "red";
     const upOrDown = data > 0 ? "up" : "down";
-    return (
-      <li className="flex justify-between" key={timeframe}>
-        {timeframe} price change:{" "}
-        <span className={`text-${greenOrRed}-500`}>
-          {data.toFixed(2)}%{" "}
+
+    if (timeframe === "24h") {
+      return (
+        <small className={`text-${greenOrRed}-500`}>
+          24h: {data.toFixed(2)}%{" "}
           <i
             className={`fa-sharp fa-solid fa-arrow-${upOrDown} text-${greenOrRed}-500`}
           ></i>
-        </span>
-      </li>
-    );
+        </small>
+      );
+    } else {
+      return (
+        <li className="flex justify-between" key={timeframe}>
+          {timeframe} price change:{" "}
+          <span className={`text-${greenOrRed}-500`}>
+            {data.toFixed(2)}%{" "}
+            <i
+              className={`fa-sharp fa-solid fa-arrow-${upOrDown} text-${greenOrRed}-500`}
+            ></i>
+          </span>
+        </li>
+      );
+    }
   };
 
   console.log(coin);
@@ -65,10 +77,11 @@ const CoinProfileCard = ({ coin }: PropTypes) => {
           >
             USD ${coin.market_data.current_price.usd}
           </h2>
-          <small className="text-green-500">
-            24h: 3.4%{" "}
+          {priceDifference("24h", coin.market_data.price_change_percentage_24h)}
+          {/* <small className={`text-green-500`}>
+            24h: {coin.market_data.market_cap_change_percentage_24}%{" "}
             <i className="fa-sharp fa-solid fa-arrow-up text-green-500"></i>
-          </small>
+          </small> */}
         </div>
 
         <div className="flex flex-col gap-5">
