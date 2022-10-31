@@ -5,8 +5,9 @@ interface PropTypes {
 }
 
 const CoinProfileCard = ({ coin }: PropTypes) => {
+  // console.log(coin);
   return (
-    <div className="flex flex-col rounded-sm gap-5 shadow-lg shadow-gray-400 m-5 p-5 w-[600px] h-[400px]">
+    <div className="flex flex-col rounded-sm gap-5 shadow-lg shadow-gray-400 m-5 p-5 w-[1100px] h-[400px]">
       <div className="flex items-end justify-start gap-3">
         <img
           className="w-[40px]"
