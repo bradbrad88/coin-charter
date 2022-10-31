@@ -6,10 +6,13 @@ import React, { useEffect, useState } from "react";
 import { PropagateLoader } from "react-spinners";
 
 export interface CoinType {
+  market_data: any;
   id: string;
   symbol: string;
   name: string;
   image: string;
+  description: any;
+  en: any;
   current_price: number | null;
   market_cap: number | null;
   market_cap_rank: number | null;
