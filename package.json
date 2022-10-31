@@ -5,8 +5,10 @@
   "main": "index.js",
   "scripts": {
     "build": "cd client && webpack",
-    "dev": "cd client && npm run dev",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "concurrently \"cd server && npm run dev\" \"cd client && npm run dev\"",
+    "seed": "cd server && npm run seed",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install": "cd client && npm i && cd ../server && npm i"
   },
   "repository": {
     "type": "git",
@@ -24,11 +26,8 @@
     "@types/prettier": "^2.7.1",
     "@typescript-eslint/eslint-plugin": "^5.40.0",
     "@typescript-eslint/parser": "^5.40.0",
+    "concurrently": "^7.5.0",
     "eslint": "^8.25.0",
     "eslint-plugin-react": "^7.31.10"
-  },
-  "dependencies": {
-    "express": "^4.18.2",
-    "mongoose": "^6.6.5"
   }
 }
