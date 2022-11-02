@@ -12,6 +12,8 @@ export type HeaderObject<T> = {
   title: React.ReactNode;
   processor: (item: T) => React.ReactNode;
   alignRight?: boolean;
+  width?: number;
+  weight?: number;
 };
 
 interface Proptypes<T> {
@@ -29,6 +31,10 @@ const Table = <T extends {}>({
 }: Proptypes<T>) => {
   const nav = useNavigate();
   const body = mapTable(data, headers, urlGetter);
+  const totalWeight = headers.reduce(
+    (total, header) => (header.width ? total : (header.weight || 1) + total),
+    0,
+  );
 
   const renderColumnHeaders = () => (
     <tr>
@@ -36,8 +42,15 @@ const Table = <T extends {}>({
       {headers.map((header, idx) => {
         // Header can be a string: render as is, or an object: render header.content
         const { title } = header;
+        const width = header.width
+          ? header.width + "px"
+          : ((header.weight || 1) / totalWeight) * 100 + "%";
         return (
-          <th key={idx} className="py-3 px-5">
+          <th
+            key={idx}
+            className={`px-1 py-3 md:px-3 box-content`}
+            style={{ width }}
+          >
             {title}
           </th>
         );
@@ -56,7 +69,7 @@ const Table = <T extends {}>({
       return (
         <tr
           key={"body" + idx}
-          className={`border-t-[1px] border-zinc-100  hover:bg-zinc-100 cursor-pointer`}
+          className={`border-t-[1px] border-zinc-100 hover:bg-zinc-100 cursor-pointer`}
           onClick={navigate}
         >
           {content.map((column, cellIdx) => {
@@ -65,7 +78,9 @@ const Table = <T extends {}>({
             return (
               <td
                 key={"cell" + idx + cellIdx}
-                className={`${alignRight ? "text-right" : ""} py-3 px-5`}
+                className={`text-ellipsis whitespace-nowrap overflow-hidden py-3 px-1 md:px-3 ${
+                  alignRight ? "text-right" : ""
+                }`}
               >
                 {column}
               </td>
@@ -78,13 +93,13 @@ const Table = <T extends {}>({
 
   return (
     <div className="flex flex-col px-2">
-      <table className="">
+      <table className="table-fixed w-full">
         <thead>{renderColumnHeaders()}</thead>
         <tbody>{renderBody()}</tbody>
       </table>
       {/* Display spinner while loading */}
       {working && (
-        <div>
+        <div className="flex flex-col h-8 justify-center">
           <PropagateLoader
             size={12}
             color={"#0004"}
