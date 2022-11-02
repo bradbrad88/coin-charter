@@ -5,6 +5,7 @@ import Table, { HeaderObject } from "common/Table";
 import Favourite from "src/components/common/Favourite";
 import { formatCurrency, formatPercentage } from "src/utils/strings";
 import NumberHighlight from "common/NumberHighlight";
+import FieldSorter from "src/components/common/FieldSorter";
 
 export interface CoinMarketType {
   id: string;
@@ -34,21 +35,38 @@ export interface CoinMarketType {
   roi: { times: number; currency: string; percentage: number } | null;
   last_updated: string;
   sparkline_in_7d?: { price: number[] };
+  price_change_percentage_7d_in_currency: number | null;
 }
+
+type CoinMarketOrder =
+  | "market_cap_desc"
+  | "market_cap_asc"
+  | "gecko_desc"
+  | "gecko_asc"
+  | "volume_desc"
+  | "volume_asc"
+  | "price_desc"
+  | "price_asc"
+  | "price_change_percentage_desc"
+  | "price_change_percentage_asc";
+
+const DEFAULT_ORDER = "gecko_desc";
 
 const CoinList = () => {
   const [data, setData] = useState<CoinMarketType[]>([]);
+  const [order, setOrder] = useState<CoinMarketOrder>(DEFAULT_ORDER);
   const { fetchJSON, working } = useFetch();
 
-  const getData = useCallback(async () => {
+  const getData = useCallback(async (order: CoinMarketOrder) => {
     const req: Config = {
       url: "https://api.coingecko.com/api/v3/coins/markets",
       params: {
         vs_currency: "aud",
-        order: "market_cap_desc",
+        order,
         per_page: "20",
-        page: "3",
+        page: "1",
         sparkline: true,
+        price_change_percentage: "7d",
       },
     };
     const data = await fetchJSON<CoinMarketType[]>(req);
@@ -57,8 +75,13 @@ const CoinList = () => {
   }, []);
 
   useEffect(() => {
-    getData();
-  }, []);
+    getData(order);
+  }, [order]);
+
+  const setSortOrder = (value: CoinMarketOrder | null) => {
+    if (!value) return setOrder(DEFAULT_ORDER);
+    setOrder(value);
+  };
 
   const urlGetter = (item: CoinMarketType) => {
     return `/coin/${item.id}`;
@@ -66,59 +89,112 @@ const CoinList = () => {
 
   const headers: HeaderObject<CoinMarketType>[] = [
     {
-      title: "Fav",
+      title: "",
       processor() {
         return <Favourite />;
       },
+      width: 20,
+      weight: 1,
+    },
+    {
+      title: "",
+      processor(item) {
+        return (
+          <div className="w-[20px]">
+            <img className="w-full" src={item.image} />
+          </div>
+        );
+      },
+
+      width: 20,
     },
     {
       title: "Name",
       processor(item) {
         return `${item.symbol.toUpperCase()}-${item.name}`;
       },
+      weight: 2.5,
     },
     {
-      title: "Price",
+      title: (
+        <FieldSorter
+          setOrder={setSortOrder}
+          current={order}
+          asc="price_asc"
+          desc="price_desc"
+        >
+          Price
+        </FieldSorter>
+      ),
       processor(item) {
         return formatCurrency(item.current_price || 0);
       },
       alignRight: true,
+      weight: 2.2,
     },
     {
-      title: "Market Cap",
+      title: (
+        <FieldSorter
+          setOrder={setSortOrder}
+          current={order}
+          asc="market_cap_asc"
+          desc="market_cap_desc"
+        >
+          Market Cap
+        </FieldSorter>
+      ),
       processor(item) {
         return formatCurrency(item.market_cap || 0);
       },
       alignRight: true,
+      weight: 3.2,
     },
     {
-      title: "Circulating Supply",
+      title: (
+        <FieldSorter
+          setOrder={setSortOrder}
+          current={order}
+          asc="volume_asc"
+          desc="volume_desc"
+        >
+          Volume
+        </FieldSorter>
+      ),
       processor(item) {
-        return formatCurrency(item.circulating_supply || 0);
+        return formatCurrency(item.total_volume || 0);
       },
       alignRight: true,
+      weight: 3.2,
     },
     {
-      title: "7d Sparkline",
+      title: "7 Days",
       processor(item) {
+        const colour =
+          (item.price_change_percentage_7d_in_currency || 0) < 0
+            ? "red"
+            : "green";
         return (
-          <Sparklines data={item.sparkline_in_7d?.price || []}>
-            <SparklinesLine color="green" style={{ fill: "none" }} />
-          </Sparklines>
+          <div className="w-28">
+            <Sparklines data={item.sparkline_in_7d?.price || []}>
+              <SparklinesLine color={colour} style={{ fill: "none" }} />
+            </Sparklines>
+          </div>
         );
       },
+      weight: 2,
     },
     {
-      title: "24hr",
+      title: "7 Day %",
       processor(item) {
         return (
           <NumberHighlight
-            value={item.price_change_percentage_24h || 0}
+            value={item.price_change_percentage_7d_in_currency || 0}
             formatter={formatPercentage}
           />
         );
       },
       alignRight: true,
+      weight: 2,
     },
   ];
 
