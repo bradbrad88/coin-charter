@@ -1,7 +1,12 @@
 const CoinComments = () => {
   return (
     <div className="flex flex-col rounded-sm gap-1 shadow-lg shadow-gray-400 m-4 p-5 w-[400px] h-screen">
-      <h1 className="text-lg font-bold">Comments</h1>
+      <div className="flex gap-3 items-center">
+        <h1 className="text-lg font-bold">Comments</h1>
+        <i className="fa-regular fa-comments text-lg"></i>
+      </div>
+
+      {/*  MAKE THIS SECTION SEPERATE COMPONENT AND MAP THE DATA THROUGH*/}
       <ul className="flex flex-col gap-1 overflow-y-scroll">
         <li className="border-black-50 border-solid border-2 flex gap-2 width-5/6 h-[100px]">
           <div className="flex flex-col items-center w-1/6 gap-1 p-1">
