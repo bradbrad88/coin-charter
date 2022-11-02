@@ -35,7 +35,6 @@ const App = () => {
           <Route path="friends" element={<Friends />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="charts" element={<Charts />} />
-          {/* temporary in here while dev */}
           <Route path="coin/:coinId" element={<CoinProfile />} />
           <Route path="login" element={<Login />} />
           <Route path="signup" element={<Signup />} />
