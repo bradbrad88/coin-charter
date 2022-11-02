@@ -105,7 +105,7 @@ const CoinProfileCard = ({ coin }: PropTypes) => {
       </div>
       <div className="">
         <h3 className="font-bold">Description</h3>
-        <p className="overflow-y-auto h-[340px] w-auto">
+        <p className="overflow-y-scroll h-[340px] w-auto">
           {coin.description.en}
         </p>
       </div>
