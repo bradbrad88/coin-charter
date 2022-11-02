@@ -54,7 +54,7 @@ const CoinProfileCard = ({ coin }: PropTypes) => {
 
   console.log(coin);
   return (
-    <div className="flex rounded-sm gap-5 shadow-lg shadow-gray-400 m-5 p-5 w-[1100px] h-[400px]">
+    <div className="flex rounded-sm gap-5 shadow-lg shadow-gray-400 p-5 m-5 w-[1050px] h-[400px]">
       <div className="flex flex-col ">
         <div className="flex items-start justify-start gap-3">
           <div className="flex flex-col justify-end items-center">
@@ -105,7 +105,9 @@ const CoinProfileCard = ({ coin }: PropTypes) => {
       </div>
       <div className="">
         <h3 className="font-bold">Description</h3>
-        <p className="overflow-y-auto h-[340px]">{coin.description.en}</p>
+        <p className="overflow-y-auto h-[340px] w-auto">
+          {coin.description.en}
+        </p>
       </div>
     </div>
   );

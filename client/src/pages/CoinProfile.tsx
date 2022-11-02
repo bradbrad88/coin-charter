@@ -1,5 +1,6 @@
 import CoinProfileCard from "../components/features/coinProfile/CoinProfileCard";
 import CoinComments from "../components/features/coinProfile/CoinComments";
+import CoinCharts from "../components/features/coinProfile/CoinCharts";
 import { BrowserRouter, Routes, Route, useParams } from "react-router-dom";
 import useFetch, { Config } from "../hooks/useFetch";
 import React, { useEffect, useState } from "react";
@@ -56,10 +57,13 @@ const CoinProfile = () => {
   return (
     <div className="flex">
       {coin && (
-        <>
-          <CoinProfileCard coin={coin} />
+        <div className="flex">
+          <div className="flex flex-col">
+            <CoinProfileCard coin={coin} />
+            <CoinCharts />
+          </div>
           <CoinComments />
-        </>
+        </div>
       )}
       {working && (
         <div>
