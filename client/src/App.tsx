@@ -13,6 +13,7 @@ import {
   createHttpLink,
 } from "@apollo/client";
 import Signup from "./pages/Signup";
+import { Provider as UserProvider } from "contexts/UserContext";
 
 // Construct our main GraphQL API endpoint
 const httpLink = createHttpLink({
@@ -28,18 +29,20 @@ const client = new ApolloClient({
 const App = () => {
   return (
     <ApolloProvider client={client}>
-      <div>
-        <Header />
-        <Routes>
-          <Route index element={<Homepage />} />
-          <Route path="friends" element={<Friends />} />
-          <Route path="dashboard" element={<Dashboard />} />
-          <Route path="charts" element={<Charts />} />
-          <Route path="coin/:coinId" element={<CoinProfile />} />
-          <Route path="login" element={<Login />} />
-          <Route path="signup" element={<Signup />} />
-        </Routes>
-      </div>
+      <UserProvider>
+        <div>
+          <Header />
+          <Routes>
+            <Route index element={<Homepage />} />
+            <Route path="friends" element={<Friends />} />
+            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="charts" element={<Charts />} />
+            <Route path="coin/:coinId" element={<CoinProfile />} />
+            <Route path="login" element={<Login />} />
+            <Route path="signup" element={<Signup />} />
+          </Routes>
+        </div>
+      </UserProvider>
     </ApolloProvider>
   );
 };
