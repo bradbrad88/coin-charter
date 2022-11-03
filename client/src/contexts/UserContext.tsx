@@ -5,10 +5,11 @@ import { ADD_USER } from "src/graphql/queries";
 
 interface Ctx {
   user: User | null;
-  loginUser: (newUser: User) => void;
+  loginUser: (user: User) => void;
   logoutUser: () => void;
   signUpUser: (newUser: NewUser) => void;
   loading: boolean;
+  isLoggedIn: boolean;
 }
 interface User {
   _id: string;
@@ -43,8 +44,8 @@ export const Provider = ({ children }: Prototypes) => {
     }
   }, [data]);
 
-  const loginUser = (newUser: User) => {
-    setUser(newUser);
+  const loginUser = (user: User) => {
+    setUser(user);
   };
 
   const logoutUser = () => {
@@ -56,8 +57,12 @@ export const Provider = ({ children }: Prototypes) => {
     addUser({ variables: { ...newUser } });
   };
 
+  const isLoggedIn = !!user;
+
   return (
-    <UserProvider value={{ user, loginUser, logoutUser, signUpUser, loading }}>
+    <UserProvider
+      value={{ user, loginUser, logoutUser, signUpUser, loading, isLoggedIn }}
+    >
       {children}
     </UserProvider>
   );
