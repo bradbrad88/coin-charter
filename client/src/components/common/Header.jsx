@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import SearchBar from "./SearchBar";
 import { TbArrowBackUp } from "react-icons/tb";
 import logo from "src/assets/logo.png";
+import invertLogo from "src/assets/logo small invert.png";
 
 const Header = () => {
   const [hideNav, setHideNav] = useState(true);
@@ -17,20 +18,23 @@ const Header = () => {
   }, []);
   return (
     <div className="flex lg:justify-between justify-center p-5 border-b relative">
-      <div className="flex lg:hidden absolute left-0 pl-5">
+      <div className="flex lg:hidden absolute left-0 top-7 pl-5">
         <HamburgerButton onClick={() => setHideNav(false)} />
       </div>
       <Link to={"/"} className="center">
         <div>
-          <img src={logo} alt="logo" className="h-20" />
+          <img src={logo} alt="logo" className="md:h-20 h-10" />
         </div>
       </Link>
       <div
         className={`${
           hideNav ? "" : "translate-x-full"
-        } fixed overflow-hidden top-0 bottom-0 left-[-100vw] right-[100vw] transition-transform bg-white lg:relative lg:flex lg:translate-x-0 lg:transition-none lg:left-0`}
+        } fixed overflow-hidden top-0 bottom-0 left-[-100vw] right-[100vw] transition-transform bg-white lg:relative lg:flex lg:translate-x-0 lg:transition-none lg:left-0 z-10`}
       >
         <div className="flex flex-col gap-3 bg-indigo-800 bg-opacity-80 p-6 h-full w-full lg:p-0 lg:bg-white">
+          <div className="absolute w-full left-0 top-3 flex justify-center lg:hidden">
+            <img src={invertLogo} alt="inverted logo" className="h-10" />
+          </div>
           <div className="flex lg:hidden">
             <button
               className="ml-auto translate-x-2 -translate-y-2"
