@@ -38,7 +38,7 @@ module.exports = {
       src: path.resolve(__dirname, "src/"),
       pages: path.resolve(__dirname, "src/pages/"),
       hooks: path.resolve(__dirname, "src/hooks/"),
-      contexts: path.resolve(__dirname, "src/components/contexts/"),
+      contexts: path.resolve(__dirname, "src/contexts/"),
       common: path.resolve(__dirname, "src/components/common/"),
       features: path.resolve(__dirname, "src/components/features/"),
     },
