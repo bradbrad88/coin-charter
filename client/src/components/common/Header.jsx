@@ -17,21 +17,21 @@ const Header = () => {
     return () => window.removeEventListener("resize", onResize);
   }, []);
   return (
-    <div className="flex lg:justify-between justify-center p-5 border-b relative">
+    <div className="flex lg:justify-between justify-center p-5 border-b relative gap-5">
       <div className="flex lg:hidden absolute left-0 top-7 pl-5">
         <HamburgerButton onClick={() => setHideNav(false)} />
       </div>
-      <Link to={"/"} className="center">
+      <Link to={"/"} className="">
         <div>
-          <img src={logo} alt="logo" className="md:h-20 h-10" />
+          <img src={logo} alt="logo" className="h-8 sm:h-20" />
         </div>
       </Link>
       <div
         className={`${
           hideNav ? "" : "translate-x-full"
-        } fixed overflow-hidden top-0 bottom-0 left-[-100vw] right-[100vw] transition-transform bg-white lg:relative lg:flex lg:translate-x-0 lg:transition-none lg:left-0 z-10`}
+        } fixed overflow-hidden top-0 bottom-0 left-[-100vw] right-[100vw] transition-transform bg-white w-full lg:relative lg:flex lg:translate-x-0 lg:transition-none lg:left-0 z-10`}
       >
-        <div className="flex flex-col gap-3 bg-indigo-800 bg-opacity-80 p-6 h-full w-full lg:p-0 lg:bg-white">
+        <div className="flex lg:items-end flex-col lg:flex-row gap-3 bg-indigo-800 bg-opacity-80 p-6 h-full w-full lg:justify-between lg:p-0 lg:bg-white">
           <div className="absolute w-full left-0 top-3 flex justify-center lg:hidden">
             <img src={invertLogo} alt="inverted logo" className="h-10" />
           </div>
@@ -43,8 +43,10 @@ const Header = () => {
               <TbArrowBackUp color="white" size={24} />
             </button>
           </div>
-          <div className="flex flex-col lg:flex-row-reverse gap-5 lg:items-center">
+          <div className="w-full lg:px-10">
             <SearchBar />
+          </div>
+          <div className="flex flex-col lg:flex-row-reverse gap-5 lg:items-center">
             <NavBar close={() => setHideNav(true)} />
           </div>
         </div>
