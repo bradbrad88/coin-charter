@@ -1,13 +1,15 @@
+import Button from "common/Button";
+
 const ProfileCard = () => {
   return (
-    <div className="grid grid-cols-[1fr,_2fr] w-[500px] p-5 rounded-sm gap-5 shadow-lg shadow-gray-400 mt-20 ml-72">
-      <div className="">
+    <div className="sm:p-5 rounded-sm md:shadow-lg shadow-gray-400 grid grid-cols-1 md:grid-cols-2">
+      <div className="bg-gradient-to-b from-indigo-800 opacity-80 flex justify-center p-5">
         <img
           src="https://source.unsplash.com/random/?person/"
-          className="aspect-[3/4] object-cover block w-full rounded-sm"
+          className="aspect-[4/4] object-cover block w-1/2 rounded-full border-white border-4"
         />
       </div>
-      <div className="border-l pl-5">
+      <div className="md:border-l p-5 grid">
         <div className="flex justify-between gap-5">
           <h1 className="text-2xl break-all">Ben Teague</h1>
           <h3 className="self-end text-slate-500">coin horder</h3>
@@ -22,14 +24,10 @@ const ProfileCard = () => {
           <p>Friends: 100</p>
           <p>Posts: 50</p>
         </div>
-        <div className="flex justify-between gap-5 pt-5">
-          <button className="border rounded-sm w-28 py-1 bg-opacity-80 bg-indigo-600 hover:bg-opacity-100 text-white transition-all duration-75">
-            Message
-          </button>
-          <button className="border rounded-sm w-28 py-1 bg-opacity-80 bg-indigo-600 hover:bg-opacity-100 text-white transition-all duration-75">
-            Add
-          </button>
-          {/* the above buttons will be condition if logged in and be replaced with an edit button*/}
+        <div className="flex justify-between gap-5 pt-5 row-start-2">
+          <Button onClick={() => {}}>Message</Button>
+          <Button onClick={() => {}}>Add Friend</Button>
+          <Button onClick={() => {}}>...</Button>
         </div>
       </div>
     </div>
