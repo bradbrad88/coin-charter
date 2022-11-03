@@ -1,18 +1,8 @@
 // Import Mongoose methods
 const { Schema, model } = require("mongoose");
+const bcrypt = require("bcrypt");
 
 // setup validators here
-
-// coins favourites can be subdoc of Users
-// Favourite coins schema
-
-const favouriteCoinSchema = new Schema({
-  coinName: {
-    type: String,
-    required: true,
-  },
-  // Might need a coin id for reference to all coins that might be given from the third party api, not sure
-});
 
 // need to add in profile picture for user, think it's a string with img url
 
@@ -64,7 +54,8 @@ const userSchema = new Schema(
         ref: "friends",
       },
     ],
-    favCoins: [favouriteCoinSchema],
+    favCoins: [String],
+    image: { type: String, required: false },
   },
   {
     toJSON: {
@@ -84,6 +75,18 @@ userSchema.virtual("friendsCount").get(function () {
 userSchema.virtual("favCoinCount").get(function () {
   return this.favCoins.length;
 });
+
+userSchema.pre("save", async function (next) {
+  if (this.isNew || this.isModified("password")) {
+    const saltRounds = 10;
+    this.password = await bcrypt.hash(this.password, saltRounds);
+  }
+  next();
+});
+
+userSchema.methods.isCorrectPassword = async function (password) {
+  return bcrypt.compare(password, this.password);
+};
 
 // Create user model with userSchema
 const Users = model("users", userSchema);

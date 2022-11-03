@@ -13,7 +13,11 @@ connection.once("open", async () => {
   await Users.deleteMany({});
 
   // Insert new dataseed into models
-  await Users.collection.insertMany(userSeed);
+  const userPromises = userSeed.map(async (user) => {
+    await Users.create(user);
+  });
+
+  await Promise.all(userPromises);
 
   console.log("Seed complete");
 });
