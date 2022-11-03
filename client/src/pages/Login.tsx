@@ -21,12 +21,6 @@ const Login = () => {
     <div className="p-3 md:w-96 md:mx-auto">
       <div className="flex justify-between">
         <h2 className="text-lg font-bold">Login</h2>
-        <Link
-          to={"/signup"}
-          className="bg-lime-400 border-[1px] border-lime-600 bg-opacity-70 py-1 px-2 rounded-sm hover:bg-opacity-100 transition-colors "
-        >
-          Create a new account
-        </Link>
       </div>
       <form className="flex flex-col gap-3">
         <FormField
@@ -44,6 +38,15 @@ const Login = () => {
           placeholder="Password..."
         />
         <Button onClick={onLogin}>Login</Button>
+        <div>
+          Don't already have an account?{" "}
+          <Link
+            to={"/signup"}
+            className="hover:text-indigo-700 transition-colors font-bold"
+          >
+            Sign Up
+          </Link>
+        </div>
       </form>
     </div>
   );
