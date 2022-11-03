@@ -6,8 +6,12 @@ const TopCharts = () => {
         {/* HAVE THIS PART DYNAMIC COMPONENT FROM DATABASE*/}
         <div className="flex flex-col h-full">
           <div className="flex gap-3 items-center">
-            <h1 className="font-bold text-md">Ethereum Is Going Down</h1>
-            <p className="italic font-bold text-sm">By Ben Smerd</p>
+            <h1 className="font-bold text-md text-indigo-600">
+              Ethereum Is Going Down
+            </h1>
+            <p className="italic font-bold text-sm text-slate-500">
+              By Ben Smerd
+            </p>
             <div className="flex flex-col">
               <i className="fa-regular fa-thumbs-up text-[14px]"></i>
               <p className="text-[8px]">121230</p>

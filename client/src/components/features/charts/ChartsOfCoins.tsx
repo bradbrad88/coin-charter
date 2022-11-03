@@ -4,8 +4,8 @@ const ChartsOfCoins = () => {
   return (
     <div className="flex">
       <form>
-        <h1>
-          View Charts For: <span>Bitcoin</span>
+        <h1 className="font-bold">
+          View Charts For: <span className="italic">Bitcoin</span>
         </h1>
         <input
           type="text"
