@@ -4,6 +4,7 @@ import HamburgerButton from "./HamburgerButton";
 import { useState, useEffect } from "react";
 import SearchBar from "./SearchBar";
 import { TbArrowBackUp } from "react-icons/tb";
+import logo from "src/assets/logo.png";
 
 const Header = () => {
   const [hideNav, setHideNav] = useState(true);
@@ -20,9 +21,9 @@ const Header = () => {
         <HamburgerButton onClick={() => setHideNav(false)} />
       </div>
       <Link to={"/"} className="center">
-        <h1 className="text-xl whitespace-nowrap text-center">
-          Coin Charter pp
-        </h1>
+        <div>
+          <img src={logo} alt="logo" className="h-20" />
+        </div>
       </Link>
       <div
         className={`${
