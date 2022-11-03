@@ -9,6 +9,7 @@ const NavBar = ({ close }) => {
       <NavItem path={"/dashboard"} title={"Dashboard"} onClick={close} />
       {/*temporary in here while dev */}
       <NavItem path={"/coin"} title={"Coin"} onClick={close} />
+      <NavItem path="/login" title={"Login"} onClick={close} />
     </nav>
   );
 };
