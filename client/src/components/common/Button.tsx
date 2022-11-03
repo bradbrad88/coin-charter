@@ -14,7 +14,7 @@ const Button = ({ children, onClick, loading }: Proptypes) => {
 
   return (
     <button
-      disabled={!loading}
+      disabled={loading}
       className="h-10 bg-indigo-800 bg-opacity-80 text-white hover:bg-opacity-100 transition-colors p-2 rounded-sm"
       onClick={handleClick}
     >

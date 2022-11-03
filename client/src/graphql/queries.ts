@@ -5,7 +5,7 @@ export const ADD_USER = gql`
     addUser(username: $username, password: $password, email: $email) {
       _id
       username
-      email
+      image
     }
   }
 `;
