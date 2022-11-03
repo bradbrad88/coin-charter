@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { useMutation } from "@apollo/client";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import FormField from "common/FormField";
 import Button from "common/Button";
-import { ADD_USER } from "src/graphql/queries";
+import useUserCtx from "src/contexts/UserContext";
 
 const Signup = () => {
   const [formState, setFormState] = useState({
@@ -11,7 +11,14 @@ const Signup = () => {
     email: "",
   });
 
-  const [addUser, { data, loading }] = useMutation(ADD_USER);
+  const { signUpUser, loading, user } = useUserCtx();
+  const nav = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      nav("/");
+    }
+  }, [user]);
 
   const inputChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     setFormState((prevState) => ({
@@ -21,7 +28,9 @@ const Signup = () => {
   };
 
   const onLogin: React.PointerEventHandler<HTMLButtonElement> = (e) => {
-    addUser({ variables: { ...formState } });
+    console.log(formState);
+    e.preventDefault();
+    signUpUser({ ...formState });
   };
 
   return (
