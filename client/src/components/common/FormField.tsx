@@ -21,7 +21,7 @@ const FormField = ({
         {label}
       </label>
       <input
-        className="border-[1px] border-indigo-600 focus-visible:border-amber-400 outline-none py-1 px-2 rounded-sm transition-all focus-visible:shadow-md focus-visible:shadow-indigo-200"
+        className="border-[1px] border-indigo-600 focus-visible:border-amber-400 outline-none py-1 px-2 rounded-md transition-all focus-visible:shadow-md focus-visible:shadow-indigo-200"
         value={value}
         onChange={onChange}
         type={type}
