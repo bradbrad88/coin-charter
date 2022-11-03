@@ -53,9 +53,13 @@ const OtherCharts = () => {
           <li className="flex flex-col group transition-all hover:bg-indigo-100 hover:rounded-lg hover:border-2 hover:border-indigo-100 hover:cursor-pointer">
             <div className="flex justify-between">
               <div className="flex flex-col w-5/6 h-[40px]">
-                <h1 className="truncate font-bold text-md">{info.title}</h1>
+                <h1 className="truncate font-bold text-md text-indigo-600">
+                  {info.title}
+                </h1>
                 <div className="flex justify-between">
-                  <p className="italic font-bold text-xs">By {info.name}</p>
+                  <p className="italic font-bold text-xs text-slate-500">
+                    By {info.name}
+                  </p>
                   <p className="text-gray-500 text-xs">
                     Posted On: {info.createdAt}
                   </p>
