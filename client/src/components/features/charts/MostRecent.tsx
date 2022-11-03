@@ -51,7 +51,7 @@ const MostRecent = () => {
     <div className="flex flex-col w-2/6 h-full pl-2">
       <ul className="flex flex-col gap-1 h-[580px] w-full overflow-y-scroll">
         {data.map((info) => (
-          <li className="border-2 border-solid border-black-50 flex flex-col">
+          <li className="group transition-all hover:bg-indigo-100 hover:rounded-lg hover:border-2 hover:border-indigo-100 hover:cursor-pointer flex flex-col ">
             <div className="flex justify-between">
               <div className="flex flex-col w-5/6 h-[60px] ">
                 <h1 className="truncate font-bold text-md">{info.title}</h1>
@@ -60,7 +60,7 @@ const MostRecent = () => {
                   <p className="truncate italic font-bold text-xs w-[110px]">
                     By {info.name}
                   </p>
-                  <p className="text-gray-500 text-xs break-all">
+                  <p className="text-gray-500 text-xs">
                     Posted On: {info.createdAt}
                   </p>
                 </div>
@@ -75,7 +75,10 @@ const MostRecent = () => {
                 <p className="text-[8px]">{info.downVotes}</p>
               </div>
             </div>
-            <img src={info.chart} className="w-full h-[120px]" />
+            <img
+              src={info.chart}
+              className="w-full h-[120px] group-hover:brightness-75 rounded-md"
+            />
           </li>
         ))}
       </ul>
