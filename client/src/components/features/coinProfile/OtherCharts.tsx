@@ -50,7 +50,7 @@ const OtherCharts = () => {
       </div>
       <ul className="flex flex-col gap-1 h-[510px] w-full overflow-y-scroll">
         {data.map((info) => (
-          <li className="flex flex-col group transition-all hover:bg-indigo-100 hover:rounded-lg hover:border-2 hover:border-indigo-100 hover:cursor-pointer">
+          <li className="flex flex-col group transition-all hover:bg-indigo-100 hover:rounded-lg hover:border-2 hover:border-indigo-100 hover:cursor-pointer p-2">
             <div className="flex justify-between">
               <div className="flex flex-col w-5/6 h-[40px]">
                 <h1 className="truncate font-bold text-md text-indigo-600">
