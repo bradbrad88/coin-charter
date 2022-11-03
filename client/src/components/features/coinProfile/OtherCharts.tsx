@@ -50,11 +50,11 @@ const OtherCharts = () => {
       </div>
       <ul className="flex flex-col gap-1 h-[510px] w-full overflow-y-scroll">
         {data.map((info) => (
-          <li className="border-2 border-solid border-black-50 flex flex-col">
+          <li className="flex flex-col group transition-all hover:bg-indigo-100 hover:rounded-lg hover:border-2 hover:border-indigo-100 hover:cursor-pointer">
             <div className="flex justify-between">
               <div className="flex flex-col w-5/6 h-[40px]">
                 <h1 className="truncate font-bold text-md">{info.title}</h1>
-                <div className="flex gap-10">
+                <div className="flex justify-between">
                   <p className="italic font-bold text-xs">By {info.name}</p>
                   <p className="text-gray-500 text-xs">
                     Posted On: {info.createdAt}
@@ -71,7 +71,10 @@ const OtherCharts = () => {
                 <p className="text-[8px]">{info.downVotes}</p>
               </div>
             </div>
-            <img src={info.chart} className="w-full h-[120px]" />
+            <img
+              src={info.chart}
+              className="w-full h-[120px] group-hover:brightness-75"
+            />
           </li>
         ))}
       </ul>
