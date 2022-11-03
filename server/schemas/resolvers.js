@@ -1,5 +1,6 @@
 const { Charts, Coins, Comments, Users } = require("../models");
-
+const { signToken } = require("../utils/auth");
+const TOKEN_AGE = 1000 * 60 * 60 * 24;
 // TODO add in sorting filters
 
 // ? can make into seperate folders
@@ -45,8 +46,14 @@ const resolvers = {
     },
   },
   Mutation: {
-    addUser: async (parent, { username, password, subTitle, email, bio }) => {
-      return Users.create({ username, password, subTitle, email, bio });
+    addUser: async (parent, { username, email, password }, { res }) => {
+      const user = await Users.create({ username, email, password });
+      const token = signToken(user);
+      res.cookie("token", token, {
+        httpOnly: true,
+        maxAge: TOKEN_AGE,
+      });
+      return user;
     },
     // removeUser: async (parent, { userId }) => {
     //   return Users.findOneAndDelete({ _id: userId });
