@@ -47,11 +47,11 @@ const FriendsActivity = () => {
   return (
     <div className="flex flex-col rounded-sm gap-1 shadow-lg shadow-gray-400 m-4 p-5 w-2/6 h-[600px]">
       <h1 className="text-xl font-bold">Friends Activity</h1>
-      <ul className="border-solid border-2 border-black w-full h-full flex flex-col">
+      <ul className="w-full h-full flex flex-col">
         {data.map((info) => (
-          <li className="border-b flex w-full h-[40px] justify-between items-center px-2 group hover:bg-indigo-100 hover:cursor-pointer">
+          <li className="border-b flex w-full h-[40px] justify-between items-center group hover:bg-indigo-100 hover:cursor-pointer">
             <div className="flex flex-col">
-              <h1 className="font-bold text-sm text-indigo-600 hover:cursor-pointer group-hover:text-indigo-900">
+              <h1 className="font-bold text-sm text-indigo-600 hover:cursor-pointer ">
                 {info.name}
               </h1>
               <p className="text-xs text-gray-500">Date: {info.date}</p>
