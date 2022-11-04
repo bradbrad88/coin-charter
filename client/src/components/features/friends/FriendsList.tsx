@@ -1,3 +1,5 @@
+// import { Button } from "src/components/common/Button";
+
 const FriendsList = () => {
   //TODO SHOW PROFILE PIC, TITLE, NAME, AMOUNT FRIENDS, AND FAR RIGHT CAN SHOW MOST TOP RATED CHART THEY HAVE DONE
   return (
@@ -31,20 +33,29 @@ const FriendsList = () => {
             </div>
             <div className="flex w-2/6">
               <div className=" flex flex-col w-[100px] h-full justify-center items-center">
-                <p className="font-bold text-sm">Friends #</p>
+                <p className="font-bold text-sm text-indigo-600">Friends #</p>
                 <p>1234</p>
               </div>
               <div className=" flex flex-col w-[100px] h-full justify-center items-center">
-                <p className="font-bold text-sm">Charts #</p>
+                <p className="font-bold text-sm text-indigo-600">Charts #</p>
                 <p>12</p>
               </div>
               <div className=" flex flex-col w-[100px] h-full justify-center items-center">
-                <p className="font-bold text-sm">Fav Coins #</p>
-                <p>34</p>
+                <p className="font-bold text-sm text-indigo-600">Fav Coins #</p>
+                <p>347</p>
               </div>
             </div>
-            <div className="border-solid border-2 border-black w-2/6 h-full">
-              <h1 className="font-bold text-md">Highlighted Post</h1>
+            <div className=" w-2/6 h-full leading-4">
+              <h1 className="font-bold text-md text-indigo-600">
+                Recent Activity
+              </h1>
+              {/* //TODO add links to the things*/}
+              <ul className="flex flex-col">
+                <li>Commented on coin: Ethereum</li>
+                <li>Commented on chart: Binance</li>
+                <li>New Friend: Sam March</li>
+                <li>Added To Favourites: Cardano</li>
+              </ul>
             </div>
           </div>
         </li>
