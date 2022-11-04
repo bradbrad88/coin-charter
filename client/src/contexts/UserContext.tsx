@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import createCtx from "./index";
 import { useMutation } from "@apollo/client";
-import { ADD_USER } from "src/graphql/queries";
+import { ADD_USER, LOGOUT_USER } from "src/graphql/queries";
 
 interface Ctx {
   user: User | null;
@@ -32,23 +32,25 @@ const [useCtx, UserProvider] = createCtx<Ctx>();
 
 export const Provider = ({ children }: Prototypes) => {
   const [user, setUser] = useState<User | null>(localUser);
-  const [addUser, { data, loading }] = useMutation(ADD_USER);
+  const [addUser, { data: signupData, loading }] = useMutation(ADD_USER);
+  const [logoutUserMutation] = useMutation(LOGOUT_USER);
 
   useEffect(() => {
     localStorage.setItem("user", JSON.stringify(user));
   }, [user]);
 
   useEffect(() => {
-    if (data) {
-      loginUser(data.addUser);
+    if (signupData) {
+      loginUser(signupData.addUser);
     }
-  }, [data]);
+  }, [signupData]);
 
   const loginUser = (user: User) => {
     setUser(user);
   };
 
   const logoutUser = () => {
+    logoutUserMutation();
     setUser(null);
   };
 

@@ -7,7 +7,7 @@ if (!secret) throw new Error("JWT_SECRET missing from server .env file");
 const expiration = "2h";
 
 module.exports = {
-  authMiddleware: function ({ req }) {
+  authMiddleware: function ({ req, res }) {
     let token =
       req.body.token ||
       req.query.token ||
@@ -26,6 +26,7 @@ module.exports = {
       const { data } = jwt.verify(token, secret, { maxAge: expiration });
       req.user = data;
     } catch {
+      res.clearCookie("token");
       console.log("Invalid token");
     }
 

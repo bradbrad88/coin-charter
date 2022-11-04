@@ -55,6 +55,14 @@ const resolvers = {
       });
       return user;
     },
+    logoutUser: async (parent, args, { res, user }) => {
+      if (!user) {
+        return false;
+      }
+      res.clearCookie("token");
+      return true;
+    },
+
     // removeUser: async (parent, { userId }) => {
     //   return Users.findOneAndDelete({ _id: userId });
     // },

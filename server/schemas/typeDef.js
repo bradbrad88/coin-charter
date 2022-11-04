@@ -13,6 +13,7 @@ const typeDefs = gql`
     comments: [Comment]
     friends: [User]
     favCoins: [String]
+    image: String
   }
 
   type Comment {
@@ -51,6 +52,7 @@ const typeDefs = gql`
 
   type Mutation {
     addUser(username: String!, password: String!, email: String!): User
+    logoutUser: Boolean
   }
 `;
 
