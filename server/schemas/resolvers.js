@@ -1,6 +1,10 @@
 const { Charts, Coins, Comments, Users } = require("../models");
+const { AuthenticationError } = require("apollo-server-express");
 const { signToken } = require("../utils/auth");
 const TOKEN_AGE = 1000 * 60 * 60 * 24;
+const sharp = require("sharp");
+const upload = require("../utils/s3");
+const IMG_SIZE = 300;
 // TODO add in sorting filters
 
 // ? can make into seperate folders
@@ -61,6 +65,27 @@ const resolvers = {
       }
       res.clearCookie("token");
       return true;
+    },
+    addImage: async (parent, { image }, { user }) => {
+      if (!user) throw new AuthenticationError();
+      let imageBuffer = new Buffer.from(image, "base64");
+      const { height, width } = await sharp(imageBuffer).metadata();
+      if (height > IMG_SIZE || width > IMG_SIZE)
+        imageBuffer = await sharp(imageBuffer)
+          .resize({
+            height: IMG_SIZE,
+            width: IMG_SIZE,
+            fit: "cover",
+          })
+          .png()
+          .toBuffer();
+      const url = await upload(imageBuffer, `${user._id}-profile.png`);
+      await Users.findByIdAndUpdate(
+        user._id,
+        { $set: { image: url } },
+        { new: true },
+      );
+      return url;
     },
 
     // removeUser: async (parent, { userId }) => {

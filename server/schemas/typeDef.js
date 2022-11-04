@@ -53,6 +53,7 @@ const typeDefs = gql`
   type Mutation {
     addUser(username: String!, password: String!, email: String!): User
     logoutUser: Boolean
+    addImage(image: String!): String
   }
 `;
 
