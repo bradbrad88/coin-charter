@@ -16,6 +16,12 @@ export const LOGOUT_USER = gql`
   }
 `;
 
+export const ADD_PROFILE_IMAGE = gql`
+  mutation addImage($image: String!) {
+    addImage(image: $image)
+  }
+`;
+
 export const QUERY_USERS = gql`
   query getUsers {
     users {
