@@ -10,6 +10,12 @@ export const ADD_USER = gql`
   }
 `;
 
+export const LOGOUT_USER = gql`
+  mutation LogoutUser {
+    logoutUser
+  }
+`;
+
 export const QUERY_USERS = gql`
   query getUsers {
     users {
