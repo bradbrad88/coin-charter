@@ -2,34 +2,42 @@ const data = [
   {
     name: "Ben Smerd",
     activity: "Commented on a coin: Ethereum",
+    date: "12/02/21",
   },
   {
     name: "Sam March",
     activity: "Commented on a cchart: Cardano",
+    date: "12/02/21",
   },
   {
     name: "Brad Teague",
     activity: "Newly Added Friend: Sam March",
+    date: "12/02/21",
   },
   {
     name: "Sally Peterson",
     activity: "Posted a New Chart: Binance",
+    date: "12/02/21",
   },
   {
     name: "Ben Smerd",
     activity: "Commented on a coin: Ethereum",
+    date: "12/02/21",
   },
   {
     name: "Rachel Default",
     activity: "Commented on a coin: Bitcoin",
+    date: "12/02/21",
   },
   {
     name: "Ben Smerd",
     activity: "Commented on a coin: Ethereum",
+    date: "12/02/21",
   },
   {
     name: "Ben Smerd",
     activity: "Commented on a coin: Ethereum",
+    date: "12/02/21",
   },
 ];
 
@@ -41,10 +49,14 @@ const FriendsActivity = () => {
       <h1 className="text-xl font-bold">Friends Activity</h1>
       <ul className="border-solid border-2 border-black w-full h-full flex flex-col">
         {data.map((info) => (
-          <li className="border-b flex w-full h-[35px] justify-between items-center px-2">
-            <h1 className="font-bold text-indigo-600 hover:cursor-pointer hover:text-indigo-300">
-              {info.name}
-            </h1>
+          <li className="border-b flex w-full h-[40px] justify-between items-center px-2 group hover:bg-indigo-100 hover:cursor-pointer">
+            <div className="flex flex-col">
+              <h1 className="font-bold text-sm text-indigo-600 hover:cursor-pointer group-hover:text-indigo-900">
+                {info.name}
+              </h1>
+              <p className="text-xs text-gray-500">Date: {info.date}</p>
+            </div>
+
             <p>{info.activity}</p>
           </li>
         ))}
