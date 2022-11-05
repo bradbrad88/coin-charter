@@ -49,7 +49,7 @@ const data = [
 
 const FriendsList = () => {
   return (
-    <div className="flex flex-col rounded-sm shadow-lg shadow-gray-400 p-5 m-5 w-4/6 h-[600px]">
+    <div className="flex flex-col rounded-sm shadow-lg shadow-gray-400 p-5 m-5 mr-10 w-full h-[600px] text-sm md:text-md md:w-4/6">
       <div className="flex justify-between">
         <h1 className="text-xl font-bold">Friends List</h1>
         <h1>Friends: 2312</h1>
@@ -61,19 +61,19 @@ const FriendsList = () => {
               <div className="flex w-2/6 gap-2">
                 <img
                   src={info.profilePic}
-                  className="h-[90px] w-[70px] rounded-lg"
+                  className="h-[45px] w-[35px] rounded-lg md:h-[90px] md:w-[70px]"
                 />
                 <div className="flex flex-col leading-4 w-5/6">
                   <h1 className="font-bold text-md text-indigo-600">
                     {info.name}
                   </h1>
                   <p className="italic text-sm">{info.subtitle}</p>
-                  <p className="text-sm w-full leading-4 overflow-y-auto">
+                  <p className="hidden text-sm w-full leading-4 md:flex overflow-y-auto">
                     {info.bio}
                   </p>
                 </div>
               </div>
-              <div className="flex w-2/6">
+              <div className="flex w-2/6 hidden md:flex">
                 <div className=" flex flex-col w-[100px] h-full justify-center items-center">
                   <p className="font-bold text-sm text-indigo-600">Friends #</p>
                   <p>{info.friendsCount}</p>
@@ -89,13 +89,13 @@ const FriendsList = () => {
                   <p>{info.favCoinsCount}</p>
                 </div>
               </div>
-              <div className=" w-2/6 h-full leading-4">
+              <div className=" w-3/6 md:w-2/6 h-full leading-4">
                 <h1 className="font-bold text-md text-indigo-600">
                   Recent Activity
                 </h1>
-                <ul className="flex flex-col">
+                <ul className=" flex flex-col">
                   {info.recentActivity.map((activity) => (
-                    <li>{activity}</li>
+                    <li className="truncate">{activity}</li>
                   ))}
                 </ul>
               </div>
