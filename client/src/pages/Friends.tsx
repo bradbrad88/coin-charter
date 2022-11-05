@@ -3,7 +3,7 @@ import FriendsActivity from "src/components/features/friends/FriendsActivity";
 
 const Friends = () => {
   return (
-    <div className="flex">
+    <div className="flex flex-col md:flex-row">
       <FriendsList />
       <FriendsActivity />
     </div>
