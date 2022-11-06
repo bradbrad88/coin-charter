@@ -53,7 +53,7 @@ const MostRecent = () => {
         {data.map((info) => (
           <li className="group transition-all hover:bg-indigo-100 hover:rounded-lg hover:border-2 hover:border-indigo-100 hover:cursor-pointer flex flex-col p-2">
             <div className="flex justify-between">
-              <div className="flex flex-col w-5/6 h-[60px] ">
+              <div className="flex flex-col w-5/6 h-[80px] ">
                 <h1 className="truncate font-bold text-md text-indigo-600">
                   {info.title}
                 </h1>

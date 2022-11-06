@@ -44,7 +44,7 @@ const data = [
 
 const ChartsOfCoins = () => {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col w-[95%]">
       <form className="mb-2 border-b pb-2">
         <h1 className="font-bold">
           View Charts For: <span className="italic">Bitcoin</span>
@@ -60,7 +60,7 @@ const ChartsOfCoins = () => {
           ))}
         </select>
       </form>
-      <ul className="flex flex-col gap-1 h-[580px] w-full overflow-y-scroll">
+      <ul className="flex flex-col gap-1 h-[500px] w-full overflow-y-scroll">
         {data.map((info) => (
           <li className="group transition-all hover:bg-indigo-100 hover:rounded-lg hover:border-2 hover:border-indigo-100 hover:cursor-pointer flex flex-col p-2">
             <div className="flex justify-between">

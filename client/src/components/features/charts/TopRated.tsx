@@ -29,7 +29,7 @@ const TopRated = () => {
           </p>
           <img
             src="https://source.unsplash.com/random/?person/"
-            className="h-[400px] w-full mt-2"
+            className="h-[95%] w-full xl:w-[95%] mt-2"
           />
         </div>
       </div>
