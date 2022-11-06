@@ -67,25 +67,12 @@ const resolvers = {
       return true;
     },
     addImage: async (parent, { image }, { user }) => {
-      if (!user) throw new AuthenticationError();
-      let imageBuffer = new Buffer.from(image, "base64");
-      const { height, width } = await sharp(imageBuffer).metadata();
-      if (height > IMG_SIZE || width > IMG_SIZE)
-        imageBuffer = await sharp(imageBuffer)
-          .resize({
-            height: IMG_SIZE,
-            width: IMG_SIZE,
-            fit: "cover",
-          })
-          .png()
-          .toBuffer();
-      const url = await upload(imageBuffer, `${user._id}-profile.png`);
       await Users.findByIdAndUpdate(
         user._id,
-        { $set: { image: url } },
+        { $set: { image } },
         { new: true },
       );
-      return url;
+      return image;
     },
 
     // removeUser: async (parent, { userId }) => {
