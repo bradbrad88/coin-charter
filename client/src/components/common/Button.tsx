@@ -4,18 +4,20 @@ interface Proptypes {
   children: React.ReactNode;
   onClick: React.PointerEventHandler<HTMLButtonElement>;
   loading?: boolean;
+  disabled?: boolean;
 }
 
-const Button = ({ children, onClick, loading }: Proptypes) => {
+const Button = ({ children, onClick, loading, disabled }: Proptypes) => {
   const handleClick: React.PointerEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
+    if (loading) return;
     onClick(e);
   };
 
   return (
     <button
-      disabled={loading}
-      className="h-10 bg-indigo-800 bg-opacity-80 text-white hover:bg-opacity-100 transition-colors p-2 rounded-sm"
+      disabled={disabled}
+      className="h-10 bg-indigo-800 bg-opacity-80 text-white hover:bg-opacity-100 transition-colors p-2 rounded-sm disabled:bg-gray-400"
       onClick={handleClick}
     >
       {loading ? (
