@@ -66,10 +66,13 @@ const ImageEditor = ({ image, close, submit }: Proptypes) => {
   };
 
   return (
-    <div onClick={close} className="fixed bg-black bg-opacity-70 inset-0 z-20">
+    <div
+      onPointerDown={close}
+      className="fixed bg-black bg-opacity-70 inset-0 z-20"
+    >
       <div className="relative w-full h-full flex justify-center items-center">
         <div
-          onClick={(e) => e.stopPropagation()}
+          onPointerDown={(e) => e.stopPropagation()}
           className="relative flex flex-col items-center bg-white border-indigo-600 border-2 rounded-md"
           style={{ width: width ? width : "auto" }}
         >
