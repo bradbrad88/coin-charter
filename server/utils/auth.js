@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 
 const secret = process.env.JWT_SECRET;
+const TOKEN_AGE = 1000 * 60 * 60 * 24;
 
 if (!secret) throw new Error("JWT_SECRET missing from server .env file");
 
@@ -45,5 +46,11 @@ module.exports = {
   signToken: function ({ _id }) {
     const payload = { _id };
     return jwt.sign({ data: payload }, secret, { expiresIn: expiration });
+  },
+  setCookie: function (res, token) {
+    res.cookie("token", token, {
+      httpOnly: true,
+      maxAge: TOKEN_AGE,
+    });
   },
 };
