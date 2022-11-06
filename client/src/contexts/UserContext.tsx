@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import { useMutation } from "@apollo/client";
-import { ADD_USER, LOGOUT_USER, ADD_PROFILE_IMAGE } from "src/graphql/queries";
+import {
+  ADD_USER,
+  LOGIN_USER,
+  LOGOUT_USER,
+  ADD_PROFILE_IMAGE,
+} from "src/graphql/queries";
 import createCtx from "./index";
 import useFetch from "hooks/useFetch";
 
@@ -11,7 +16,13 @@ interface Ctx {
   user: User | null;
   isLoggedIn: boolean;
   loading: boolean;
-  loginUser: (user: User) => void;
+  loginUser: ({
+    username,
+    password,
+  }: {
+    username: string;
+    password: string;
+  }) => void;
   logoutUser: () => void;
   signUpUser: (newUser: NewUser) => void;
   updateImage: (image: File, crop: Crop) => void;
@@ -19,6 +30,10 @@ interface Ctx {
 interface User {
   _id: string;
   username: string;
+  subTitle: string;
+  bio: string;
+  friendCount: number;
+  postCount: number;
   image?: string;
 }
 
@@ -37,46 +52,74 @@ const [useCtx, UserProvider] = createCtx<Ctx>();
 
 export const Provider = ({ children }: Prototypes) => {
   const [user, setUser] = useState<User | null>(localUser);
-  const [addUser, { data: signupData, loading }] = useMutation(ADD_USER);
   const [logoutUserMutation] = useMutation(LOGOUT_USER);
-  const [addProfileImage, { data: imageData }] = useMutation(ADD_PROFILE_IMAGE);
+  const [addUser, { data: signupData, loading }] = useMutation(ADD_USER);
+  const [loginUserMutation, { data: loginData }] = useMutation(LOGIN_USER);
+  const [addProfileImage, { data: imageData, error }] =
+    useMutation(ADD_PROFILE_IMAGE);
   const { postRequest } = useFetch();
 
+  // Update local storage with user state data whenever it changes
   useEffect(() => {
     localStorage.setItem("user", JSON.stringify(user));
   }, [user]);
 
+  // If the signup-data from signup mutation changes then update user state
   useEffect(() => {
     if (signupData) {
-      loginUser(signupData.addUser);
+      authenticateUser(signupData.addUser);
     }
   }, [signupData]);
 
+  // If the login-data from login mutation changes then update user state
   useEffect(() => {
-    if (imageData)
+    if (loginData) {
+      authenticateUser(loginData.loginUser);
+    }
+  }, [loginData]);
+
+  // If the image-data from image mutation changes then update user state
+  useEffect(() => {
+    if (imageData) {
       setUser((prevState) => {
         if (!prevState) return null;
         return {
           ...prevState,
-          image: imageData.addImage as string,
+          // The appended query string forces an image reload as the src string changes
+          image: (imageData.addImage + "?time=" + Date.now()) as string,
         };
       });
+    }
   }, [imageData]);
 
-  const loginUser = (user: User) => {
+  // Helper function
+  const authenticateUser = (user: User) => {
     setUser(user);
   };
 
+  // Function exposed to context consumer for logging in
+  const loginUser = ({
+    username,
+    password,
+  }: {
+    username: string;
+    password: string;
+  }) => {
+    loginUserMutation({ variables: { username, password } });
+  };
+
+  // Function exposed to context consumer for logging out
   const logoutUser = () => {
     logoutUserMutation();
     setUser(null);
   };
 
+  // Function exposed to context consumer for signing up
   const signUpUser = (newUser: NewUser) => {
-    console.log(newUser);
     addUser({ variables: { ...newUser } });
   };
 
+  // Function exposed to context consumer for updating image
   const updateImage = async (image: File, crop: Crop) => {
     const data = new FormData();
     data.append("image", image);
@@ -86,12 +129,18 @@ export const Provider = ({ children }: Prototypes) => {
       url: `/api/user/${user?._id}/upload-image`,
     };
     const res = await postRequest<{ url: string }>(req);
-    if (!res) return;
+    if (!res) {
+      logoutUser();
+      return;
+    }
 
     addProfileImage({ variables: { image: res.url } });
     setUser((prevState: any) => ({ ...prevState, image: res.url }));
+    // Reset the image in http cache
+    fetch(res.url, { cache: "reload", mode: "no-cors" });
   };
 
+  // Property exposed to context consumer for checking if a user exists in state
   const isLoggedIn = !!user;
 
   return (
