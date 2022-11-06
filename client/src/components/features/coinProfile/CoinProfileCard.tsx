@@ -79,7 +79,7 @@ const CoinProfileCard = ({ coin }: PropTypes) => {
         </div>
 
         <div className="flex flex-col gap-5">
-          <ul className="flex flex-col gap-1 border-b pt-2 pb-5 sm:w-[95%] w-[300px]">
+          <ul className="flex flex-col gap-1 border-b pt-2 pb-5 md:w-[500px] w-[300px]">
             {dataTimeFrame.map((info) =>
               priceDifference(info.timeframe, info.data),
             )}
