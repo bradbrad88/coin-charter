@@ -90,7 +90,7 @@ const data = [
 
 const FriendsActivity = () => {
   return (
-    <div className="flex flex-col rounded-sm gap-1 shadow-lg shadow-gray-400 m-4 p-5 w-2/6 h-[600px] lg:bg-indigo-100 md:bg-green-200">
+    <div className="flex flex-col rounded-sm gap-1 shadow-lg shadow-gray-400 m-4 p-5 w-[95%] md:w-2/6 h-[400px] md:h-[600px] ">
       <h1 className="text-xl font-bold">Friends Activity</h1>
       <ul className="w-full h-full flex flex-col overflow-y-auto">
         {data.map((info) => (
