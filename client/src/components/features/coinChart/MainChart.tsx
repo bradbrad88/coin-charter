@@ -29,12 +29,27 @@ const hardcode = [
     downVotes: 13,
     profilePic: "https://source.unsplash.com/random/?person/",
   },
+  {
+    name: "Same",
+    comment: "I am in love with this and and so good",
+    upVotes: 3910,
+    downVotes: 1332,
+    profilePic: "https://source.unsplash.com/random/?person/",
+  },
+  {
+    name: "Jamie",
+    comment:
+      "I rasd love it so much sooooo much THE BESTTTeally enjoy this coin because it is so good and i love it so much because it is so good and so good",
+    upVotes: 390,
+    downVotes: 13,
+    profilePic: "https://source.unsplash.com/random/?person/",
+  },
 ];
 
 const MainChart = () => {
   return (
     <>
-      <div className="w-4/6 flex flex-col">
+      <div className="md:h-[600px] w-full md:w-4/6 flex flex-col">
         <div className="flex flex-col">
           <div className="flex justify-between items-center">
             <h1 className="text-lg font-bold">
@@ -67,11 +82,11 @@ const MainChart = () => {
         </div>
 
         <img
-          className=" h-5/6"
+          className=" h-3/6 md:h-4/6"
           src="https://source.unsplash.com/random/?person/"
         />
       </div>
-      <div className="w-2/6 flex flex-col">
+      <div className="w-full md:w-2/6 flex flex-col">
         <div className="flex gap-2">
           <h1 className="text-lg font-bold">Comments</h1>
           <i className="fa-regular fa-comments text-lg"></i>
