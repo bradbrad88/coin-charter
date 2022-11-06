@@ -54,7 +54,7 @@ const CoinProfileCard = ({ coin }: PropTypes) => {
 
   console.log(coin);
   return (
-    <div className="flex rounded-sm gap-5 shadow-lg shadow-gray-400 p-5 m-5 w-[1050px] h-[400px]">
+    <div className="flex flex-col lg:flex-row rounded-sm gap-5 shadow-lg shadow-gray-400 p-5 m-5 w-[95%] lg:w-[1050px] lg:h-[400px]">
       <div className="flex flex-col ">
         <div className="flex items-start justify-start gap-3">
           <div className="flex flex-col justify-end items-center">
@@ -62,7 +62,7 @@ const CoinProfileCard = ({ coin }: PropTypes) => {
             <small>#{coin.market_cap_rank}</small>
           </div>
 
-          <h1 className="text-4xl font-bold">
+          <h1 className="text-md md:text-4xl font-bold">
             {coin.name} ({coin.symbol.toUpperCase()})
           </h1>
 
@@ -79,7 +79,7 @@ const CoinProfileCard = ({ coin }: PropTypes) => {
         </div>
 
         <div className="flex flex-col gap-5">
-          <ul className="flex flex-col gap-1 border-b pt-2 pb-5 w-[500px]">
+          <ul className="flex flex-col gap-1 border-b pt-2 pb-5 sm:w-[95%] w-[300px]">
             {dataTimeFrame.map((info) =>
               priceDifference(info.timeframe, info.data),
             )}
@@ -95,7 +95,7 @@ const CoinProfileCard = ({ coin }: PropTypes) => {
               <span>{coin.market_data.circulating_supply}</span>
             </li>
           </ul>
-          <div className="flex gap-5 items-center">
+          <div className="flex flex-col sm:flex-row gap-5 items-center">
             <button className="border rounded-sm w-40 p-2 bg-opacity-80 bg-indigo-600 hover:bg-opacity-100 text-white transition-all duration-75">
               Add To Favourites
             </button>
