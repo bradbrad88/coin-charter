@@ -45,11 +45,131 @@ const data = [
       "Added to Favourites: Cardano",
     ],
   },
+  {
+    profilePic: "https://source.unsplash.com/random/?person/",
+    name: "Brad Teague",
+    subtitle: "Expert trader",
+    bio: "I love trading so much and really like Ethereum.",
+    friendsCount: 12334,
+    chartsCount: 122,
+    favCoinsCount: 302,
+    recentActivity: [
+      "Commented on Coin: Ethereum",
+      "Comented on chart: Binance",
+      "New Friend: Sam March",
+      "Added to Favourites: Cardano",
+    ],
+  },
+  {
+    profilePic: "https://source.unsplash.com/random/?person/",
+    name: "Brad Teague",
+    subtitle: "Expert trader",
+    bio: "I love trading so much and really like Ethereum.",
+    friendsCount: 12334,
+    chartsCount: 122,
+    favCoinsCount: 302,
+    recentActivity: [
+      "Commented on Coin: Ethereum",
+      "Comented on chart: Binance",
+      "New Friend: Sam March",
+      "Added to Favourites: Cardano",
+    ],
+  },
+  {
+    profilePic: "https://source.unsplash.com/random/?person/",
+    name: "Brad Teague",
+    subtitle: "Expert trader",
+    bio: "I love trading so much and really like Ethereum.",
+    friendsCount: 12334,
+    chartsCount: 122,
+    favCoinsCount: 302,
+    recentActivity: [
+      "Commented on Coin: Ethereum",
+      "Comented on chart: Binance",
+      "New Friend: Sam March",
+      "Added to Favourites: Cardano",
+    ],
+  },
+  {
+    profilePic: "https://source.unsplash.com/random/?person/",
+    name: "Brad Teague",
+    subtitle: "Expert trader",
+    bio: "I love trading so much and really like Ethereum.",
+    friendsCount: 12334,
+    chartsCount: 122,
+    favCoinsCount: 302,
+    recentActivity: [
+      "Commented on Coin: Ethereum",
+      "Comented on chart: Binance",
+      "New Friend: Sam March",
+      "Added to Favourites: Cardano",
+    ],
+  },
+  {
+    profilePic: "https://source.unsplash.com/random/?person/",
+    name: "Brad Teague",
+    subtitle: "Expert trader",
+    bio: "I love trading so much and really like Ethereum.",
+    friendsCount: 12334,
+    chartsCount: 122,
+    favCoinsCount: 302,
+    recentActivity: [
+      "Commented on Coin: Ethereum",
+      "Comented on chart: Binance",
+      "New Friend: Sam March",
+      "Added to Favourites: Cardano",
+    ],
+  },
+  {
+    profilePic: "https://source.unsplash.com/random/?person/",
+    name: "Brad Teague",
+    subtitle: "Expert trader",
+    bio: "I love trading so much and really like Ethereum.",
+    friendsCount: 12334,
+    chartsCount: 122,
+    favCoinsCount: 302,
+    recentActivity: [
+      "Commented on Coin: Ethereum",
+      "Comented on chart: Binance",
+      "New Friend: Sam March",
+      "Added to Favourites: Cardano",
+    ],
+  },
+  {
+    profilePic: "https://source.unsplash.com/random/?person/",
+    name: "Brad Teague",
+    subtitle: "Expert trader",
+    bio: "I love trading so much and really like Ethereum.",
+    friendsCount: 12334,
+    chartsCount: 122,
+    favCoinsCount: 302,
+    recentActivity: [
+      "Commented on Coin: Ethereum",
+      "Comented on chart: Binance",
+      "New Friend: Sam March",
+      "Added to Favourites: Cardano",
+    ],
+  },
+  {
+    profilePic: "https://source.unsplash.com/random/?person/",
+    name: "Brad Teague",
+    subtitle: "Expert trader",
+    bio: "I love trading so much and really like Ethereum.",
+    friendsCount: 12334,
+    chartsCount: 122,
+    favCoinsCount: 302,
+    recentActivity: [
+      "Commented on Coin: Ethereum",
+      "Comented on chart: Binance",
+      "New Friend: Sam March",
+      "Added to Favourites: Cardano",
+    ],
+  },
 ];
 
 const FriendsList = () => {
   return (
-    <div className="flex flex-col rounded-sm shadow-lg shadow-gray-400 p-5 m-5 mr-10 w-full h-[600px] text-sm md:text-md md:w-4/6">
+    <div className="flex flex-col rounded-sm shadow-lg shadow-gray-400 p-5 m-4 mr-2 w-[95%] h-[500px] text-sm md:h-[600px] md:text-md md:w-4/6">
       <div className="flex justify-between">
         <h1 className="text-xl font-bold">Friends List</h1>
         <h1>Friends: 2312</h1>
@@ -64,7 +184,7 @@ const FriendsList = () => {
                   className="h-[45px] w-[35px] rounded-lg md:h-[90px] md:w-[70px]"
                 />
                 <div className="flex flex-col leading-4 w-5/6">
-                  <h1 className="font-bold text-md text-indigo-600">
+                  <h1 className="font-bold text-md text-indigo-600 hover:text-indigo-200 hover:cursor-pointer">
                     {info.name}
                   </h1>
                   <p className="italic text-sm">{info.subtitle}</p>
@@ -95,7 +215,11 @@ const FriendsList = () => {
                 </h1>
                 <ul className=" flex flex-col">
                   {info.recentActivity.map((activity) => (
-                    <li className="truncate">{activity}</li>
+                    <li className="truncate">
+                      <a href="#" className="hover:text-indigo-200">
+                        {activity}
+                      </a>
+                    </li>
                   ))}
                 </ul>
               </div>
