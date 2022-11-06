@@ -2,17 +2,16 @@ require("dotenv").config();
 const express = require("express");
 const { ApolloServer } = require("apollo-server-express");
 const path = require("path");
-
-const { typeDefs, resolvers } = require("./schemas");
 const db = require("./config/connection");
-const { authMiddleware } = require("./utils/auth");
-const PORT = process.env.PORT || 3001;
+const { typeDefs, resolvers } = require("./schemas");
+const { gqlAuthMiddleware } = require("./utils/auth");
+const router = require("./routes");
+
+// Create express app
 const app = express();
-const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-  context: authMiddleware,
-});
+
+// Default to port 3001 if not port specified in env variables
+const PORT = process.env.PORT || 3001;
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -22,14 +21,28 @@ if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../client/build")));
 }
 
+// Serve the custom api routes
+app.use(router);
+
+// Serve the react client
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/build/index.html"));
 });
 
-const startApolloServer = async (typeDefs, resolvers) => {
+// Function for starting the apollo server
+const startApolloServer = async (typeDefs, resolvers, context) => {
+  // Create apollo server with typeDefs, resolvers and context middleware
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    context,
+  });
+
   await server.start();
+
   server.applyMiddleware({ app });
 
+  // Once db connection has been established, set the app to listen on specified port
   db.once("open", () => {
     app.listen(PORT, () => {
       console.log(`API server running on port ${PORT}!`);
@@ -40,4 +53,4 @@ const startApolloServer = async (typeDefs, resolvers) => {
   });
 };
 
-startApolloServer(typeDefs, resolvers);
+startApolloServer(typeDefs, resolvers, gqlAuthMiddleware);
