@@ -67,7 +67,7 @@ const userSchema = new Schema(
 
 // Virtuals
 // Virtual for amount of friends
-userSchema.virtual("friendsCount").get(function () {
+userSchema.virtual("friendCount").get(function () {
   return this.friends.length;
 });
 
@@ -85,7 +85,7 @@ userSchema.pre("save", async function (next) {
 });
 
 userSchema.methods.isCorrectPassword = async function (password) {
-  return bcrypt.compare(password, this.password);
+  return await bcrypt.compare(password, this.password);
 };
 
 // Create user model with userSchema
