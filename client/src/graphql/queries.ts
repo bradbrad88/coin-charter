@@ -5,7 +5,25 @@ export const ADD_USER = gql`
     addUser(username: $username, password: $password, email: $email) {
       _id
       username
+      subTitle
+      bio
       image
+      friendCount
+      postCount
+    }
+  }
+`;
+
+export const LOGIN_USER = gql`
+  mutation loginUser($username: String!, $password: String!) {
+    loginUser(username: $username, password: $password) {
+      _id
+      username
+      subTitle
+      bio
+      image
+      friendCount
+      postCount
     }
   }
 `;

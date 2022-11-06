@@ -12,6 +12,8 @@ const typeDefs = gql`
     bio: String
     comments: [Comment]
     friends: [User]
+    friendCount: Int
+    postCount: Int
     favCoins: [String]
     image: String
   }
@@ -52,6 +54,7 @@ const typeDefs = gql`
 
   type Mutation {
     addUser(username: String!, password: String!, email: String!): User
+    loginUser(username: String!, password: String!): User
     logoutUser: Boolean
     addImage(image: String!): String
   }
