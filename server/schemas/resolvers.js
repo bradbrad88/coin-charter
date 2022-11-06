@@ -1,7 +1,7 @@
 const { Charts, Coins, Comments, Users } = require("../models");
 const { AuthenticationError } = require("apollo-server-express");
-const { signToken } = require("../utils/auth");
-const TOKEN_AGE = 1000 * 60 * 60 * 24;
+const { signToken, setCookie } = require("../utils/auth");
+
 const sharp = require("sharp");
 const upload = require("../utils/s3");
 const IMG_SIZE = 300;
@@ -53,10 +53,16 @@ const resolvers = {
     addUser: async (parent, { username, email, password }, { res }) => {
       const user = await Users.create({ username, email, password });
       const token = signToken(user);
-      res.cookie("token", token, {
-        httpOnly: true,
-        maxAge: TOKEN_AGE,
-      });
+      setCookie(res, token);
+      return user;
+    },
+    loginUser: async (parent, { username, password }, { res }) => {
+      const user = await Users.findOne({ username });
+      if (!user) throw AuthenticationError();
+      if (!(await user.isCorrectPassword(password)))
+        throw AuthenticationError();
+      const token = signToken(user);
+      setCookie(res, token);
       return user;
     },
     logoutUser: async (parent, args, { res, user }) => {
