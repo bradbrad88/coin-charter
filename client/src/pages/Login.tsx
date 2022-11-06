@@ -1,10 +1,18 @@
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import useUserContext from "contexts/UserContext";
 import FormField from "common/FormField";
-import { useState } from "react";
 import Button from "common/Button";
-import { Link } from "react-router-dom";
 
 const Login = () => {
   const [formState, setFormState] = useState({ username: "", password: "" });
+  const { isLoggedIn, loginUser } = useUserContext();
+  const nav = useNavigate();
+
+  // If the user is already logged in then navigate to dashboard
+  useEffect(() => {
+    if (isLoggedIn) nav("/dashboard");
+  }, [isLoggedIn]);
 
   const inputChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     setFormState((prevState) => ({
@@ -14,7 +22,7 @@ const Login = () => {
   };
 
   const onLogin: React.PointerEventHandler<HTMLButtonElement> = (e) => {
-    console.log("login");
+    loginUser({ ...formState });
   };
 
   return (
@@ -33,6 +41,7 @@ const Login = () => {
         <FormField
           label="Password"
           name="password"
+          type="password"
           onChange={inputChange}
           value={formState.password}
           placeholder="Password..."
