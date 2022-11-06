@@ -25,6 +25,7 @@ const useFetch = () => {
   );
 
   const postRequest = async <T>(req: AxiosRequestConfig): Promise<T | null> => {
+    req.method = "POST";
     const res = await sendRequest<T>(req);
     if (!res) return null;
     return res.data;
