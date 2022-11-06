@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MdEdit } from "react-icons/md";
 import useUserContext from "contexts/UserContext";
 import ImageEditor from "features/image-editor/ImageEditor";
@@ -6,9 +6,35 @@ import Button from "common/Button";
 
 import type { ChangeEventHandler } from "react";
 
-const ProfileCard = () => {
-  const { isLoggedIn, updateImage } = useUserContext();
+interface Proptypes {
+  _id: string;
+  username: string;
+  subTitle: string;
+  image?: string;
+  bio: string;
+  friendCount: number;
+  postCount: number;
+  edit?: boolean;
+}
+
+const ProfileCard = ({
+  _id,
+  username,
+  subTitle,
+  image,
+  bio,
+  friendCount,
+  postCount,
+  edit = false,
+}: Proptypes) => {
+  const { updateImage } = useUserContext();
   const [editImage, setEditImage] = useState<File | null>();
+  const imageRef = useRef<HTMLInputElement>(null);
+
+  // Remove the file loaded in input element on every change - this allows the same file to be opened twice in a row
+  useEffect(() => {
+    if (imageRef.current) imageRef.current.value = "";
+  }, [editImage]);
 
   const onImageEdit: ChangeEventHandler<HTMLInputElement> = (e) => {
     const image = e.target.files![0];
@@ -19,6 +45,7 @@ const ProfileCard = () => {
   const submitImage = (image: File, crop: any) => {
     if (!editImage) return;
     updateImage(image, crop);
+    setEditImage(null);
   };
 
   return (
@@ -31,12 +58,12 @@ const ProfileCard = () => {
         />
       )}
       <div className="bg-gradient-to-b sm:bg-gradient from-indigo-800 md:from-white bg-opacity-80 flex justify-center p-5">
-        <div className="relative block w-1/2 md:w-full h-fit max-w-[300px]">
+        <div className="relative block w-1/2 md:w-[300px] h-fit">
           <img
-            src="https://source.unsplash.com/random/?person/"
-            className="aspect-[4/4] object-cover rounded-full border-white border-4"
+            src={image}
+            className="aspect-[4/4] w-full object-cover rounded-full border-white border-4"
           />
-          {isLoggedIn && (
+          {edit && (
             <>
               <label
                 htmlFor="avatar"
@@ -45,8 +72,9 @@ const ProfileCard = () => {
                 <MdEdit color="rgb(255,255,255)" />
               </label>
               <input
+                ref={imageRef}
                 className="hidden"
-                onChange={onImageEdit}
+                onInput={onImageEdit}
                 type="file"
                 id="avatar"
                 accept="image/jpeg, image/png"
@@ -57,24 +85,24 @@ const ProfileCard = () => {
       </div>
       <div className="p-5 grid gap-2">
         <div className="flex justify-between gap-3">
-          <h1 className="text-2xl break-all">Ben Teague</h1>
-          <h3 className="self-end text-slate-500">coin horder</h3>
+          <h1 className="text-2xl break-all">{username}</h1>
+          <h3 className="self-end text-slate-500">{subTitle}</h3>
         </div>
         <div className="flex justify-between gap-5">
-          <Button onClick={() => {}}>Message</Button>
-          <Button onClick={() => {}}>Add Friend</Button>
-          <Button onClick={() => {}}>...</Button>
+          {edit ? (
+            <Button onClick={() => {}}>Edit Profile</Button>
+          ) : (
+            <>
+              <Button onClick={() => {}}>Message</Button>
+              <Button onClick={() => {}}>Add Friend</Button>
+            </>
+          )}
         </div>
-        <p className="italic">
-          Description: Lorem Ipsum is simply dummy text of the printing and
-          typesetting industry. Lorem Ipsum has been the industry's standard
-          dummy text ever since the 1500s, when an unknown printer took a galley
-          of type and scrambled it to make a type specimen book.
-        </p>
+        <p className="italic">{bio}</p>
         <hr />
         <div className="flex justify-between gap-5 text-slate-500">
-          <p>Friends: 100</p>
-          <p>Posts: 50</p>
+          <p>Friends: {friendCount}</p>
+          <p>Posts: {postCount}</p>
         </div>
       </div>
     </div>
