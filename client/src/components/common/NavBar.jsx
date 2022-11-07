@@ -15,7 +15,7 @@ const NavBar = ({ close }) => {
       {/* <NavItem path={"/coin"} title={"Coin"} onClick={close} /> */}
       {isLoggedIn && (
         <>
-          <NavItem path={"/dashboard"} title={"Dashboard"} onClick={close} />
+          <NavItem path={"/profile"} title={"Profile"} onClick={close} />
           <NavItem path={"/friends"} title={"Friends"} onClick={close} />
           <NavItem path="/" title={"Logout"} onClick={Logout} />
         </>

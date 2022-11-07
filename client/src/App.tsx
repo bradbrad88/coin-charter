@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Header from "common/Header";
 import Homepage from "pages/Homepage";
-import Dashboard from "pages/Dashboard";
+import Profile from "src/pages/Profile";
 import Friends from "pages/Friends";
 import Charts from "pages/Charts";
 import CoinProfile from "pages/CoinProfile";
@@ -35,7 +35,7 @@ const App = () => {
           <Routes>
             <Route index element={<Homepage />} />
             <Route path="friends" element={<Friends />} />
-            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="profile" element={<Profile />} />
             <Route path="charts" element={<Charts />} />
             <Route path="coin/:coinId" element={<CoinProfile />} />
             <Route path="login" element={<Login />} />

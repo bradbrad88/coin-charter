@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useUserContext from "contexts/UserContext";
-import ProfileCard from "features/dashboard/ProfileCard";
-import Favorites from "features/dashboard/Favorites";
+import ProfileCard from "features/profile/ProfileCard";
+import Favorites from "features/profile/Favorites";
 
-const Dashboard = () => {
+const Profile = () => {
   const { user, isLoggedIn } = useUserContext();
   const nav = useNavigate();
 
@@ -23,4 +23,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Profile;
