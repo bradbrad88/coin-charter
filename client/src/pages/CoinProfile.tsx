@@ -63,7 +63,7 @@ const CoinProfile = () => {
             <CoinProfileCard coin={coin} />
             <CoinComments />
           </div>
-          <Chart />
+          <Chart coin={coin} />
           <CoinCharts />
         </div>
       )}
