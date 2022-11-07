@@ -28,7 +28,8 @@
     "react-image-crop": "^10.0.8",
     "react-router-dom": "^6.4.2",
     "react-sparklines": "^1.7.0",
-    "react-spinners": "^0.13.6"
+    "react-spinners": "^0.13.6",
+    "react-ts-tradingview-widgets": "^1.0.12"
   },
   "devDependencies": {
     "@babel/cli": "^7.19.3",
