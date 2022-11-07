@@ -58,13 +58,13 @@ const CoinProfile = () => {
   return (
     <div className="flex">
       {coin && (
-        <div className="flex flex-col lg:flex-row">
-          <div className="flex flex-col">
+        <div className="flex flex-col">
+          <div className="flex flex-col lg:flex-row">
             <CoinProfileCard coin={coin} />
-            <Chart />
-            <CoinCharts />
+            <CoinComments />
           </div>
-          <CoinComments />
+          <Chart />
+          <CoinCharts />
         </div>
       )}
       {working && (
