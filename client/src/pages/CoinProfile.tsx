@@ -2,6 +2,7 @@ import CoinProfileCard from "../components/features/coinProfile/CoinProfileCard"
 import CoinComments from "../components/features/coinProfile/CoinComments";
 import CoinCharts from "../components/features/coinProfile/CoinCharts";
 import { BrowserRouter, Routes, Route, useParams } from "react-router-dom";
+import Chart from "../components/common/Chart";
 import useFetch, { Config } from "../hooks/useFetch";
 import React, { useEffect, useState } from "react";
 import { PropagateLoader } from "react-spinners";
@@ -60,6 +61,7 @@ const CoinProfile = () => {
         <div className="flex flex-col lg:flex-row">
           <div className="flex flex-col">
             <CoinProfileCard coin={coin} />
+            <Chart />
             <CoinCharts />
           </div>
           <CoinComments />
