@@ -71,7 +71,7 @@ const ProfileCard = ({
             submit={submitImage}
           />
         )}
-        <div className="bg-gradient-to-b sm:bg-gradient from-indigo-800 md:from-white bg-opacity-80 flex justify-center p-5">
+        <div className="bg-gradient-to-b sm:bg-gradient from-indigo-800 md:from-white bg-opacity-80 flex justify-center p-5 -z-10">
           <div className="relative block w-1/2 md:w-[300px] h-fit">
             <img
               src={image}
