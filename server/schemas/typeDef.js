@@ -57,6 +57,7 @@ const typeDefs = gql`
     loginUser(username: String!, password: String!): User
     logoutUser: Boolean
     addImage(image: String!): String
+    addBio(bio: String!): String
   }
 `;
 
