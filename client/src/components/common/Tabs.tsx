@@ -18,7 +18,7 @@ const TabComponent = ({ componentList }: Proptypes) => {
         <div
           className={`${
             isSelected ? "bg-primary" : "bg-indigo-900"
-          } min-w-[100px] text-center px-4 py-2 rounded-t-md`}
+          } min-w-[100px] text-center px-4 py-2 rounded-t-sm cursor-pointer`}
           onClick={() => setComponent(item.component)}
         >
           {item.title}
@@ -29,8 +29,8 @@ const TabComponent = ({ componentList }: Proptypes) => {
 
   return (
     <div>
-      <div className="flex w-fit gap-10 text-white">{renderTabs()}</div>
-      <div className="bg-primary">{component}</div>
+      <div className="flex w-fit gap-1 text-white">{renderTabs()}</div>
+      <div className="p-2 bg-primary">{component}</div>
     </div>
   );
 };
