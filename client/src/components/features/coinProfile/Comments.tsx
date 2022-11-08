@@ -34,8 +34,11 @@ const hardcode = [
 const Comments = () => {
   return (
     <ul className="flex flex-col gap-1 overflow-y-scroll">
-      {hardcode.map((info) => (
-        <li className="border-black-50 border-solid border-2 flex gap-2 width-5/6 h-[92px]">
+      {hardcode.map((info, index) => (
+        <li
+          key={info.name + index}
+          className="border-black-50 border-solid border-2 flex gap-2 width-5/6 h-[92px]"
+        >
           <div className="flex flex-col items-center w-1/6 gap-1 p-1">
             <img src={info.profilePic} className="h-[50px] w-[50px] rounded" />
             <div className="flex gap-2 items-center">
