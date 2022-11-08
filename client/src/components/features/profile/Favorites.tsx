@@ -14,7 +14,6 @@ const Favorites = () => {
   return (
     <Container>
       <div>
-        <h1>Favorites</h1>
         <Tabs componentList={componentList} />
       </div>
     </Container>
