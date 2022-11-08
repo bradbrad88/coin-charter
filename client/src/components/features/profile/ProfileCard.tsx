@@ -28,7 +28,7 @@ const ProfileCard = ({
   postCount,
   edit = false,
 }: Proptypes) => {
-  const { updateImage, addBio } = useUserContext();
+  const { updateImage, addBio, addFriend } = useUserContext();
   const [editImage, setEditImage] = useState<File | null>();
   const imageRef = useRef<HTMLInputElement>(null);
   const [editBio, setEditBio] = useState(false);
@@ -59,6 +59,10 @@ const ProfileCard = ({
   const onBioSubmit = () => {
     setEditBio(false);
     addBio(newBio);
+  };
+
+  const addFriendHandler = () => {
+    addFriend(_id);
   };
 
   return (
@@ -108,7 +112,7 @@ const ProfileCard = ({
             ) : (
               <>
                 <Button onClick={() => {}}>Message</Button>
-                <Button onClick={() => {}}>Add Friend</Button>
+                <Button onClick={addFriendHandler}>Add Friend</Button>
               </>
             )}
           </div>

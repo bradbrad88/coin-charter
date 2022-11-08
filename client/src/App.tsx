@@ -40,6 +40,7 @@ const App = () => {
             <Route path="coin/:coinId" element={<CoinProfile />} />
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<Signup />} />
+            <Route path="profile/:profileId" element={<Profile />} />
           </Routes>
         </div>
       </UserProvider>
