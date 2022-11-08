@@ -183,6 +183,29 @@ export const REMOVE_COIN = gql`
         coinId
         _id
       }
+      `;
+
+export const ADD_CHART = gql`
+  mutation addChart(
+    $coinName: String!
+    $chartDescription: String!
+    $imageThumbnail: String!
+    $imageMedium: String!
+    $imageSmall: String!
+  ) {
+    addChart(
+      coinName: $coinName
+      chartDescription: $chartDescription
+      imageThumbnail: $imageThumbnail
+      imageMedium: $imageMedium
+      imageSmall: $imageSmall
+    ) {
+      coinId
+      coinName
+      chartDescription
+      imageThumbnail
+      imageMedium
+      imageSmall
     }
   }
 `;
