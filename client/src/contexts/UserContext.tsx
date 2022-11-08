@@ -40,6 +40,7 @@ export interface User {
   friendCount: number;
   postCount: number;
   image?: string;
+  friends: User[];
 }
 
 interface Prototypes {

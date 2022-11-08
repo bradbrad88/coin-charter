@@ -45,7 +45,7 @@ const typeDefs = gql`
     comments: [Comment]
     coins: [Coin]
     charts: [Chart]
-    user(user: ID!): User
+    user(id: ID!): User
     comment(comment: ID!): Comment
     coin(coin: ID!): Coin
     chart(chart: ID!): Chart
@@ -58,7 +58,7 @@ const typeDefs = gql`
     logoutUser: Boolean
     addImage(image: String!): String
     addBio(bio: String!): String
-    addFriend(friend: ID!): User
+    addFriend(friendId: ID!): User
   }
 `;
 

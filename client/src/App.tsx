@@ -6,6 +6,7 @@ import Friends from "pages/Friends";
 import Charts from "pages/Charts";
 import CoinProfile from "pages/CoinProfile";
 import Login from "pages/Login";
+import ReadOnlyProfile from "pages/ReadOnlyProfile";
 import {
   ApolloClient,
   InMemoryCache,
@@ -40,7 +41,7 @@ const App = () => {
             <Route path="coin/:coinId" element={<CoinProfile />} />
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<Signup />} />
-            <Route path="profile/:profileId" element={<Profile />} />
+            <Route path="profile/:profileId" element={<ReadOnlyProfile />} />
           </Routes>
         </div>
       </UserProvider>
