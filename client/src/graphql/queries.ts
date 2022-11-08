@@ -56,3 +56,14 @@ export const QUERY_USERS = gql`
     }
   }
 `;
+
+export const SEARCH_USERS = gql`
+  query searchUsers($query: String!) {
+    searchUsers(query: $query) {
+      _id
+      username
+      subTitle
+      image
+    }
+  }
+`;

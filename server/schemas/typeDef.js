@@ -6,7 +6,6 @@ const typeDefs = gql`
   type User {
     _id: ID
     username: String
-    password: String
     subTitle: String
     email: String
     bio: String
@@ -50,6 +49,7 @@ const typeDefs = gql`
     comment(comment: ID!): Comment
     coin(coin: ID!): Coin
     chart(chart: ID!): Chart
+    searchUsers(query: String!): [User]
   }
 
   type Mutation {
