@@ -19,13 +19,45 @@ router.post("/upload-image", multer, async (req, res) => {
 });
 
 router.post("/chart/:symbol", multer, async (req, res) => {
+  const imageSizes = [
+    {
+      size: "thumbnail",
+      height: 1000,
+      width: 1000,
+    },
+    {
+      size: "medium",
+      height: 700,
+      width: 700,
+    },
+    {
+      size: "small",
+      height: undefined,
+      width: undefined,
+    },
+  ];
   try {
     const { userId, symbol } = req.params;
-    const image = await resizeImage(req.file.buffer);
-    const key = `${userId}${symbol}${uuidv4()}.avif`;
-    const url = await upload(image, key);
-    console.log(url);
-    res.json({ url });
+    // const image = await resizeImage(req.file.buffer);
+    const responseData = imageSizes.map(async (iteration) => {
+      const image = await resizeImage(
+        req.file.buffer,
+        iteration.width,
+        iteration.height,
+      );
+      const key = `${userId}${symbol}${uuidv4()}${iteration.size}.avif`;
+      const url = await upload(image, key);
+      return { url, size: iteration.size };
+    });
+
+    const responses = await Promise.all(responseData);
+    const imageResponse = responses.reduce((map, response) => {
+      map[response.size] = response.url;
+      return map;
+    }, {});
+
+    console.log(imageResponse);
+    res.json(imageResponse);
   } catch (error) {
     console.log(error);
     res.status(400).send(error);
