@@ -56,13 +56,18 @@ const ChartsOfCoins = () => {
         />
         <select>
           {coinOption.map((option) => (
-            <option value={option}>{option}</option>
+            <option value={option} key={option}>
+              {option}
+            </option>
           ))}
         </select>
       </form>
       <ul className="flex flex-col gap-1 h-[500px] w-full overflow-y-scroll">
-        {data.map((info) => (
-          <li className="group transition-all hover:bg-indigo-100 hover:rounded-lg hover:border-2 hover:border-indigo-100 hover:cursor-pointer flex flex-col p-2">
+        {data.map((info, index) => (
+          <li
+            className="group transition-all hover:bg-indigo-100 hover:rounded-lg hover:border-2 hover:border-indigo-100 hover:cursor-pointer flex flex-col p-2"
+            key={info.name + index}
+          >
             <div className="flex justify-between">
               <div className="flex flex-col w-5/6 h-[50px] gap-1">
                 <h1 className="truncate font-bold text-md text-indigo-600">

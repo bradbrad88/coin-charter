@@ -12,6 +12,7 @@ interface PropTypes {
 type Sizes = {
   thumbnail: string;
   medium: string;
+  small: string;
 };
 
 const Chart = ({ coin }: PropTypes) => {

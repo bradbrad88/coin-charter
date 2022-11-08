@@ -50,8 +50,11 @@ const MostRecent = () => {
   return (
     <div className="flex flex-col w-2/6 h-full pl-2">
       <ul className="flex flex-col gap-1 h-[580px] w-full overflow-y-scroll">
-        {data.map((info) => (
-          <li className="group transition-all hover:bg-indigo-100 hover:rounded-lg hover:border-2 hover:border-indigo-100 hover:cursor-pointer flex flex-col p-2">
+        {data.map((info, index) => (
+          <li
+            className="group transition-all hover:bg-indigo-100 hover:rounded-lg hover:border-2 hover:border-indigo-100 hover:cursor-pointer flex flex-col p-2"
+            key={info.title + index}
+          >
             <div className="flex justify-between">
               <div className="flex flex-col w-5/6 h-[80px] ">
                 <h1 className="truncate font-bold text-md text-indigo-600">
