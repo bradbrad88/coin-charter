@@ -17,7 +17,12 @@ const NavBar = ({ close }) => {
         <>
           <NavItem path={"/profile"} title={"Profile"} onClick={close} />
           <NavItem path={"/friends"} title={"Friends"} onClick={close} />
-          <NavItem path="/" title={"Logout"} onClick={Logout} />
+          <NavItem
+            path="/"
+            title={"Logout"}
+            onClick={Logout}
+            disableActiveStyling
+          />
         </>
       )}
       {!isLoggedIn && <NavItem path="/login" title={"Login"} onClick={close} />}
