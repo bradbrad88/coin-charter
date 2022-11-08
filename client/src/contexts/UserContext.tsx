@@ -29,7 +29,8 @@ interface Ctx {
   updateImage: (image: File, crop: Crop) => void;
   addBio: (bio: string) => void;
 }
-interface User {
+
+export interface User {
   _id: string;
   username: string;
   subTitle: string;
