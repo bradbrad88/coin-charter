@@ -3,18 +3,39 @@ import { CoinType } from "pages/CoinProfile";
 import Button from "./Button";
 import useFetch, { Config } from "hooks/useFetch";
 import useUser from "contexts/UserContext";
+import { useRef } from "react";
 
 interface PropTypes {
   coin: CoinType;
 }
 
+type Sizes = {
+  thumbnail: string;
+  medium: string;
+};
+
 const Chart = ({ coin }: PropTypes) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const { postRequest } = useFetch();
   let { user } = useUser();
 
-  const downloadFile = () => {
-    const config: Config = { url: `/api/user/${user?._id}/chart/${symbol}` };
-    postRequest(config);
+  const downloadFile = async () => {
+    const image = inputRef.current?.files![0];
+    const data = new FormData();
+    data.append("image", image!);
+
+    const config: Config = {
+      data,
+      url: `/api/user/${user?._id}/chart/${symbol}`,
+    };
+
+    const res = await postRequest<Sizes>(config);
+    if (!res) {
+      return;
+    }
+
+    console.log(res);
   };
 
   const symbol = coin.symbol;
@@ -29,7 +50,8 @@ const Chart = ({ coin }: PropTypes) => {
       ></AdvancedRealTimeChart>
 
       <form className="flex flex-col items-center">
-        <input type="file" />
+        <input type="file" ref={inputRef} />
+
         <Button onClick={downloadFile}>Upload</Button>
       </form>
     </div>
