@@ -2,9 +2,6 @@ const { Charts, Coins, Comments, Users } = require("../models");
 const { AuthenticationError } = require("apollo-server-express");
 const { signToken, setCookie } = require("../utils/auth");
 
-const sharp = require("sharp");
-const upload = require("../utils/s3");
-const IMG_SIZE = 300;
 // TODO add in sorting filters
 
 // ? can make into seperate folders
@@ -47,6 +44,14 @@ const resolvers = {
       return await Charts.findById(args.id)
         .populate("comments")
         .populate({ path: "comments", populate: "users" });
+    },
+    searchUsers: async (parent, { query }) => {
+      const regex = new RegExp(`.*${query}.*`, "i");
+      const users = await Users.find({ username: regex })
+        .populate("comments")
+        .populate({ path: "comments", populate: "users" });
+
+      return users;
     },
   },
   Mutation: {
