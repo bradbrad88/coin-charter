@@ -52,7 +52,6 @@ const CoinProfileCard = ({ coin }: PropTypes) => {
     }
   };
 
-  console.log(coin);
   return (
     <div className="flex flex-col lg:flex-row rounded-sm gap-5 shadow-lg shadow-gray-400 p-5 m-5 w-[95%] lg:w-[1050px] lg:h-[400px]">
       <div className="flex flex-col ">
