@@ -16,7 +16,7 @@ const Signup = () => {
 
   useEffect(() => {
     if (user) {
-      nav("/");
+      nav("/profile");
     }
   }, [user]);
 
