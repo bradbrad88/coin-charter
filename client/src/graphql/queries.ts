@@ -46,6 +46,20 @@ export const ADD_BIO = gql`
   }
 `;
 
+export const ADD_FRIEND = gql`
+  mutation addFriend($friendId: ID!) {
+    addFriend(friendId: $friendId) {
+      _id
+      username
+      subTitle
+      bio
+      image
+      friendCount
+      postCount
+    }
+  }
+`;
+
 export const QUERY_USERS = gql`
   query getUsers {
     users {
@@ -64,6 +78,20 @@ export const SEARCH_USERS = gql`
       username
       subTitle
       image
+    }
+  }
+`;
+
+export const QUERY_USER = gql`
+  query getUser($id: String!) {
+    user(id: $id) {
+      _id
+      username
+      subTitle
+      bio
+      image
+      friendCount
+      postCount
     }
   }
 `;

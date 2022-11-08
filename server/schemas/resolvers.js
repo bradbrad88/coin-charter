@@ -90,6 +90,22 @@ const resolvers = {
       await Users.findByIdAndUpdate(user._id, { $set: { bio } }, { new: true });
       return bio;
     },
+    addFriend: async (parent, { friendId }, { user }) => {
+      if (!user) throw new AuthenticationError();
+      const friend = await Users.findById(friendId);
+      if (!friend) throw new AuthenticationError();
+      await Users.findByIdAndUpdate(
+        user._id,
+        { $addToSet: { friends: friendId } },
+        { new: true },
+      );
+      await Users.findByIdAndUpdate(
+        friendId,
+        { $addToSet: { friends: user._id } },
+        { new: true },
+      );
+      return friend;
+    },
 
     // removeUser: async (parent, { userId }) => {
     //   return Users.findOneAndDelete({ _id: userId });

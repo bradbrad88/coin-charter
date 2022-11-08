@@ -58,6 +58,7 @@ const typeDefs = gql`
     logoutUser: Boolean
     addImage(image: String!): String
     addBio(bio: String!): String
+    addFriend(friend: ID!): User
   }
 `;
 
