@@ -10,6 +10,15 @@ export const ADD_USER = gql`
       image
       friendCount
       postCount
+      friends {
+        _id
+        username
+        subTitle
+        bio
+        image
+        friendCount
+        postCount
+      }
     }
   }
 `;
@@ -24,6 +33,15 @@ export const LOGIN_USER = gql`
       image
       friendCount
       postCount
+      friends {
+        _id
+        username
+        subTitle
+        bio
+        image
+        friendCount
+        postCount
+      }
     }
   }
 `;
@@ -83,7 +101,7 @@ export const SEARCH_USERS = gql`
 `;
 
 export const QUERY_USER = gql`
-  query getUser($id: String!) {
+  query getUser($id: ID!) {
     user(id: $id) {
       _id
       username

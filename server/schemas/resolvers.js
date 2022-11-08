@@ -94,7 +94,7 @@ const resolvers = {
       if (!user) throw new AuthenticationError();
       const friend = await Users.findById(friendId);
       if (!friend) throw new AuthenticationError();
-      await Users.findByIdAndUpdate(
+      const updatedUser = await Users.findByIdAndUpdate(
         user._id,
         { $addToSet: { friends: friendId } },
         { new: true },
@@ -104,7 +104,7 @@ const resolvers = {
         { $addToSet: { friends: user._id } },
         { new: true },
       );
-      return friend;
+      return updatedUser;
     },
 
     // removeUser: async (parent, { userId }) => {
