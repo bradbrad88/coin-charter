@@ -75,7 +75,7 @@ const ProfileCard = ({
           <div className="relative block w-1/2 md:w-[300px] h-fit">
             <img
               src={image}
-              className="aspect-[4/4] w-full object-cover rounded-full border-white border-4"
+              className="aspect-[4/4] w-full object-cover rounded-full border-white border-4 md:border-primary"
             />
             {edit && (
               <>
