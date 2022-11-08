@@ -1,9 +1,28 @@
 const sharp = require("sharp");
 const IMG_SIZE = 300;
 
-const resizeImage = async (image, crop) => {
+const resizeImage = async (
+  imageBuffer,
+  imgWidth = IMG_SIZE,
+  imgHeight = IMG_SIZE,
+) => {
   // Get height and width metadata
-  const { height, width } = await sharp(image.buffer).metadata();
+  const { height, width } = await sharp(imageBuffer).metadata();
+
+  let resizedImage = imageBuffer;
+
+  // Check size of image after cropping - if still too large, resize
+  if (width > imgWidth || height > imgHeight)
+    resizedImage = await sharp(resizedImage)
+      .resize(width, height, { fit: "cover" })
+      .toBuffer();
+
+  return await sharp(resizedImage).avif().toBuffer();
+};
+
+const cropImage = async (imageBuffer, crop) => {
+  // Get height and width metadata
+  const { height, width } = await sharp(imageBuffer).metadata();
 
   // Crop values are initially percentages. Use the metadata to get absolute values to use in sharp.extract
   const cropAbsolute = {
@@ -14,15 +33,7 @@ const resizeImage = async (image, crop) => {
   };
 
   // Crop the image
-  let croppedImage = await sharp(image.buffer).extract(cropAbsolute).toBuffer();
-
-  // Check size of image after cropping - if still too large, resize
-  if (cropAbsolute.width > IMG_SIZE || cropAbsolute.height > IMG_SIZE)
-    croppedImage = await sharp(croppedImage)
-      .resize(IMG_SIZE, IMG_SIZE, { fit: "cover" })
-      .png()
-      .toBuffer();
-  return croppedImage;
+  return await sharp(imageBuffer).extract(cropAbsolute).toBuffer();
 };
 
-module.exports = resizeImage;
+module.exports = { resizeImage, cropImage };
