@@ -40,6 +40,12 @@ export const ADD_PROFILE_IMAGE = gql`
   }
 `;
 
+export const ADD_BIO = gql`
+  mutation addBio($bio: String!) {
+    addBio(bio: $bio)
+  }
+`;
+
 export const QUERY_USERS = gql`
   query getUsers {
     users {

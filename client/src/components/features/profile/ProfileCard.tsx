@@ -28,9 +28,11 @@ const ProfileCard = ({
   postCount,
   edit = false,
 }: Proptypes) => {
-  const { updateImage } = useUserContext();
+  const { updateImage, addBio } = useUserContext();
   const [editImage, setEditImage] = useState<File | null>();
   const imageRef = useRef<HTMLInputElement>(null);
+  const [editBio, setEditBio] = useState(false);
+  const [newBio, setNewBio] = useState(bio || "");
 
   // Remove the file loaded in input element on every change - this allows the same file to be opened twice in a row
   useEffect(() => {
@@ -47,6 +49,16 @@ const ProfileCard = ({
     if (!editImage) return;
     updateImage(image, crop);
     setEditImage(null);
+  };
+
+  // onclick of the Edit Profile Button open an input to fill in the bio
+  const onBioEdit = () => {
+    setEditBio(!editBio);
+  };
+
+  const onBioSubmit = () => {
+    setEditBio(false);
+    addBio(newBio);
   };
 
   return (
@@ -92,7 +104,7 @@ const ProfileCard = ({
           </div>
           <div className="flex justify-between gap-5">
             {edit ? (
-              <Button onClick={() => {}}>Edit Profile</Button>
+              <Button onClick={onBioEdit}>Edit Bio</Button>
             ) : (
               <>
                 <Button onClick={() => {}}>Message</Button>
@@ -100,7 +112,20 @@ const ProfileCard = ({
               </>
             )}
           </div>
-          <p className="italic">{bio}</p>
+          {editBio ? (
+            <div>
+              <textarea
+                className="w-full h-24 p-2 border border-gray-300 rounded-md"
+                placeholder="Enter your bio"
+                onChange={(e) => setNewBio(e.target.value)}
+                value={newBio}
+              />
+              <Button onClick={onBioSubmit}>Submit</Button>
+            </div>
+          ) : (
+            <p className="italic">{newBio}</p>
+          )}
+
           <hr />
           <div className="flex justify-between gap-5 text-slate-500">
             <p>Friends: {friendCount}</p>

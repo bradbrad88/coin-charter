@@ -58,9 +58,9 @@ const resolvers = {
     },
     loginUser: async (parent, { username, password }, { res }) => {
       const user = await Users.findOne({ username });
-      if (!user) throw AuthenticationError();
+      if (!user) throw new AuthenticationError();
       if (!(await user.isCorrectPassword(password)))
-        throw AuthenticationError();
+        throw new AuthenticationError();
       const token = signToken(user);
       setCookie(res, token);
       return user;
@@ -79,6 +79,11 @@ const resolvers = {
         { new: true },
       );
       return image;
+    },
+    addBio: async (parent, { bio }, { user }) => {
+      if (!user) throw new AuthenticationError();
+      await Users.findByIdAndUpdate(user._id, { $set: { bio } }, { new: true });
+      return bio;
     },
 
     // removeUser: async (parent, { userId }) => {

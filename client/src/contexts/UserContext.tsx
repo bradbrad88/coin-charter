@@ -5,6 +5,7 @@ import {
   LOGIN_USER,
   LOGOUT_USER,
   ADD_PROFILE_IMAGE,
+  ADD_BIO,
 } from "src/graphql/queries";
 import createCtx from "./index";
 import useFetch from "hooks/useFetch";
@@ -26,6 +27,7 @@ interface Ctx {
   logoutUser: () => void;
   signUpUser: (newUser: NewUser) => void;
   updateImage: (image: File, crop: Crop) => void;
+  addBio: (bio: string) => void;
 }
 interface User {
   _id: string;
@@ -58,6 +60,7 @@ export const Provider = ({ children }: Prototypes) => {
   const [addProfileImage, { data: imageData, error }] =
     useMutation(ADD_PROFILE_IMAGE);
   const { postRequest } = useFetch();
+  const [addBioMutation, { data: bioData }] = useMutation(ADD_BIO);
 
   // Update local storage with user state data whenever it changes
   useEffect(() => {
@@ -91,6 +94,19 @@ export const Provider = ({ children }: Prototypes) => {
       });
     }
   }, [imageData]);
+
+  // If the bio-data from bio mutation changes then update user state
+  useEffect(() => {
+    if (bioData) {
+      setUser((prevState) => {
+        if (!prevState) return null;
+        return {
+          ...prevState,
+          bio: bioData.addBio,
+        };
+      });
+    }
+  }, [bioData]);
 
   // Helper function
   const authenticateUser = (user: User) => {
@@ -140,6 +156,10 @@ export const Provider = ({ children }: Prototypes) => {
     fetch(res.url, { cache: "reload", mode: "no-cors" });
   };
 
+  const addBio = (bio: string) => {
+    addBioMutation({ variables: { bio } });
+  };
+
   // Property exposed to context consumer for checking if a user exists in state
   const isLoggedIn = !!user;
 
@@ -153,6 +173,7 @@ export const Provider = ({ children }: Prototypes) => {
         loading,
         isLoggedIn,
         updateImage,
+        addBio,
       }}
     >
       {children}
