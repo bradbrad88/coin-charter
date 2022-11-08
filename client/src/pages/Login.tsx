@@ -11,7 +11,7 @@ const Login = () => {
 
   // If the user is already logged in then navigate to dashboard
   useEffect(() => {
-    if (isLoggedIn) nav("/dashboard");
+    if (isLoggedIn) nav("/profile");
   }, [isLoggedIn]);
 
   const inputChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
