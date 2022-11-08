@@ -30,7 +30,7 @@ const Header = () => {
       <div
         className={`${
           hideNav ? "" : "translate-x-full"
-        } fixed top-0 bottom-0 left-[-100vw] right-[100vw] transition-transform bg-white w-full lg:relative lg:flex lg:translate-x-0 lg:transition-none lg:left-0`}
+        } fixed top-0 bottom-0 left-[-100vw] right-[100vw] transition-transform bg-white w-full lg:relative lg:flex lg:translate-x-0 lg:transition-none lg:left-0 z-10`}
       >
         <div className="flex lg:items-end flex-col lg:flex-row gap-3 bg-indigo-800 bg-opacity-80 p-6 h-full w-full lg:justify-between lg:p-0 lg:bg-white">
           <div className="absolute w-full left-0 top-3 flex justify-center lg:hidden">

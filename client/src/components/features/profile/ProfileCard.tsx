@@ -67,7 +67,7 @@ const ProfileCard = ({
 
   return (
     <Container>
-      <div className="grid grid-cols-1md:grid-cols-2">
+      <div className="relative grid grid-cols-1md:grid-cols-2">
         {editImage && (
           <ImageEditor
             image={editImage}
@@ -75,8 +75,8 @@ const ProfileCard = ({
             submit={submitImage}
           />
         )}
-        <div className="bg-gradient-to-b sm:bg-gradient from-indigo-800 md:from-white bg-opacity-80 flex justify-center p-5 -z-10">
-          <div className="relative block w-1/2 md:w-[300px] h-fit">
+        <div className="bg-gradient-to-b sm:bg-gradient from-primary md:from-white bg-opacity-80 flex justify-center p-5">
+          <div className="relative bg-blue-30 w-1/2 md:w-[300px] h-fit bg-white rounded-full">
             <img
               src={image}
               className="aspect-[4/4] w-full object-cover rounded-full border-white border-4 md:border-primary"
@@ -85,7 +85,7 @@ const ProfileCard = ({
               <>
                 <label
                   htmlFor="avatar"
-                  className="absolute flex justify-center items-center right-[15%] bottom-[15%] w-8 h-8 rounded-full bg-[rgb(95,90,192)] border-white border-2 translate-x-1/2 translate-y-1/2"
+                  className="absolute flex justify-center items-center right-[15%] bottom-[15%] w-8 h-8 rounded-full bg-[rgb(95,90,192)] border-white border-2 translate-x-1/2 translate-y-1/2 cursor-pointer"
                 >
                   <MdEdit color="rgb(255,255,255)" />
                 </label>
