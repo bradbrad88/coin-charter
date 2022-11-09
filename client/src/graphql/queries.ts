@@ -10,6 +10,7 @@ export const ADD_USER = gql`
       image
       friendCount
       postCount
+      favCoins
       friends {
         _id
         username
@@ -18,6 +19,7 @@ export const ADD_USER = gql`
         image
         friendCount
         postCount
+        favCoins
       }
     }
   }
@@ -33,6 +35,7 @@ export const LOGIN_USER = gql`
       image
       friendCount
       postCount
+      favCoins
       friends {
         _id
         username
@@ -41,6 +44,7 @@ export const LOGIN_USER = gql`
         image
         friendCount
         postCount
+        favCoins
       }
     }
   }
@@ -74,6 +78,7 @@ export const ADD_FRIEND = gql`
       image
       friendCount
       postCount
+      favCoins
     }
   }
 `;
@@ -110,6 +115,23 @@ export const QUERY_USER = gql`
       image
       friendCount
       postCount
+      favCoins
+    }
+  }
+`;
+
+export const ADD_COIN = gql`
+  mutation Mutation($coinId: String!) {
+    addCoin(coinId: $coinId) {
+      favCoins
+    }
+  }
+`;
+
+export const REMOVE_COIN = gql`
+  mutation Mutation($coinId: String!) {
+    removeCoin(coinId: $coinId) {
+      favCoins
     }
   }
 `;

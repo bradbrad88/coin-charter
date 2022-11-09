@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
 import useFetch, { Config } from "hooks/useFetch";
 import { Sparklines, SparklinesLine } from "react-sparklines";
+import useUserContext from "contexts/UserContext";
 import Table, { HeaderObject } from "common/Table";
 import Favourite from "src/components/common/Favourite";
 import { formatCurrency, formatPercentage } from "src/utils/strings";
 import NumberHighlight from "common/NumberHighlight";
 import FieldSorter from "src/components/common/FieldSorter";
+import { removeConnectionDirectiveFromDocument } from "@apollo/client/utilities";
 
 export interface CoinMarketType {
   id: string;
@@ -53,6 +55,7 @@ type CoinMarketOrder =
 const DEFAULT_ORDER = "gecko_desc";
 
 const CoinList = () => {
+  const { user, addCoin, removeCoin } = useUserContext();
   const [data, setData] = useState<CoinMarketType[]>([]);
   const [order, setOrder] = useState<CoinMarketOrder>(DEFAULT_ORDER);
   const { fetchJSON, working } = useFetch();
@@ -90,8 +93,20 @@ const CoinList = () => {
   const headers: HeaderObject<CoinMarketType>[] = [
     {
       title: "",
-      processor() {
-        return <Favourite />;
+      processor(item) {
+        const onClick = () => {
+          if (user?.favCoins.includes(item.id)) {
+            removeCoin(item.id);
+          } else {
+            addCoin(item.id);
+          }
+        };
+        return (
+          <Favourite
+            fav={user?.favCoins.includes(item.id) || false}
+            onClick={onClick}
+          />
+        );
       },
       width: 20,
       weight: 1,
