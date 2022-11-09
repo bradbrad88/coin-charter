@@ -16,6 +16,7 @@ const TabComponent = ({ componentList }: Proptypes) => {
       const isSelected = item.component === component;
       return (
         <div
+          key={item.title}
           className={`${
             isSelected ? "bg-primary" : "bg-indigo-900"
           } min-w-[100px] text-center px-4 py-2 rounded-t-sm cursor-pointer`}
