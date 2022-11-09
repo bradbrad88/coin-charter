@@ -3,7 +3,7 @@ import { CoinType } from "pages/CoinProfile";
 import Button from "./Button";
 import useFetch, { Config } from "hooks/useFetch";
 import useUser from "contexts/UserContext";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 
 interface PropTypes {
   coin: CoinType;
@@ -15,9 +15,21 @@ type Sizes = {
   small: string;
 };
 
-const Chart = ({ coin }: PropTypes) => {
-  const inputRef = useRef<HTMLInputElement>(null);
+interface ImageDataState {
+  thumbnail: string;
+  medium: string;
+  small: string;
+}
 
+const FormInput = ({ coin }: PropTypes) => {
+  const [description, setDescription] = useState<string>();
+  const [imageData, setImageData] = useState<ImageDataState>({
+    thumbnail: "",
+    medium: "",
+    small: "",
+  });
+
+  const inputRef = useRef<HTMLInputElement>(null);
   const { postRequest } = useFetch();
   let { user } = useUser();
 
@@ -35,26 +47,48 @@ const Chart = ({ coin }: PropTypes) => {
     if (!res) {
       return;
     }
-
-    console.log(res);
+    setImageData(res);
+    return res;
   };
 
   const symbol = coin.symbol;
+
+  const callData = {
+    coinName: symbol,
+    chartDescription: description,
+    imageThumbnail: imageData.thumbnail,
+    imageMedium: imageData.medium,
+    imageSmall: imageData.small,
+  };
+
+  console.log(callData);
   return (
-    <div className="flex flex-col gap-10 rounded-sm shadow-lg shadow-gray-400 p-5 pb-7 m-5 w-[95%] lg:w-[97%] lg:h-[750px]">
+    <form className="flex flex-col w-[300px] gap-2">
+      <input type="file" ref={inputRef} />
+      <textarea
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        rows={5}
+        placeholder="Chart Description Here"
+      ></textarea>
+      <Button onClick={downloadFile}>Upload Chart</Button>
+    </form>
+  );
+};
+
+const Chart = ({ coin }: PropTypes) => {
+  return (
+    <div className="flex flex-col gap-7 rounded-sm shadow-lg shadow-gray-400 p-5 pb-7 m-5 w-[95%] lg:w-[97%] lg:h-[900px]">
       <AdvancedRealTimeChart
         theme="dark"
-        autosize
-        symbol={`${symbol.toUpperCase()}USDT`}
+        height={600}
+        width={1400}
+        // autosize
+        symbol={`${coin.symbol.toUpperCase()}USDT`}
         show_popup_button
         details
       ></AdvancedRealTimeChart>
-
-      <form className="flex flex-col items-center">
-        <input type="file" ref={inputRef} />
-
-        <Button onClick={downloadFile}>Upload</Button>
-      </form>
+      <FormInput coin={coin} />
     </div>
   );
 };

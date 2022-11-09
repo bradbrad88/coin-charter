@@ -20,6 +20,15 @@ const chartSchema = new Schema(
       required: false,
       maxLength: [250, "Too many characters, max length is 250"],
     },
+    imageThumbnail: {
+      type: String,
+    },
+    imageMedium: {
+      type: String,
+    },
+    imageSmall: {
+      type: String,
+    },
     chartComments: [
       {
         type: Schema.Types.ObjectId,
