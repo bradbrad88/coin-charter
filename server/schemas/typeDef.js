@@ -59,6 +59,8 @@ const typeDefs = gql`
     addImage(image: String!): String
     addBio(bio: String!): String
     addFriend(friendId: ID!): User
+    addCoin(coinId: String!): User
+    removeCoin(coinId: String!): User
   }
 `;
 

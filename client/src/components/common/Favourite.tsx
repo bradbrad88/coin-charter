@@ -1,19 +1,19 @@
-import { useState } from "react";
-import classnames from "classnames";
+import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 
-const Favourite = () => {
-  const [fav, setFav] = useState(false);
-  const onClick: React.PointerEventHandler<HTMLDivElement> = (e) => {
+interface Proptypes {
+  fav: boolean;
+  onClick: () => void;
+}
+
+const Favourite = ({ fav, onClick }: Proptypes) => {
+  const handleClick: React.PointerEventHandler<HTMLDivElement> = (e) => {
     e.stopPropagation();
-    setFav(!fav);
+    onClick();
   };
-  const classes = classnames("fa-star", {
-    "fa-solid": fav,
-    "fa-regular": !fav,
-  });
+
   return (
-    <div onClick={onClick}>
-      <i className={classes}></i>
+    <div onClick={handleClick}>
+      {fav ? <AiFillStar fill="orange" /> : <AiOutlineStar />}
     </div>
   );
 };

@@ -106,7 +106,24 @@ const resolvers = {
       );
       return updatedUser;
     },
-
+    addCoin: async (parent, { coinId }, { user }) => {
+      if (!user) throw new AuthenticationError();
+      const updatedUser = await Users.findByIdAndUpdate(
+        user,
+        { $addToSet: { favCoins: coinId } },
+        { new: true },
+      );
+      return updatedUser;
+    },
+    removeCoin: async (parent, { coinId }, { user }) => {
+      if (!user) throw new AuthenticationError();
+      const updatedUser = await Users.findByIdAndUpdate(
+        user,
+        { $pull: { favCoins: coinId } },
+        { new: true },
+      );
+      return updatedUser;
+    },
     // removeUser: async (parent, { userId }) => {
     //   return Users.findOneAndDelete({ _id: userId });
     // },
