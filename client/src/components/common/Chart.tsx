@@ -17,28 +17,52 @@ type Sizes = {
   small: string;
 };
 
-interface DataState {
-  coinName: string;
-  chartDescription: string;
-  imageThumbnail: string;
-  imageMedium: string;
-  imageSmall: string;
+interface ImageDataState {
+  thumbnail: string;
+  medium: string;
+  small: string;
 }
 
 const FormInput = ({ coin }: PropTypes) => {
   const symbol = coin.symbol;
-  const [chartData, setChartData] = useState<DataState>({
-    coinName: symbol,
-    chartDescription: "",
-    imageThumbnail: "",
-    imageMedium: "",
-    imageSmall: "",
+  const coinId = coin.id;
+
+  const [imageData, setImageData] = useState<ImageDataState>({
+    thumbnail: "",
+    medium: "",
+    small: "",
   });
-  const [addChart, { error }] = useMutation(ADD_CHART);
+  const [description, setDescription] = useState<string>("");
+  const [addChart, { error, data }] = useMutation(ADD_CHART);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const { postRequest } = useFetch();
   let { user } = useUser();
+
+  useEffect(() => {
+    if (imageData.thumbnail && imageData.medium && imageData.small) {
+      console.log(
+        coinId,
+        symbol,
+        description,
+        imageData.thumbnail,
+        imageData.medium,
+        imageData.small,
+      );
+      const variables = {
+        coinId,
+        coinName: symbol,
+        chartDescription: description,
+        imageThumbnail: imageData.thumbnail,
+        imageMedium: imageData.medium,
+        imageSmall: imageData.small,
+      };
+
+      addChart({
+        variables,
+      });
+    }
+  }, [imageData]);
 
   const downloadFile = async () => {
     const image = inputRef.current?.files![0];
@@ -54,25 +78,11 @@ const FormInput = ({ coin }: PropTypes) => {
     if (!res) {
       return;
     }
-    console.log(chartData);
-    setChartData({
-      coinName: chartData.coinName,
-      chartDescription: chartData.chartDescription,
-      imageThumbnail: res.thumbnail,
-      imageMedium: res.medium,
-      imageSmall: res.small,
-    });
-    // setImageData(res);
+
     console.log("images uploaded");
-    submitData();
+    setImageData(res);
     return res;
   };
-
-  const submitData = () => {
-    console.log(chartData);
-    console.log("submission");
-  };
-  console.log(chartData);
 
   //TODO the callData object has all info and now just need to add in the ADD_CHART mutation into a function for a click event, need to figure out how to get click event to trigger it
 
@@ -80,16 +90,8 @@ const FormInput = ({ coin }: PropTypes) => {
     <form className="flex flex-col w-[300px] gap-2">
       <input type="file" ref={inputRef} />
       <textarea
-        value={chartData.chartDescription}
-        onChange={(e) =>
-          setChartData({
-            coinName: chartData.coinName,
-            chartDescription: e.target.value,
-            imageThumbnail: chartData.imageThumbnail,
-            imageMedium: chartData.imageMedium,
-            imageSmall: chartData.imageSmall,
-          })
-        }
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
         rows={5}
         placeholder="Chart Description Here"
       ></textarea>
