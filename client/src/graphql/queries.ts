@@ -192,6 +192,7 @@ export const ADD_CHART = gql`
     $coinId: String!
     $coinName: String!
     $symbol: String!
+    $chartTitle: String!
     $chartDescription: String!
     $imageThumbnail: String!
     $imageMedium: String!
@@ -201,6 +202,7 @@ export const ADD_CHART = gql`
       coinId: $coinId
       coinName: $coinName
       symbol: $symbol
+      chartTitle: $chartTitle
       chartDescription: $chartDescription
       imageThumbnail: $imageThumbnail
       imageMedium: $imageMedium
@@ -209,6 +211,7 @@ export const ADD_CHART = gql`
       coinId
       coinName
       symbol
+      chartTitle
       chartDescription
       imageThumbnail
       imageMedium

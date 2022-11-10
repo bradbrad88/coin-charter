@@ -19,6 +19,11 @@ const chartSchema = new Schema(
       type: String,
       required: true,
     },
+    chartTitle: {
+      type: String,
+      required: false,
+      maxLength: [35, "Too many characters, max length is 35"],
+    },
     chartDescription: {
       type: String,
       required: false,
