@@ -36,7 +36,7 @@ const typeDefs = gql`
 
   type Chart {
     _id: ID
-    coinId: Coin
+    coinId: String
     coinName: String
     chartDescription: String
     imageThumbnail: String

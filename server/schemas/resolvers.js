@@ -139,10 +139,20 @@ const resolvers = {
 
     addChart: async (
       parent,
-      { coinName, chartDescription, imageThumbnail, imageMedium, imageSmall },
+      {
+        coinId,
+        coinName,
+        chartDescription,
+        imageThumbnail,
+        imageMedium,
+        imageSmall,
+      },
       { user },
     ) => {
+      // TODO check for if coin (OFF COINID) already in database - if not then create new coin off COINID.
+
       const newChart = await Charts.create({
+        coinId,
         coinName,
         chartDescription,
         imageThumbnail,
@@ -152,6 +162,8 @@ const resolvers = {
       const addToUser = await Users.findOneAndUpdate(user._id, {
         $push: { charts: newChart },
       });
+
+      // TODO  add the chart to coins chart array/create query
       return addToUser;
     },
     // removeUser: async (parent, { userId }) => {

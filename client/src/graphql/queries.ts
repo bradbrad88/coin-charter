@@ -183,10 +183,13 @@ export const REMOVE_COIN = gql`
         coinId
         _id
       }
-      `;
+    }
+  }
+`;
 
 export const ADD_CHART = gql`
   mutation addChart(
+    $coinId: String!
     $coinName: String!
     $chartDescription: String!
     $imageThumbnail: String!
@@ -194,6 +197,7 @@ export const ADD_CHART = gql`
     $imageSmall: String!
   ) {
     addChart(
+      coinId: $coinId
       coinName: $coinName
       chartDescription: $chartDescription
       imageThumbnail: $imageThumbnail
