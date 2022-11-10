@@ -191,6 +191,7 @@ export const ADD_CHART = gql`
   mutation addChart(
     $coinId: String!
     $coinName: String!
+    $symbol: String!
     $chartDescription: String!
     $imageThumbnail: String!
     $imageMedium: String!
@@ -199,6 +200,7 @@ export const ADD_CHART = gql`
     addChart(
       coinId: $coinId
       coinName: $coinName
+      symbol: $symbol
       chartDescription: $chartDescription
       imageThumbnail: $imageThumbnail
       imageMedium: $imageMedium
@@ -206,6 +208,7 @@ export const ADD_CHART = gql`
     ) {
       coinId
       coinName
+      symbol
       chartDescription
       imageThumbnail
       imageMedium

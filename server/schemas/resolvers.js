@@ -142,6 +142,7 @@ const resolvers = {
       {
         coinId,
         coinName,
+        symbol,
         chartDescription,
         imageThumbnail,
         imageMedium,
@@ -149,21 +150,37 @@ const resolvers = {
       },
       { user },
     ) => {
-      // TODO check for if coin (OFF COINID) already in database - if not then create new coin off COINID.
+      if (!user) throw new AuthenticationError();
+
+      const newCoin = await Coins.findOne({ coinId: coinId });
+      if (!newCoin) {
+        await Coins.create({ coinName, coinId, symbol, image: imageSmall });
+      }
 
       const newChart = await Charts.create({
         coinId,
         coinName,
+        symbol,
         chartDescription,
         imageThumbnail,
         imageMedium,
         imageSmall,
       });
-      const addToUser = await Users.findOneAndUpdate(user._id, {
-        $push: { charts: newChart },
-      });
 
-      // TODO  add the chart to coins chart array/create query
+      await Coins.findOneAndUpdate(
+        { coinId },
+        { $push: { coinCharts: newChart._id } },
+        { new: true },
+      );
+
+      const addToUser = await Users.findByIdAndUpdate(
+        user,
+        {
+          $push: { charts: newChart._id },
+        },
+        { new: true },
+      );
+
       return addToUser;
     },
     // removeUser: async (parent, { userId }) => {
