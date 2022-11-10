@@ -39,7 +39,12 @@ const typeDefs = gql`
     coinId: Coin
     coinName: String
     chartDescription: String
+    imageThumbnail: String
+    imageMedium: String
+    imageSmall: String
     chartComments: [Comment]
+    upVotes: Int
+    downVotes: Int
   }
 
   type Query {
@@ -68,6 +73,13 @@ const typeDefs = gql`
       image: String!
     ): User
     removeCoin(coinId: String!): User
+    addChart(
+      coinName: String!
+      chartDescription: String
+      imageThumbnail: String
+      imageMedium: String
+      imageSmall: String
+    ): Chart
   }
 `;
 
