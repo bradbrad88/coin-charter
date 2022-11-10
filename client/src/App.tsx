@@ -6,6 +6,7 @@ import Friends from "pages/Friends";
 import Charts from "pages/Charts";
 import CoinProfile from "pages/CoinProfile";
 import Login from "pages/Login";
+import ChartCoin from "./pages/ChartCoin";
 import ReadOnlyProfile from "pages/ReadOnlyProfile";
 import {
   ApolloClient,
@@ -39,6 +40,8 @@ const App = () => {
             <Route path="profile" element={<Profile />} />
             <Route path="charts" element={<Charts />} />
             <Route path="coin/:coinId" element={<CoinProfile />} />
+            {/* // ! will change to coin/:chartId for the chart of a coin */}
+            <Route path="chart" element={<ChartCoin />} />
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<Signup />} />
             <Route path="profile/:profileId" element={<ReadOnlyProfile />} />
