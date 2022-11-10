@@ -7,11 +7,15 @@ const { Schema, model, Types } = require("mongoose");
 const chartSchema = new Schema(
   {
     coinId: {
-      type: Schema.Types.ObjectId,
+      type: String,
       ref: "coins",
       required: true,
     },
     coinName: {
+      type: String,
+      required: true,
+    },
+    symbol: {
       type: String,
       required: true,
     },
