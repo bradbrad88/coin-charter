@@ -4,7 +4,7 @@ interface Proptypes {
 
 const Container = ({ children }: Proptypes) => {
   return (
-    <div className="md:shadow-lg rounded-sm shadow-gray-400">{children}</div>
+    <div className="md:shadow-2xl rounded-sm shadow-gray-900">{children}</div>
   );
 };
 
