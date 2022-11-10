@@ -13,7 +13,7 @@ const typeDefs = gql`
     friends: [User]
     friendCount: Int
     postCount: Int
-    favCoins: [String]
+    favCoins: [Coin]
     image: String
   }
 
@@ -28,6 +28,8 @@ const typeDefs = gql`
     _id: ID
     coinName: String
     coinId: String
+    symbol: String
+    image: String
     coinComments: [Comment]
     coinCharts: [Chart]
   }
@@ -59,7 +61,12 @@ const typeDefs = gql`
     addImage(image: String!): String
     addBio(bio: String!): String
     addFriend(friendId: ID!): User
-    addCoin(coinId: String!): User
+    addCoin(
+      coinId: String!
+      coinName: String!
+      symbol: String!
+      image: String!
+    ): User
     removeCoin(coinId: String!): User
   }
 `;

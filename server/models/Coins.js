@@ -15,6 +15,11 @@ const coinSchema = new Schema(
       type: String,
       required: true,
     },
+    symbol: {
+      type: String,
+      required: true,
+    },
+    image: String,
     coinComments: [
       {
         type: Schema.Types.ObjectId,
