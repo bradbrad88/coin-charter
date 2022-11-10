@@ -14,6 +14,7 @@ const typeDefs = gql`
     friendCount: Int
     postCount: Int
     favCoins: [Coin]
+    charts: [Chart]
     image: String
   }
 
@@ -38,6 +39,7 @@ const typeDefs = gql`
     _id: ID
     coinId: String
     coinName: String
+    symbol: String
     chartDescription: String
     imageThumbnail: String
     imageMedium: String
@@ -74,7 +76,9 @@ const typeDefs = gql`
     ): User
     removeCoin(coinId: String!): User
     addChart(
+      coinId: String!
       coinName: String!
+      symbol: String!
       chartDescription: String
       imageThumbnail: String
       imageMedium: String
