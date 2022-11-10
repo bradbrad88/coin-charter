@@ -1,3 +1,7 @@
+import Container from "src/components/common/Container";
+import { IoIosArrowRoundUp } from "react-icons/Io";
+import { IoIosArrowRoundDown } from "react-icons/Io";
+
 const data = [
   {
     title: "This is what i see happening this month",
@@ -48,46 +52,48 @@ const data = [
 
 const MostRecent = () => {
   return (
-    <div className="flex flex-col w-2/6 h-full pl-2">
-      <ul className="flex flex-col gap-1 h-[580px] w-full overflow-y-scroll">
-        {data.map((info, index) => (
-          <li
-            className="group transition-all hover:bg-indigo-100 hover:rounded-lg hover:border-2 hover:border-indigo-100 hover:cursor-pointer flex flex-col p-2"
-            key={info.title + index}
-          >
-            <div className="flex justify-between">
-              <div className="flex flex-col w-5/6 h-[80px] ">
-                <h1 className="truncate font-bold text-md text-indigo-600">
-                  {info.title}
-                </h1>
-                <h1 className="truncate font-bold text-sm">{info.coin}</h1>
-                <div className="flex justify-between">
-                  <p className="truncate italic font-bold text-xs text-slate-500 w-[110px]">
-                    By {info.name}
-                  </p>
-                  <p className="text-gray-500 text-xs">
-                    Posted On: {info.createdAt}
-                  </p>
+    <Container>
+      <div className="">
+        <h1 className="font-bold text-lg text-center p-5 sticky top-0 bg-white border-b border-t">
+          Top Charts
+        </h1>
+        <ul className="flex flex-col gap-1 h-full w-full overflow-y-scroll scrollbar hover:scrollbar-track-slate-200">
+          {data.map((info, index) => (
+            <li
+              className=" hover:bg-indigo-100 hover:cursor-pointer flex flex-col p-2"
+              key={info.title + index}
+            >
+              <div className="flex justify-between">
+                <div className="flex flex-col w-5/6 h-[80px] ">
+                  <h1 className="truncate font-bold text-md text-indigo-600">
+                    {info.title}
+                  </h1>
+                  <h1 className="truncate font-bold text-sm">{info.coin}</h1>
+                  <div className="flex justify-between">
+                    <p className="truncate italic font-bold text-xs text-slate-500 w-[110px]">
+                      By {info.name}
+                    </p>
+                    <p className="text-gray-500 text-xs">
+                      Posted On: {info.createdAt}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex flex-col">
+                  <IoIosArrowRoundUp className="text-green-500" />
+                  <p className="text-[8px]">{info.upVotes}</p>
+                </div>
+                <div className="flex flex-col">
+                  <IoIosArrowRoundDown className="text-red-500" />
+                  <p className="text-[8px]">{info.downVotes}</p>
                 </div>
               </div>
-
-              <div className="flex flex-col justify-start pr-2 pt-2">
-                <i className="fa-regular fa-thumbs-up text-[14px]"></i>
-                <p className="text-[8px]">{info.upVotes}</p>
-              </div>
-              <div className="flex flex-col justify-start pr-2 pt-2">
-                <i className="fa-regular fa-thumbs-down text-[14px]"></i>
-                <p className="text-[8px]">{info.downVotes}</p>
-              </div>
-            </div>
-            <img
-              src={info.chart}
-              className="w-full h-[120px] group-hover:brightness-75 rounded-md"
-            />
-          </li>
-        ))}
-      </ul>
-    </div>
+              <img src={info.chart} className="w-full h-[120px] rounded-sm" />
+            </li>
+          ))}
+        </ul>
+      </div>
+    </Container>
   );
 };
 
