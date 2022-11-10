@@ -26,6 +26,7 @@ interface ImageDataState {
 const FormInput = ({ coin }: PropTypes) => {
   const symbol = coin.symbol;
   const coinId = coin.id;
+  const coinName = coin.name;
 
   const [imageData, setImageData] = useState<ImageDataState>({
     thumbnail: "",
@@ -36,22 +37,15 @@ const FormInput = ({ coin }: PropTypes) => {
   const [addChart, { error, data }] = useMutation(ADD_CHART);
 
   const inputRef = useRef<HTMLInputElement>(null);
-  const { postRequest } = useFetch();
+  const { postRequest, working } = useFetch();
   let { user } = useUser();
 
   useEffect(() => {
     if (imageData.thumbnail && imageData.medium && imageData.small) {
-      console.log(
-        coinId,
-        symbol,
-        description,
-        imageData.thumbnail,
-        imageData.medium,
-        imageData.small,
-      );
       const variables = {
         coinId,
-        coinName: symbol,
+        coinName,
+        symbol,
         chartDescription: description,
         imageThumbnail: imageData.thumbnail,
         imageMedium: imageData.medium,
@@ -79,12 +73,9 @@ const FormInput = ({ coin }: PropTypes) => {
       return;
     }
 
-    console.log("images uploaded");
     setImageData(res);
     return res;
   };
-
-  //TODO the callData object has all info and now just need to add in the ADD_CHART mutation into a function for a click event, need to figure out how to get click event to trigger it
 
   return (
     <form className="flex flex-col w-[300px] gap-2">
@@ -95,7 +86,9 @@ const FormInput = ({ coin }: PropTypes) => {
         rows={5}
         placeholder="Chart Description Here"
       ></textarea>
-      <Button onClick={downloadFile}>Upload Chart</Button>
+      <Button loading={working} onClick={downloadFile}>
+        Upload Chart
+      </Button>
     </form>
   );
 };
