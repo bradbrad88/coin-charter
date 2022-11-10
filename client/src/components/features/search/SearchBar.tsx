@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useLazyQuery } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import { AiOutlineClose } from "react-icons/ai";
 import useUserContext from "contexts/UserContext";
-import { SEARCH_USERS } from "src/graphql/queries";
+import { SEARCH_USERS, SEND_FRIEND_REQUEST } from "src/graphql/queries";
 import { User } from "src/contexts/UserContext";
 import useFetch, { Config } from "hooks/useFetch";
 import Favourite from "src/components/common/Favourite";
@@ -22,6 +22,8 @@ interface Proptypes {
 }
 
 const SearchBar = ({ closeSidebar }: Proptypes) => {
+  // Check if user is authenticated before rendering User Profile search results
+  const { isLoggedIn } = useUserContext();
   // Current text in search bar
   const [query, setQuery] = useState("");
   // Provide ability to hide the search results even if query data exists
@@ -43,7 +45,6 @@ const SearchBar = ({ closeSidebar }: Proptypes) => {
     }
   }, [userData]);
 
-  //
   useEffect(() => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     if (!query) return;
@@ -95,17 +96,18 @@ const SearchBar = ({ closeSidebar }: Proptypes) => {
       </div>
       {(userData?.searchUsers.length > 0 || coins.length > 0) && !hideSearch && (
         <div className="absolute block mt-2 top-full w-full left-0 max-h-[60vh] h-fit border-[1px] border-gray-200 bg-white rounded-md z-50 overflow-auto">
-          {userData?.searchUsers.length > 0 && (
+          {isLoggedIn && userData?.searchUsers.length > 0 && (
             <h2 className="bg-indigo-100 font-bold p-1">Users</h2>
           )}
-          {userData?.searchUsers.map((user: User) => (
-            <SearchUser
-              key={user._id}
-              user={user}
-              close={closeSearch}
-              closeSidebar={closeSidebar}
-            />
-          ))}
+          {isLoggedIn &&
+            userData?.searchUsers.map((user: User) => (
+              <SearchUser
+                key={user._id}
+                user={user}
+                close={closeSearch}
+                closeSidebar={closeSidebar}
+              />
+            ))}
           {coins.length > 0 && (
             <h2 className="bg-indigo-100 font-bold p-1">Coins</h2>
           )}
@@ -129,18 +131,32 @@ interface SearchUserProptypes {
   closeSidebar: () => void;
 }
 
-const SearchUser = ({ user, close, closeSidebar }: SearchUserProptypes) => {
+const SearchUser = ({
+  user: selectedUser,
+  close,
+  closeSidebar,
+}: SearchUserProptypes) => {
   const nav = useNavigate();
-
+  const { user } = useUserContext();
+  const [sendRequest, { data }] = useMutation(SEND_FRIEND_REQUEST);
   const onSelectUser = () => {
-    nav(`/profile/${user._id}`);
+    nav(`/profile/${selectedUser._id}`);
     close();
     closeSidebar();
   };
 
   const onAddFriend: React.PointerEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation();
-    console.log("Add friend", user._id);
+    sendRequest({
+      variables: {
+        friendId: selectedUser._id,
+        userId: user!._id,
+        username: user!.username,
+        image: user!.image,
+        bio: user!.bio,
+        subTitle: user!.subTitle,
+      },
+    });
   };
 
   return (
@@ -149,11 +165,13 @@ const SearchUser = ({ user, close, closeSidebar }: SearchUserProptypes) => {
       className="grid grid-cols-[min-content,_minmax(0,_1fr),_min-content] p-2 gap-2 w-full items-center bg-gray-100 hover:bg-indigo-100"
     >
       <div className="h-10 w-10 shrink-0 rounded-full overflow-hidden">
-        <img className="" src={user.image} alt="" />
+        <img className="" src={selectedUser.image} alt="" />
       </div>
       <div className="w-full">
-        <div className="">{user.username}</div>
-        <div className="w-full text-primary truncate">{user.subTitle}</div>
+        <div className="">{selectedUser.username}</div>
+        <div className="w-full text-primary truncate">
+          {selectedUser.subTitle}
+        </div>
       </div>
       <button
         className="hover:text-primary transition-colors ml-auto shrink-0 whitespace-nowrap"
