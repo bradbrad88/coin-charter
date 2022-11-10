@@ -136,6 +136,27 @@ const resolvers = {
       ).populate("favCoins");
       return updatedUser;
     },
+
+    addChart: async (
+      parent,
+      { coinName, chartDescription, imageThumbnail, imageMedium, imageSmall },
+      { user },
+    ) => {
+      const newChart = await Charts.create({
+        coinName,
+        chartDescription,
+        imageThumbnail,
+        imageMedium,
+        imageSmall,
+      });
+      const addToUser = await Users.findOneAndUpdate(user._id, {
+        $push: { charts: newChart },
+      });
+      return addToUser;
+    },
+    // removeUser: async (parent, { userId }) => {
+    //   return Users.findOneAndDelete({ _id: userId });
+    // },
   },
 };
 
