@@ -15,7 +15,9 @@ const typeDefs = gql`
     friendCount: Int
     postCount: Int
     favCoins: [Coin]
+    favCoinCount: Int
     charts: [Chart]
+    chartCount: Int
     image: String
   }
 
@@ -72,6 +74,7 @@ const typeDefs = gql`
     chart(chart: ID!): Chart
     searchUsers(query: String!): [User]
     friendRequests: [FriendRequest]
+    friends: [User]
   }
 
   type Mutation {

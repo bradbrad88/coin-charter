@@ -100,6 +100,10 @@ userSchema.virtual("favCoinCount").get(function () {
   return this.favCoins.length;
 });
 
+userSchema.virtual("chartCount").get(function () {
+  return this.charts.length;
+});
+
 userSchema.pre("save", async function (next) {
   if (this.isNew || this.isModified("password")) {
     const saltRounds = 10;
