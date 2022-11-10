@@ -7,7 +7,6 @@ import Favourite from "src/components/common/Favourite";
 import { formatCurrency, formatPercentage } from "src/utils/strings";
 import NumberHighlight from "common/NumberHighlight";
 import FieldSorter from "src/components/common/FieldSorter";
-import { removeConnectionDirectiveFromDocument } from "@apollo/client/utilities";
 
 export interface CoinMarketType {
   id: string;
@@ -95,15 +94,22 @@ const CoinList = () => {
       title: "",
       processor(item) {
         const onClick = () => {
-          if (user?.favCoins.includes(item.id)) {
+          if (user?.favCoins.some((coin) => coin.coinId === item.id)) {
             removeCoin(item.id);
           } else {
-            addCoin(item.id);
+            addCoin({
+              coinId: item.id,
+              coinName: item.name,
+              symbol: item.symbol,
+              image: item.image,
+            });
           }
         };
         return (
           <Favourite
-            fav={user?.favCoins.includes(item.id) || false}
+            fav={
+              user?.favCoins.some((coin) => coin.coinId === item.id) || false
+            }
             onClick={onClick}
           />
         );
