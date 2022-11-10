@@ -11,11 +11,21 @@ const typeDefs = gql`
     bio: String
     comments: [Comment]
     friends: [User]
+    receivedFriendRequests: [FriendRequest]
     friendCount: Int
     postCount: Int
     favCoins: [Coin]
     charts: [Chart]
     image: String
+  }
+
+  type FriendRequest {
+    userId: String
+    username: String
+    image: String
+    bio: String
+    subTitle: String
+    createdAt: String
   }
 
   type Comment {
@@ -61,6 +71,7 @@ const typeDefs = gql`
     coin(coin: ID!): Coin
     chart(chart: ID!): Chart
     searchUsers(query: String!): [User]
+    friendRequests: [FriendRequest]
   }
 
   type Mutation {
@@ -88,6 +99,16 @@ const typeDefs = gql`
       imageMedium: String
       imageSmall: String
     ): Chart
+    sendFriendRequest(
+      friendId: ID!
+      userId: ID!
+      username: String!
+      image: String
+      bio: String
+      subTitle: String
+    ): Boolean
+    acceptFriendRequest(friendId: ID!): User
+    declineFriendRequest(friendId: ID!): Boolean
   }
 `;
 

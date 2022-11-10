@@ -5,6 +5,18 @@ const bcrypt = require("bcrypt");
 // setup validators here
 
 // need to add in profile picture for user, think it's a string with img url
+const requestSchema = new Schema(
+  {
+    userId: String,
+    username: String,
+    image: String,
+    bio: String,
+    subTitle: String,
+  },
+  {
+    timestamps: true,
+  },
+);
 
 // Users schema
 const userSchema = new Schema(
@@ -51,9 +63,10 @@ const userSchema = new Schema(
     friends: [
       {
         type: Schema.Types.ObjectId,
-        ref: "friends",
+        ref: "users",
       },
     ],
+    receivedFriendRequests: [{ type: requestSchema }],
     favCoins: [
       {
         type: Schema.Types.ObjectId,
@@ -97,6 +110,13 @@ userSchema.pre("save", async function (next) {
 
 userSchema.methods.isCorrectPassword = async function (password) {
   return await bcrypt.compare(password, this.password);
+};
+
+userSchema.methods.isValidRequest = async function (friendId) {
+  const valid = await this.receivedFriendRequests.some((request) => {
+    return request.userId === friendId;
+  });
+  return valid;
 };
 
 // Create user model with userSchema

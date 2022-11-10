@@ -59,6 +59,15 @@ const resolvers = {
 
       return users;
     },
+    friendRequests: async (parent, args, { user }) => {
+      if (!user) throw new AuthenticationError();
+      const requests = await Users.findById(user).populate({
+        path: "receivedFriendRequests",
+        populate: "user",
+      });
+      console.log(requests.receivedFriendRequests);
+      return requests.receivedFriendRequests;
+    },
   },
   Mutation: {
     addUser: async (parent, { username, email, password }, { res }) => {
@@ -191,6 +200,54 @@ const resolvers = {
     // removeUser: async (parent, { userId }) => {
     //   return Users.findOneAndDelete({ _id: userId });
     // },
+    sendFriendRequest: async (parent, args, { user }) => {
+      if (!user) throw new AuthenticationError();
+      const request = { ...args };
+      delete request.friendId;
+      await Users.findByIdAndUpdate(
+        args.friendId,
+        {
+          $addToSet: { receivedFriendRequests: request },
+        },
+        { new: true },
+      );
+      return true;
+    },
+    acceptFriendRequest: async (parent, { friendId }, { user: userId }) => {
+      if (!userId) throw new AuthenticationError();
+
+      const user = await Users.findById(userId);
+
+      const valid = await user.isValidRequest(friendId);
+
+      if (!valid) throw new Error("nope");
+
+      await user.updateOne({
+        $pull: {
+          receivedFriendRequests: { userId: friendId },
+        },
+      });
+
+      const friend = await Users.findById(friendId);
+      if (!friend) throw new Error("they don't exist");
+
+      const updatedUser = user.updateOne(
+        { $addToSet: { friends: friendId } },
+        { new: true },
+      );
+
+      await friend.updateOne({ $addToSet: { friends: user._id } });
+      return updatedUser;
+    },
+    declineFriendRequest: async (parent, { friendId }, { user: userId }) => {
+      if (!userId) throw new AuthenticationError();
+
+      await Users.findByIdAndUpdate(userId, {
+        $pull: { receivedFriendRequests: { userId: friendId } },
+      });
+
+      return true;
+    },
   },
 };
 

@@ -219,3 +219,64 @@ export const ADD_CHART = gql`
     }
   }
 `;
+
+export const GET_FRIEND_REQUESTS = gql`
+  query FriendRequests {
+    friendRequests {
+      createdAt
+      image
+      subTitle
+      userId
+      username
+    }
+  }
+`;
+
+export const ACCEPT_FRIEND_REQUEST = gql`
+  mutation AcceptFriendRequest($friendId: ID!) {
+    acceptFriendRequest(friendId: $friendId) {
+      friends {
+        _id
+        username
+        subTitle
+        bio
+        image
+        friendCount
+        postCount
+        favCoins {
+          _id
+          coinId
+          coinName
+          symbol
+          image
+        }
+      }
+    }
+  }
+`;
+
+export const SEND_FRIEND_REQUEST = gql`
+  mutation SendFriendRequest(
+    $friendId: ID!
+    $userId: ID!
+    $username: String!
+    $image: String
+    $bio: String
+    $subTitle: String
+  ) {
+    sendFriendRequest(
+      friendId: $friendId
+      userId: $userId
+      username: $username
+      image: $image
+      bio: $bio
+      subTitle: $subTitle
+    )
+  }
+`;
+
+export const DECLINE_FRIEND_REQEST = gql`
+  mutation DeclineFriendRequest($friendId: ID!) {
+    declineFriendRequest(friendId: $friendId)
+  }
+`;
