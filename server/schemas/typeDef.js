@@ -42,6 +42,7 @@ const typeDefs = gql`
     symbol: String
     chartTitle: String
     chartDescription: String
+    username: String
     imageThumbnail: String
     imageMedium: String
     imageSmall: String
@@ -82,6 +83,7 @@ const typeDefs = gql`
       symbol: String!
       chartTitle: String
       chartDescription: String
+      username: String
       imageThumbnail: String
       imageMedium: String
       imageSmall: String

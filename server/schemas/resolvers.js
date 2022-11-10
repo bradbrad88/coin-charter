@@ -164,10 +164,13 @@ const resolvers = {
         symbol,
         chartTitle,
         chartDescription,
+        username: user._id,
         imageThumbnail,
         imageMedium,
         imageSmall,
       });
+      console.log(newChart);
+      console.log(user._id);
 
       await Coins.findOneAndUpdate(
         { coinId },
