@@ -29,6 +29,11 @@ const chartSchema = new Schema(
       required: false,
       maxLength: [250, "Too many characters, max length is 250"],
     },
+    username: {
+      type: Schema.Types.ObjectId,
+      ref: "users",
+      required: true,
+    },
     imageThumbnail: {
       type: String,
     },
