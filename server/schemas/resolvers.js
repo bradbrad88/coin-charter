@@ -13,10 +13,16 @@ const resolvers = {
   Query: {
     users: async () => {
       // ? not sure if populate with Users again because of self-reference
-      return await Users.find({}).populate("comments");
+      const users = await Users.find({})
+        .populate("comments")
+        .populate("favCoins");
+      return users;
     },
     user: async (parent, args) => {
-      return await Users.findById(args.id).populate("comments");
+      const user = await Users.findById(args.id)
+        .populate("comments")
+        .populate("favCoins");
+      return user;
     },
     comments: async () => {
       return await Comments.find({})
@@ -59,7 +65,7 @@ const resolvers = {
       const user = await Users.create({ username, email, password });
       const token = signToken(user);
       setCookie(res, token);
-      return user;
+      return user.populate("favCoins");
     },
     loginUser: async (parent, { username, password }, { res }) => {
       const user = await Users.findOne({ username });
@@ -68,7 +74,7 @@ const resolvers = {
         throw new AuthenticationError();
       const token = signToken(user);
       setCookie(res, token);
-      return user;
+      return user.populate("favCoins");
     },
     logoutUser: async (parent, args, { res, user }) => {
       if (!user) {
@@ -106,27 +112,30 @@ const resolvers = {
       );
       return updatedUser;
     },
-    addCoin: async (parent, { coinId }, { user }) => {
+    addCoin: async (parent, { coinId, coinName, symbol, image }, { user }) => {
       if (!user) throw new AuthenticationError();
+      const coin = await Coins.findOneAndUpdate(
+        { coinId },
+        { $set: { coinId, coinName, symbol, image } },
+        { new: true, upsert: true },
+      );
       const updatedUser = await Users.findByIdAndUpdate(
         user,
-        { $addToSet: { favCoins: coinId } },
+        { $push: { favCoins: { $each: [coin._id], $position: 0 } } },
         { new: true },
-      );
+      ).populate("favCoins");
       return updatedUser;
     },
     removeCoin: async (parent, { coinId }, { user }) => {
       if (!user) throw new AuthenticationError();
+      const coin = await Coins.findOne({ coinId });
       const updatedUser = await Users.findByIdAndUpdate(
         user,
-        { $pull: { favCoins: coinId } },
+        { $pull: { favCoins: coin._id } },
         { new: true },
-      );
+      ).populate("favCoins");
       return updatedUser;
     },
-    // removeUser: async (parent, { userId }) => {
-    //   return Users.findOneAndDelete({ _id: userId });
-    // },
   },
 };
 

@@ -54,7 +54,12 @@ const userSchema = new Schema(
         ref: "friends",
       },
     ],
-    favCoins: [String],
+    favCoins: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "coins",
+      },
+    ],
     image: { type: String, required: false },
   },
   {

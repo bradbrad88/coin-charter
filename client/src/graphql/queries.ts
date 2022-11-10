@@ -10,7 +10,13 @@ export const ADD_USER = gql`
       image
       friendCount
       postCount
-      favCoins
+      favCoins {
+        _id
+        coinId
+        coinName
+        symbol
+        image
+      }
       friends {
         _id
         username
@@ -19,7 +25,13 @@ export const ADD_USER = gql`
         image
         friendCount
         postCount
-        favCoins
+        favCoins {
+          _id
+          coinId
+          coinName
+          symbol
+          image
+        }
       }
     }
   }
@@ -35,7 +47,13 @@ export const LOGIN_USER = gql`
       image
       friendCount
       postCount
-      favCoins
+      favCoins {
+        _id
+        coinId
+        coinName
+        symbol
+        image
+      }
       friends {
         _id
         username
@@ -44,7 +62,13 @@ export const LOGIN_USER = gql`
         image
         friendCount
         postCount
-        favCoins
+        favCoins {
+          _id
+          coinId
+          coinName
+          symbol
+          image
+        }
       }
     }
   }
@@ -78,7 +102,6 @@ export const ADD_FRIEND = gql`
       image
       friendCount
       postCount
-      favCoins
     }
   }
 `;
@@ -115,23 +138,51 @@ export const QUERY_USER = gql`
       image
       friendCount
       postCount
-      favCoins
+      favCoins {
+        _id
+        coinId
+        coinName
+        symbol
+        image
+      }
     }
   }
 `;
 
 export const ADD_COIN = gql`
-  mutation Mutation($coinId: String!) {
-    addCoin(coinId: $coinId) {
-      favCoins
+  mutation AddCoin(
+    $coinId: String!
+    $coinName: String!
+    $symbol: String!
+    $image: String!
+  ) {
+    addCoin(
+      coinId: $coinId
+      coinName: $coinName
+      symbol: $symbol
+      image: $image
+    ) {
+      favCoins {
+        symbol
+        image
+        coinName
+        coinId
+        _id
+      }
     }
   }
 `;
 
 export const REMOVE_COIN = gql`
-  mutation Mutation($coinId: String!) {
+  mutation RemoveCoin($coinId: String!) {
     removeCoin(coinId: $coinId) {
-      favCoins
+      favCoins {
+        symbol
+        image
+        coinName
+        coinId
+        _id
+      }
     }
   }
 `;
