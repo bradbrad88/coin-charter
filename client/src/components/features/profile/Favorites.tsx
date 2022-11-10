@@ -5,17 +5,15 @@ import Tabs from "common/Tabs";
 import Container from "src/components/common/Container";
 
 const componentList = [
+  { title: "Coins", component: <Coins /> },
   { title: "Comments", component: <Comments /> },
   { title: "Charts", component: <Charts /> },
-  { title: "Coins", component: <Coins /> },
 ];
 
 const Favorites = () => {
   return (
     <Container>
-      <div>
-        <Tabs componentList={componentList} />
-      </div>
+      <Tabs componentList={componentList} />
     </Container>
   );
 };
