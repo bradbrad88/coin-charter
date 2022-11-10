@@ -2,9 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLazyQuery } from "@apollo/client";
 import { AiOutlineClose } from "react-icons/ai";
+import useUserContext from "contexts/UserContext";
 import { SEARCH_USERS } from "src/graphql/queries";
 import { User } from "src/contexts/UserContext";
 import useFetch, { Config } from "hooks/useFetch";
+import Favourite from "src/components/common/Favourite";
 
 const DEBOUNCE = 700;
 
@@ -170,6 +172,7 @@ interface SearchCoinProptypes {
 }
 
 const SearchCoin = ({ coin, close, closeSidebar }: SearchCoinProptypes) => {
+  const { isLoggedIn, user, addCoin, removeCoin } = useUserContext();
   const nav = useNavigate();
   const onCoinSelect = () => {
     nav(`/coin/${coin.id}`);
@@ -177,9 +180,20 @@ const SearchCoin = ({ coin, close, closeSidebar }: SearchCoinProptypes) => {
     closeSidebar();
   };
 
-  const onAddCoin: React.PointerEventHandler<HTMLButtonElement> = (e) => {
-    e.stopPropagation();
-    console.log("Favourite coin functionality here");
+  const fav =
+    user?.favCoins.some((userCoin) => coin.id === userCoin.coinId) || false;
+
+  const onFavourite = () => {
+    if (fav) {
+      removeCoin(coin.id);
+    } else {
+      addCoin({
+        coinId: coin.id,
+        coinName: coin.name,
+        image: coin.thumb,
+        symbol: coin.symbol,
+      });
+    }
   };
 
   return (
@@ -194,12 +208,7 @@ const SearchCoin = ({ coin, close, closeSidebar }: SearchCoinProptypes) => {
         <div className="">{coin.name}</div>
         <div className="w-full text-primary truncate">{coin.symbol}</div>
       </div>
-      <button
-        className="hover:text-primary transition-colors ml-auto shrink-0 whitespace-nowrap"
-        onClick={onAddCoin}
-      >
-        Fav Coin
-      </button>
+      {isLoggedIn && <Favourite fav={fav} onClick={onFavourite} />}
     </div>
   );
 };

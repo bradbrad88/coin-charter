@@ -32,7 +32,7 @@ interface Ctx {
   updateImage: (image: File, crop: Crop) => void;
   addBio: (bio: string) => void;
   addFriend: (friendId: string) => void;
-  addCoin: (coinId: string) => void;
+  addCoin: (coin: Coin) => void;
   removeCoin: (coinId: string) => void;
 }
 
@@ -45,7 +45,14 @@ export interface User {
   postCount: number;
   image?: string;
   friends: User[];
-  favCoins: string[];
+  favCoins: Coin[];
+}
+
+interface Coin {
+  coinId: string;
+  coinName: string;
+  symbol: string;
+  image: string;
 }
 
 interface Prototypes {
@@ -63,12 +70,11 @@ const [useCtx, UserProvider] = createCtx<Ctx>();
 
 export const Provider = ({ children }: Prototypes) => {
   const [user, setUser] = useState<User | null>(localUser);
+  const { postRequest } = useFetch();
   const [logoutUserMutation] = useMutation(LOGOUT_USER);
   const [addUser, { data: signupData, loading }] = useMutation(ADD_USER);
   const [loginUserMutation, { data: loginData }] = useMutation(LOGIN_USER);
-  const [addProfileImage, { data: imageData, error }] =
-    useMutation(ADD_PROFILE_IMAGE);
-  const { postRequest } = useFetch();
+  const [addProfileImage, { data: imageData }] = useMutation(ADD_PROFILE_IMAGE);
   const [addBioMutation, { data: bioData }] = useMutation(ADD_BIO);
   const [addFriendMutation, { data: friendData }] = useMutation(ADD_FRIEND);
   const [addCoinMutation, { data: coinData }] = useMutation(ADD_COIN);
@@ -215,8 +221,8 @@ export const Provider = ({ children }: Prototypes) => {
     addFriendMutation({ variables: { friendId } });
   };
 
-  const addCoin = (coinId: string) => {
-    addCoinMutation({ variables: { coinId } });
+  const addCoin = (coin: Coin) => {
+    addCoinMutation({ variables: { ...coin } });
   };
 
   const removeCoin = (coinId: string) => {
