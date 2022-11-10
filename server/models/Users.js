@@ -60,6 +60,12 @@ const userSchema = new Schema(
         ref: "coins",
       },
     ],
+    charts: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "charts",
+      },
+    ],
     image: { type: String, required: false },
   },
   {

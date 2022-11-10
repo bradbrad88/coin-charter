@@ -35,7 +35,14 @@ const chartSchema = new Schema(
         ref: "comments",
       },
     ],
+    upVotes: {
+      type: Number,
+    },
+    downVotes: {
+      type: Number,
+    },
   },
+  { timestamps: true },
   {
     toJSON: {
       virtuals: true,
