@@ -34,6 +34,7 @@ const FormInput = ({ coin }: PropTypes) => {
     small: "",
   });
   const [description, setDescription] = useState<string>("");
+  const [title, setTitle] = useState<string>("");
   const [addChart, { error, data }] = useMutation(ADD_CHART);
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -46,6 +47,7 @@ const FormInput = ({ coin }: PropTypes) => {
         coinId,
         coinName,
         symbol,
+        chartTitle: title,
         chartDescription: description,
         imageThumbnail: imageData.thumbnail,
         imageMedium: imageData.medium,
@@ -80,6 +82,12 @@ const FormInput = ({ coin }: PropTypes) => {
   return (
     <form className="flex flex-col w-[300px] gap-2">
       <input type="file" ref={inputRef} />
+      <input
+        type="text"
+        placeholder="Chart Title Here"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+      />
       <textarea
         value={description}
         onChange={(e) => setDescription(e.target.value)}
@@ -95,7 +103,7 @@ const FormInput = ({ coin }: PropTypes) => {
 
 const Chart = ({ coin }: PropTypes) => {
   return (
-    <div className="flex flex-col gap-7 rounded-sm shadow-lg shadow-gray-400 p-5 pb-7 m-5 w-[95%] lg:w-[97%] lg:h-[900px]">
+    <div className="flex flex-col gap-7 rounded-sm shadow-lg shadow-gray-400 p-5 pb-7 m-5 w-[95%] lg:w-[97%] lg:h-[950px]">
       <AdvancedRealTimeChart
         theme="dark"
         height={600}

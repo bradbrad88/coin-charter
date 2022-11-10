@@ -40,6 +40,7 @@ const typeDefs = gql`
     coinId: String
     coinName: String
     symbol: String
+    chartTitle: String
     chartDescription: String
     imageThumbnail: String
     imageMedium: String
@@ -79,6 +80,7 @@ const typeDefs = gql`
       coinId: String!
       coinName: String!
       symbol: String!
+      chartTitle: String
       chartDescription: String
       imageThumbnail: String
       imageMedium: String

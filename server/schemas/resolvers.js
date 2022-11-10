@@ -143,6 +143,7 @@ const resolvers = {
         coinId,
         coinName,
         symbol,
+        chartTitle,
         chartDescription,
         imageThumbnail,
         imageMedium,
@@ -154,13 +155,14 @@ const resolvers = {
 
       const newCoin = await Coins.findOne({ coinId: coinId });
       if (!newCoin) {
-        await Coins.create({ coinName, coinId, symbol, image: imageSmall });
+        await Coins.create({ coinName, coinId, symbol });
       }
 
       const newChart = await Charts.create({
         coinId,
         coinName,
         symbol,
+        chartTitle,
         chartDescription,
         imageThumbnail,
         imageMedium,
