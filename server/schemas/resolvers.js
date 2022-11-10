@@ -68,6 +68,16 @@ const resolvers = {
       console.log(requests.receivedFriendRequests);
       return requests.receivedFriendRequests;
     },
+    friends: async (parent, args, { user: userId }) => {
+      if (!userId) throw new AuthenticationError();
+
+      const user = await Users.findById(userId)
+        .populate("charts")
+        .populate("favCoins")
+        .populate("comments")
+        .populate("friends");
+      return user.friends;
+    },
   },
   Mutation: {
     addUser: async (parent, { username, email, password }, { res }) => {
