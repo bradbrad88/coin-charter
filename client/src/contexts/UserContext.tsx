@@ -46,6 +46,8 @@ export interface User {
   image?: string;
   friends: User[];
   favCoins: Coin[];
+  favCoinCount: number;
+  chartCount: number;
 }
 
 interface Coin {

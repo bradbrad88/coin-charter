@@ -280,3 +280,48 @@ export const DECLINE_FRIEND_REQEST = gql`
     declineFriendRequest(friendId: $friendId)
   }
 `;
+
+export const GET_FRIENDS = gql`
+  query Friends {
+    friends {
+      _id
+      username
+      subTitle
+      email
+      bio
+      friends {
+        _id
+        image
+        subTitle
+        username
+        bio
+      }
+      friendCount
+      postCount
+      chartCount
+      favCoinCount
+      favCoins {
+        _id
+        coinName
+        coinId
+        symbol
+        image
+      }
+      charts {
+        _id
+        coinId
+        coinName
+        symbol
+        chartTitle
+        chartDescription
+        username
+        imageThumbnail
+        imageMedium
+        imageSmall
+        upVotes
+        downVotes
+      }
+      image
+    }
+  }
+`;
