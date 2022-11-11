@@ -37,7 +37,8 @@ interface ApiResponse {
 const Coins = () => {
   const { user } = useUserContext();
 
-  const renderCoins = () => user!.favCoins.map((coin) => <Coin coin={coin} />);
+  const renderCoins = () =>
+    user!.favCoins.map((favCoin) => <Coin coin={favCoin.coin} />);
 
   return (
     <div className="flex flex-col gap-2 rounded-md h-full overflow-auto max-h-[520px]">

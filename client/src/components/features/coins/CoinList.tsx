@@ -94,7 +94,9 @@ const CoinList = () => {
       title: "",
       processor(item) {
         const onClick = () => {
-          if (user?.favCoins.some((coin) => coin.coinId === item.id)) {
+          if (
+            user?.favCoins.some((favCoin) => favCoin.coin.coinId === item.id)
+          ) {
             removeCoin(item.id);
           } else {
             addCoin({
@@ -105,10 +107,13 @@ const CoinList = () => {
             });
           }
         };
+        if (!user) return null;
         return (
           <Favourite
             fav={
-              user?.favCoins.some((coin) => coin.coinId === item.id) || false
+              user?.favCoins.some(
+                (favCoin) => favCoin.coin.coinId === item.id,
+              ) || false
             }
             onClick={onClick}
           />
