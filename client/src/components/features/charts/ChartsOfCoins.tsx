@@ -21,6 +21,7 @@ interface CoinDataTypes {
 }
 
 const ChartsOfCoins = () => {
+  const nav = useNavigate();
   const coinOption = ["Most Recent", "Oldest", "Top Rated", "Least Rated"];
   const [searchInput, setSearchInput] = useState<string>("");
   const [search, setSearch] = useState<string>("bitcoin");
@@ -66,6 +67,10 @@ const ChartsOfCoins = () => {
         .sort((a, b) => (a.upVotes < b.upVotes ? -1 : 1));
       setChartList(leastRated);
     }
+  };
+
+  const selectChart = (chartInfo: any) => {
+    nav(`/chart/${chartInfo._id}`);
   };
 
   if (!chartList) {
