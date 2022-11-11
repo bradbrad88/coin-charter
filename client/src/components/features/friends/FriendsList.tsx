@@ -1,7 +1,9 @@
 import type { User } from "contexts/UserContext";
 
 interface Proptypes {
-  friends: User[];
+  friends: {
+    friend: User;
+  }[];
 }
 
 const FriendsList = ({ friends }: Proptypes) => {
@@ -12,38 +14,38 @@ const FriendsList = ({ friends }: Proptypes) => {
         <h1>Friends: 2312</h1>
       </div>
       <ul className="flex flex-col gap-1 w-full h-full overflow-y-auto">
-        {friends.map((info) => (
+        {friends.map(({ friend }) => (
           <li className="border-b w-full h-[100px] flex justify-start p-1">
             <div className="flex gap-1 w-full">
               <div className="flex w-2/6 gap-2">
                 <img
-                  src={info.image}
+                  src={friend.image}
                   className="h-[45px] w-[35px] rounded-lg md:h-[90px] md:w-[70px]"
                 />
                 <div className="flex flex-col leading-4 w-5/6">
                   <h1 className="font-bold text-md text-indigo-600 hover:text-indigo-200 hover:cursor-pointer">
-                    {info.username}
+                    {friend.username}
                   </h1>
-                  <p className="italic text-sm">{info.subTitle}</p>
+                  <p className="italic text-sm">{friend.subTitle}</p>
                   <p className="hidden text-sm w-full leading-4 md:flex overflow-y-auto">
-                    {info.bio}
+                    {friend.bio}
                   </p>
                 </div>
               </div>
               <div className="flex w-2/6 hidden md:flex">
                 <div className=" flex flex-col w-[100px] h-full justify-center items-center">
                   <p className="font-bold text-sm text-indigo-600">Friends #</p>
-                  <p>{info.friendCount}</p>
+                  <p>{friend.friendCount}</p>
                 </div>
                 <div className=" flex flex-col w-[100px] h-full justify-center items-center">
                   <p className="font-bold text-sm text-indigo-600">Charts #</p>
-                  <p>{info.chartCount}</p>
+                  <p>{friend.chartCount}</p>
                 </div>
                 <div className=" flex flex-col w-[100px] h-full justify-center items-center">
                   <p className="font-bold text-sm text-indigo-600">
                     Fav Coins #
                   </p>
-                  <p>{info.favCoinCount}</p>
+                  <p>{friend.favCoinCount}</p>
                 </div>
               </div>
               <div className=" w-3/6 md:w-2/6 h-full leading-4">

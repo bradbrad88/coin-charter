@@ -199,7 +199,8 @@ const SearchCoin = ({ coin, close, closeSidebar }: SearchCoinProptypes) => {
   };
 
   const fav =
-    user?.favCoins.some((userCoin) => coin.id === userCoin.coinId) || false;
+    user?.favCoins.some((userCoin) => coin.id === userCoin.coin.coinId) ||
+    false;
 
   const onFavourite = () => {
     if (fav) {

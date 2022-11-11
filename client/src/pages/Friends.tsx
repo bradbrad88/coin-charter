@@ -8,7 +8,7 @@ const Friends = () => {
   return (
     <div className="flex flex-col md:flex-row">
       {data && <FriendsList friends={data.friends} />}
-      {data && <FriendsActivity friends={data.friends} />}
+      {data && <FriendsActivity />}
     </div>
   );
 };
