@@ -1,4 +1,4 @@
-const { Charts, Coins, Comments, Users } = require("../models");
+const { Charts, Coins, Comments, Users, FavCoin } = require("../models");
 const { AuthenticationError } = require("apollo-server-express");
 const { signToken, setCookie } = require("../utils/auth");
 
@@ -15,13 +15,13 @@ const resolvers = {
       // ? not sure if populate with Users again because of self-reference
       const users = await Users.find({})
         .populate("comments")
-        .populate("favCoins");
+        .populate({ path: "favCoins", populate: "coin" });
       return users;
     },
     user: async (parent, args) => {
       const user = await Users.findById(args.id)
         .populate("comments")
-        .populate("favCoins");
+        .populate({ path: "favCoins", populate: "coin" });
       return user;
     },
     comments: async () => {
@@ -65,7 +65,6 @@ const resolvers = {
         path: "receivedFriendRequests",
         populate: "user",
       });
-      console.log(requests.receivedFriendRequests);
       return requests.receivedFriendRequests;
     },
     friends: async (parent, args, { user: userId }) => {
@@ -73,10 +72,58 @@ const resolvers = {
 
       const user = await Users.findById(userId)
         .populate("charts")
-        .populate("favCoins")
         .populate("comments")
-        .populate("friends");
+        .populate({ path: "friends", populate: "friend" });
       return user.friends;
+    },
+    recentActivity: async (parent, args, { user: userId }) => {
+      if (!userId) throw new AuthenticationError();
+
+      const user = await Users.findById(userId)
+        .populate({
+          path: "friends",
+          populate: {
+            path: "friend",
+            populate: { path: "favCoins", populate: "coin" },
+          },
+        })
+        .populate("charts")
+        .populate({ path: "favCoins", populate: "coin" });
+
+      const operations = [
+        (user) => {
+          console.log(user);
+          return user.favCoins.map((favCoin) => ({
+            createdAt: favCoin.updatedAt,
+            text: "liked a new coin:",
+            value: favCoin.coin.coinName,
+            path: `coins/${favCoin.coinId}`,
+          }));
+        },
+        (user) => {
+          return user.charts.map((chart) => ({
+            createdAt: chart.updatedAt,
+            text: "created a new chart for ",
+            value: chart.coin,
+            path: `charts/${chart._id}`,
+          }));
+        },
+      ];
+
+      const activities = user.friends.flatMap(({ friend }) => {
+        const parseOperations = (operations) => {
+          return operations.flatMap((fn) =>
+            fn(friend).map((item) => ({
+              ...item,
+              username: friend.username,
+              image: friend.image,
+            })),
+          );
+        };
+        const activities = parseOperations(operations);
+        return activities;
+      });
+      return activities;
     },
   },
   Mutation: {
@@ -84,7 +131,7 @@ const resolvers = {
       const user = await Users.create({ username, email, password });
       const token = signToken(user);
       setCookie(res, token);
-      return user.populate("favCoins");
+      return user.populate({ path: "favCoins", populate: "coin" });
     },
     loginUser: async (parent, { username, password }, { res }) => {
       const user = await Users.findOne({ username });
@@ -93,7 +140,7 @@ const resolvers = {
         throw new AuthenticationError();
       const token = signToken(user);
       setCookie(res, token);
-      return user.populate("favCoins");
+      return user.populate({ path: "favCoins", populate: "coin" });
     },
     logoutUser: async (parent, args, { res, user }) => {
       if (!user) {
@@ -115,22 +162,6 @@ const resolvers = {
       await Users.findByIdAndUpdate(user._id, { $set: { bio } }, { new: true });
       return bio;
     },
-    addFriend: async (parent, { friendId }, { user }) => {
-      if (!user) throw new AuthenticationError();
-      const friend = await Users.findById(friendId);
-      if (!friend) throw new AuthenticationError();
-      const updatedUser = await Users.findByIdAndUpdate(
-        user._id,
-        { $addToSet: { friends: friendId } },
-        { new: true },
-      );
-      await Users.findByIdAndUpdate(
-        friendId,
-        { $addToSet: { friends: user._id } },
-        { new: true },
-      );
-      return updatedUser;
-    },
     addCoin: async (parent, { coinId, coinName, symbol, image }, { user }) => {
       if (!user) throw new AuthenticationError();
       const coin = await Coins.findOneAndUpdate(
@@ -140,9 +171,9 @@ const resolvers = {
       );
       const updatedUser = await Users.findByIdAndUpdate(
         user,
-        { $push: { favCoins: { $each: [coin._id], $position: 0 } } },
-        { new: true },
-      ).populate("favCoins");
+        { $push: { favCoins: { $each: [{ coin: coin._id }], $position: 0 } } },
+        { new: true, timestamps: true },
+      ).populate({ path: "favCoins", populate: "coin" });
       return updatedUser;
     },
     removeCoin: async (parent, { coinId }, { user }) => {
@@ -150,9 +181,9 @@ const resolvers = {
       const coin = await Coins.findOne({ coinId });
       const updatedUser = await Users.findByIdAndUpdate(
         user,
-        { $pull: { favCoins: coin._id } },
+        { $pull: { favCoins: { coin: coin._id } } },
         { new: true },
-      ).populate("favCoins");
+      ).populate({ path: "favCoins", populate: "coin" });
       return updatedUser;
     },
 
@@ -188,8 +219,6 @@ const resolvers = {
         imageMedium,
         imageSmall,
       });
-      console.log(newChart);
-      console.log(user._id);
 
       await Coins.findOneAndUpdate(
         { coinId },
@@ -207,9 +236,6 @@ const resolvers = {
 
       return addToUser;
     },
-    // removeUser: async (parent, { userId }) => {
-    //   return Users.findOneAndDelete({ _id: userId });
-    // },
     sendFriendRequest: async (parent, args, { user }) => {
       if (!user) throw new AuthenticationError();
       const request = { ...args };
@@ -242,8 +268,8 @@ const resolvers = {
       if (!friend) throw new Error("they don't exist");
 
       const updatedUser = user.updateOne(
-        { $addToSet: { friends: friendId } },
-        { new: true },
+        { $addToSet: { friends: { friend: friendId } } },
+        { new: true, timestamps: true },
       );
 
       await friend.updateOne({ $addToSet: { friends: user._id } });
