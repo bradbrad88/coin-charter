@@ -93,7 +93,7 @@ const typeDefs = gql`
     user(id: ID!): User
     comment(comment: ID!): Comment
     coin(coinId: String!): Coin
-    chart(id: ID!): Chart
+    chart(chartId: ID!): Chart
     searchUsers(query: String!): [User]
     friendRequests: [FriendRequest]
     friends: [Friend]
