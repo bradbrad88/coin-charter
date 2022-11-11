@@ -21,7 +21,6 @@ interface CoinDataTypes {
 }
 
 const ChartsOfCoins = () => {
-  const nav = useNavigate();
   const coinOption = ["Most Recent", "Oldest", "Top Rated", "Least Rated"];
   const [searchInput, setSearchInput] = useState<string>("");
   const [search, setSearch] = useState<string>("bitcoin");
@@ -69,10 +68,6 @@ const ChartsOfCoins = () => {
     }
   };
 
-  const selectChart = (chartInfo: any) => {
-    nav(`/chart/${chartInfo._id}`);
-  };
-
   if (!chartList) {
     return <div>Loading...</div>;
   }
@@ -113,7 +108,6 @@ const ChartsOfCoins = () => {
               <li
                 className=" hover:bg-indigo-100 hover:border-indigo-100 hover:cursor-pointer flex flex-col p-2"
                 key={info.username + index}
-                onClick={() => selectChart(info)}
               >
                 <div className="flex justify-between">
                   <div className="flex flex-col w-5/6 h-[50px] gap-1">
@@ -130,6 +124,14 @@ const ChartsOfCoins = () => {
                     </div>
                   </div>
 
+                  <div className="flex flex-col">
+                    <IoIosArrowRoundUp className="text-green-500" />
+                    <p className="text-[8px]">{info.upVotes}</p>
+                  </div>
+                  <div className="flex flex-col">
+                    <IoIosArrowRoundDown className="text-red-500" />
+                    <p className="text-[8px]">{info.downVotes}</p>
+                  </div>
                   <div className="flex flex-col">
                     <IoIosArrowRoundUp className="text-green-500" />
                     <p className="text-[8px]">{info.upVotes}</p>

@@ -260,6 +260,27 @@ export const QUERY_ALL_CHARTS = gql`
   }
 `;
 
+export const QUERY_ALL_CHARTS = gql`
+  query QueryAllCharts {
+    charts {
+      _id
+      coinId
+      coinName
+      symbol
+      chartTitle
+      chartDescription
+      username
+      userId
+      imageThumbnail
+      imageMedium
+      imageSmall
+      upVotes
+      downVotes
+      createdAt
+    }
+  }
+`;
+
 export const ADD_COIN = gql`
   mutation AddCoin(
     $coinId: String!
