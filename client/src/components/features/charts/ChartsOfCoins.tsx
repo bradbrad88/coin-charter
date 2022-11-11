@@ -49,8 +49,8 @@ const data = [
 const ChartsOfCoins = () => {
   return (
     <Container>
-      <div className="flex flex-col">
-        <form className="p-5 sticky top-0 bg-white border-b border-t">
+      <div className="flex flex-col h-[880px]">
+        <form className="p-5 sticky top-0 bg-white border-b border-t lg:static">
           <h1 className="font-bold text-center ">
             View Charts For:{" "}
             <span className="italic font-semibold">Bitcoin</span>
