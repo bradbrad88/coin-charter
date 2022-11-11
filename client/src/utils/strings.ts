@@ -35,3 +35,27 @@ if (!topRated) {
 const selectUser = () => {
   nav(`/profile/${topRated.userId}`);
 };
+
+// TopCharts in charts folder functionality
+useEffect(() => {
+  const chartData = data?.charts;
+
+  if (chartData) {
+    createTopRated(chartData);
+  }
+}, [data]);
+
+const createTopRated = (chartData: ChartsDataTypes[]) => {
+  let topRated = chartData
+    .slice(0)
+    .sort((a, b) => (a.upVotes > b.upVotes ? -1 : 1));
+  setTopCharts(topRated);
+};
+
+const selectChart = (info: any) => {
+  nav(`/chart/${info._id}`);
+};
+
+if (!topCharts) {
+  return <div>Loading...</div>;
+}
