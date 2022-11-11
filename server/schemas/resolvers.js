@@ -57,9 +57,14 @@ const resolvers = {
         .populate({ path: "users", populate: "comments" });
     },
     coin: async (parent, { coinId }) => {
-      return await Coins.findOne({ coinId })
+      const findCoin = await Coins.findOne({ coinId })
         .populate("coinCharts")
         .populate({ path: "coinCharts", populate: "chartComments" });
+
+      if (!findCoin) {
+        throw new AuthenticationError();
+      }
+      return findCoin;
     },
     coins: async (parent, args) => {
       return await Coins.findById(args.id)
@@ -70,8 +75,8 @@ const resolvers = {
     },
     charts: async () => {
       return await Charts.find({})
-        .populate("comments")
-        .populate({ path: "comments", populate: "users" });
+        .populate("chartComments")
+        .populate({ path: "chartComments", populate: "users" });
     },
     chart: async (parent, { chartId }) => {
       return await Charts.findById(chartId);

@@ -2,56 +2,13 @@ import Container from "src/components/common/Container";
 import { IoIosArrowRoundUp, IoIosArrowRoundDown } from "react-icons/io";
 import { TfiArrowCircleLeft, TfiArrowCircleRight } from "react-icons/tfi";
 import { useRef } from "react";
-
-const data = [
-  {
-    title: "This is what i see happening this month",
-    name: "Ben Smerd",
-    coin: "DogeCooin",
-    upVotes: 1202,
-    downVotes: 12,
-    createdAt: "24/12/2022",
-    chart: "https://source.unsplash.com/random/?person/",
-  },
-  {
-    title: "We are going UP!",
-    name: "Brad Teague",
-    coin: "Ethereum",
-    upVotes: 3203,
-    downVotes: 2,
-    createdAt: "21/03/2022",
-    chart: "https://source.unsplash.com/random/?person/",
-  },
-  {
-    title: "Going DOWN!",
-    name: "Sam March",
-    coin: "Avalanche",
-    upVotes: 1022,
-    downVotes: 1223,
-    createdAt: "24/12/2020",
-    chart: "https://source.unsplash.com/random/?person/",
-  },
-  {
-    title: "This i think will happen very soon in this market",
-    name: "Sally Peterson",
-    coin: "Theta",
-    upVotes: 1230,
-    downVotes: 122,
-    createdAt: "04/05/2022",
-    chart: "https://source.unsplash.com/random/?person/",
-  },
-  {
-    title: "This is what i see happening this month",
-    name: "Ben Smerdsssssssss",
-    coin: "DogeCooin",
-    upVotes: 1202,
-    downVotes: 12,
-    createdAt: "24/12/2022",
-    chart: "https://source.unsplash.com/random/?person/",
-  },
-];
+import { useEffect, useState } from "react";
+import { QUERY_ALL_CHARTS } from "src/graphql/queries";
+import { useQuery } from "@apollo/client";
 
 const MostRecent = () => {
+  const [topCharts, setTopCharts] = useState<any>([]);
+  const { loading, error, data } = useQuery(QUERY_ALL_CHARTS);
   const ref = useRef<HTMLUListElement>(null);
 
   const renderChartItems = () => {
