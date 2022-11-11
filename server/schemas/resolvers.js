@@ -1,6 +1,7 @@
 const { Charts, Coins, Comments, Users, FavCoin } = require("../models");
 const { AuthenticationError } = require("apollo-server-express");
 const { signToken, setCookie } = require("../utils/auth");
+const { GraphQLScalarType, Kind } = require("graphql");
 
 // TODO add in sorting filters
 
@@ -10,6 +11,27 @@ const { signToken, setCookie } = require("../utils/auth");
 // * info about the relationships for resolvers
 
 const resolvers = {
+  DateTime: new GraphQLScalarType({
+    name: "DateTime",
+    description: "DateTime scalar type",
+
+    parseValue(value) {
+      return new Date(value);
+    },
+    parseLiteral(ast) {
+      if (ast.kind === Kind.INT) {
+        return parseInt(ast.value, 10);
+      }
+
+      return null;
+    },
+    serialize(value) {
+      const date = new Date(value);
+
+      return date.toISOString();
+    },
+  }),
+
   Query: {
     users: async () => {
       // ? not sure if populate with Users again because of self-reference
@@ -34,6 +56,11 @@ const resolvers = {
         .populate("users")
         .populate({ path: "users", populate: "comments" });
     },
+    coin: async (parent, { coinId }) => {
+      return await Coins.findOne({ coinId })
+        .populate("coinCharts")
+        .populate({ path: "coinCharts", populate: "chartComments" });
+    },
     coins: async (parent, args) => {
       return await Coins.findById(args.id)
         .populate("comments")
@@ -46,10 +73,10 @@ const resolvers = {
         .populate("comments")
         .populate({ path: "comments", populate: "users" });
     },
-    chart: async (parent, args) => {
-      return await Charts.findById(args.id)
-        .populate("comments")
-        .populate({ path: "comments", populate: "users" });
+    chart: async (parent, { chartId }) => {
+      return await Charts.findById(chartId);
+      // .populate("comments");
+      // .populate({ path: "comments", populate: "users" });
     },
     searchUsers: async (parent, { query }) => {
       const regex = new RegExp(`.*${query}.*`, "i");
@@ -199,14 +226,16 @@ const resolvers = {
         imageMedium,
         imageSmall,
       },
-      { user },
+      { user: userId },
     ) => {
-      if (!user) throw new AuthenticationError();
+      if (!userId) throw new AuthenticationError();
 
       const newCoin = await Coins.findOne({ coinId: coinId });
       if (!newCoin) {
         await Coins.create({ coinName, coinId, symbol });
       }
+
+      const user = await Users.findById(userId);
 
       const newChart = await Charts.create({
         coinId,
@@ -214,7 +243,8 @@ const resolvers = {
         symbol,
         chartTitle,
         chartDescription,
-        username: user._id,
+        username: user.username,
+        userId: userId,
         imageThumbnail,
         imageMedium,
         imageSmall,
@@ -226,15 +256,14 @@ const resolvers = {
         { new: true },
       );
 
-      const addToUser = await Users.findByIdAndUpdate(
-        user,
+      const updatedUser = await user.updateOne(
         {
           $push: { charts: newChart._id },
         },
         { new: true },
       );
 
-      return addToUser;
+      return updatedUser;
     },
     sendFriendRequest: async (parent, args, { user }) => {
       if (!user) throw new AuthenticationError();

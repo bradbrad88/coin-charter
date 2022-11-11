@@ -30,6 +30,10 @@ const chartSchema = new Schema(
       maxLength: [250, "Too many characters, max length is 250"],
     },
     username: {
+      type: String,
+      required: true,
+    },
+    userId: {
       type: Schema.Types.ObjectId,
       ref: "users",
       required: true,
@@ -51,16 +55,18 @@ const chartSchema = new Schema(
     ],
     upVotes: {
       type: Number,
+      default: 0,
     },
     downVotes: {
       type: Number,
+      default: 0,
     },
   },
-  { timestamps: true },
   {
     toJSON: {
       virtuals: true,
     },
+    timestamps: true,
     id: false,
   },
 );
