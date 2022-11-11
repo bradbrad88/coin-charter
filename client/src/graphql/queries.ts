@@ -11,11 +11,13 @@ export const ADD_USER = gql`
       friendCount
       postCount
       favCoins {
-        _id
-        coinId
-        coinName
-        symbol
-        image
+        coin {
+          _id
+          coinId
+          coinName
+          symbol
+          image
+        }
       }
       friends {
         _id
@@ -26,11 +28,13 @@ export const ADD_USER = gql`
         friendCount
         postCount
         favCoins {
-          _id
-          coinId
-          coinName
-          symbol
-          image
+          coin {
+            _id
+            coinId
+            coinName
+            symbol
+            image
+          }
         }
       }
     }
@@ -48,26 +52,32 @@ export const LOGIN_USER = gql`
       friendCount
       postCount
       favCoins {
-        _id
-        coinId
-        coinName
-        symbol
-        image
-      }
-      friends {
-        _id
-        username
-        subTitle
-        bio
-        image
-        friendCount
-        postCount
-        favCoins {
+        coin {
           _id
           coinId
           coinName
           symbol
           image
+        }
+      }
+      friends {
+        friend {
+          _id
+          username
+          subTitle
+          bio
+          image
+          friendCount
+          postCount
+          favCoins {
+            coin {
+              _id
+              coinId
+              coinName
+              symbol
+              image
+            }
+          }
         }
       }
     }
@@ -163,11 +173,13 @@ export const ADD_COIN = gql`
       image: $image
     ) {
       favCoins {
-        symbol
-        image
-        coinName
-        coinId
-        _id
+        coin {
+          symbol
+          image
+          coinName
+          coinId
+          _id
+        }
       }
     }
   }
@@ -177,11 +189,13 @@ export const REMOVE_COIN = gql`
   mutation RemoveCoin($coinId: String!) {
     removeCoin(coinId: $coinId) {
       favCoins {
-        symbol
-        image
-        coinName
-        coinId
-        _id
+        coin {
+          symbol
+          image
+          coinName
+          coinId
+          _id
+        }
       }
     }
   }
@@ -236,19 +250,14 @@ export const ACCEPT_FRIEND_REQUEST = gql`
   mutation AcceptFriendRequest($friendId: ID!) {
     acceptFriendRequest(friendId: $friendId) {
       friends {
-        _id
-        username
-        subTitle
-        bio
-        image
-        friendCount
-        postCount
-        favCoins {
+        friend {
           _id
-          coinId
-          coinName
-          symbol
+          username
+          subTitle
+          bio
           image
+          friendCount
+          postCount
         }
       }
     }
@@ -284,43 +293,63 @@ export const DECLINE_FRIEND_REQEST = gql`
 export const GET_FRIENDS = gql`
   query Friends {
     friends {
-      _id
-      username
-      subTitle
-      email
-      bio
-      friends {
+      friend {
         _id
-        image
+        username
         subTitle
-        username
+        email
         bio
-      }
-      friendCount
-      postCount
-      chartCount
-      favCoinCount
-      favCoins {
-        _id
-        coinName
-        coinId
-        symbol
+        friends {
+          friend {
+            _id
+            image
+            subTitle
+            username
+            bio
+          }
+        }
+        friendCount
+        postCount
+        chartCount
+        favCoinCount
+        favCoins {
+          coin {
+            _id
+            coinName
+            coinId
+            symbol
+            image
+          }
+        }
+        charts {
+          _id
+          coinId
+          coinName
+          symbol
+          chartTitle
+          chartDescription
+          username
+          imageThumbnail
+          imageMedium
+          imageSmall
+          upVotes
+          downVotes
+        }
         image
       }
-      charts {
-        _id
-        coinId
-        coinName
-        symbol
-        chartTitle
-        chartDescription
-        username
-        imageThumbnail
-        imageMedium
-        imageSmall
-        upVotes
-        downVotes
-      }
+    }
+  }
+`;
+
+export const FRIEND_ACTIVITY = gql`
+  query FriendActivity {
+    recentActivity {
+      id
+      username
+      createdAt
+      text
+      value
+      path
       image
     }
   }
