@@ -18,15 +18,15 @@ app.use(express.json());
 app.use(require("cookie-parser")());
 
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../client/build")));
+  app.use(express.static(path.join(__dirname, "../client/dist")));
 }
 
 // Serve the custom api routes
 app.use(router);
 
 // Serve the react client
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../client/build/index.html"));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/dist/index.html"));
 });
 
 // Function for starting the apollo server
