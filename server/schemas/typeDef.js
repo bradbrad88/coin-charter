@@ -10,15 +10,25 @@ const typeDefs = gql`
     email: String
     bio: String
     comments: [Comment]
-    friends: [User]
+    friends: [Friend]
     receivedFriendRequests: [FriendRequest]
     friendCount: Int
     postCount: Int
-    favCoins: [Coin]
+    favCoins: [FavouriteCoin]
     favCoinCount: Int
     charts: [Chart]
     chartCount: Int
     image: String
+  }
+
+  type Friend {
+    friend: User
+    createdAt: String
+  }
+
+  type FavouriteCoin {
+    coin: Coin
+    createdAt: String
   }
 
   type FriendRequest {
@@ -28,6 +38,16 @@ const typeDefs = gql`
     bio: String
     subTitle: String
     createdAt: String
+  }
+
+  type Activity {
+    id: ID
+    username: String
+    createdAt: String
+    text: String
+    value: String
+    path: String
+    image: String
   }
 
   type Comment {
@@ -74,7 +94,8 @@ const typeDefs = gql`
     chart(chart: ID!): Chart
     searchUsers(query: String!): [User]
     friendRequests: [FriendRequest]
-    friends: [User]
+    friends: [Friend]
+    recentActivity: [Activity]
   }
 
   type Mutation {
@@ -83,7 +104,6 @@ const typeDefs = gql`
     logoutUser: Boolean
     addImage(image: String!): String
     addBio(bio: String!): String
-    addFriend(friendId: ID!): User
     addCoin(
       coinId: String!
       coinName: String!
