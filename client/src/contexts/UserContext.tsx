@@ -44,10 +44,14 @@ export interface User {
   friendCount: number;
   postCount: number;
   image?: string;
-  friends: User[];
-  favCoins: Coin[];
+  favCoins: FavCoin[];
   favCoinCount: number;
   chartCount: number;
+}
+
+interface FavCoin {
+  coin: Coin;
+  updatedAt: string;
 }
 
 interface Coin {
@@ -137,7 +141,6 @@ export const Provider = ({ children }: Prototypes) => {
         return {
           ...prevState,
           friendCount: friendData.addFriend.friendCount,
-          friends: friendData.addFriend.friends,
         };
       });
     }
