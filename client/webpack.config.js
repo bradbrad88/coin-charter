@@ -3,12 +3,20 @@ const webpack = require("webpack");
 const path = require("path");
 const dotenv = require("dotenv");
 
-const env = dotenv.config().parsed;
+const defineEnvVariables = () => {
+  try {
+    const env = dotenv.config().parsed;
 
-const envKeys = Object.keys(env).reduce((p, key) => {
-  p[`process.env.${key}`] = JSON.stringify(env[key]);
-  return p;
-}, {});
+    const envKeys = Object.keys(env).reduce((p, key) => {
+      p[`process.env.${key}`] = JSON.stringify(env[key]);
+      return p;
+    }, {});
+    return envKeys;
+  } catch (error) {
+    return {};
+  }
+};
+const envKeys = defineEnvVariables();
 
 module.exports = {
   entry: "./src/index.js",
