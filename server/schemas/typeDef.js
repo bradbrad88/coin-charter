@@ -1,8 +1,8 @@
 const { gql } = require("apollo-server-express");
 
-// TODO create a scalar for date type
-
 const typeDefs = gql`
+  scalar DateTime
+
   type User {
     _id: ID
     username: String
@@ -53,7 +53,7 @@ const typeDefs = gql`
   type Comment {
     _id: ID
     commentText: String
-    createdAt: String
+    createdAt: DateTime
     username: User
   }
 
@@ -74,13 +74,15 @@ const typeDefs = gql`
     symbol: String
     chartTitle: String
     chartDescription: String
-    username: String
+    username: String!
+    userId: String
     imageThumbnail: String
     imageMedium: String
     imageSmall: String
     chartComments: [Comment]
     upVotes: Int
     downVotes: Int
+    createdAt: DateTime!
   }
 
   type Query {
@@ -90,8 +92,8 @@ const typeDefs = gql`
     charts: [Chart]
     user(id: ID!): User
     comment(comment: ID!): Comment
-    coin(coin: ID!): Coin
-    chart(chart: ID!): Chart
+    coin(coinId: String!): Coin
+    chart(id: ID!): Chart
     searchUsers(query: String!): [User]
     friendRequests: [FriendRequest]
     friends: [Friend]
@@ -118,6 +120,7 @@ const typeDefs = gql`
       chartTitle: String
       chartDescription: String
       username: String
+      userId: String
       imageThumbnail: String
       imageMedium: String
       imageSmall: String

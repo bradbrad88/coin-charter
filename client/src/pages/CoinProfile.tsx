@@ -64,7 +64,7 @@ const CoinProfile = () => {
             <CoinComments />
           </div>
           <Chart coin={coin} />
-          <CoinCharts />
+          <CoinCharts coin={coin} />
         </div>
       )}
       {working && (

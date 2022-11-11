@@ -159,6 +159,75 @@ export const QUERY_USER = gql`
   }
 `;
 
+export const QUERY_COIN_CHART = gql`
+  query GetCoinChart($coinId: String!) {
+    coin(coinId: $coinId) {
+      coinCharts {
+        _id
+        coinId
+        coinName
+        symbol
+        chartTitle
+        chartDescription
+        username
+        userId
+        imageThumbnail
+        imageMedium
+        imageSmall
+        upVotes
+        downVotes
+        chartComments {
+          _id
+          commentText
+          createdAt
+        }
+      }
+    }
+  }
+`;
+
+export const QUERY_ALL_COIN_CHARTS = gql`
+  query GetCoinCharts($coinId: String!) {
+    coin(coinId: $coinId) {
+      coinCharts {
+        _id
+        chartTitle
+        downVotes
+        upVotes
+        username
+        userId
+        imageSmall
+        createdAt
+      }
+    }
+  }
+`;
+
+export const QUERY_CHART = gql`
+  query Query($chartId: ID!) {
+    chart(id: $chartId) {
+      _id
+      coinId
+      coinName
+      symbol
+      chartTitle
+      chartDescription
+      username
+      imageThumbnail
+      imageMedium
+      imageSmall
+      chartComments {
+        _id
+        commentText
+        createdAt
+      }
+      upVotes
+      downVotes
+      createdAt
+    }
+  }
+`;
+
 export const ADD_COIN = gql`
   mutation AddCoin(
     $coinId: String!
@@ -227,6 +296,8 @@ export const ADD_CHART = gql`
       symbol
       chartTitle
       chartDescription
+      username
+      userId
       imageThumbnail
       imageMedium
       imageSmall
