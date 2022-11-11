@@ -21,6 +21,7 @@ interface CoinDataTypes {
 }
 
 const OtherCharts = ({ coinId }: CoinId) => {
+  const nav = useNavigate();
   const filterOptions = ["Most Recent", "Oldest", "Top Rated", "Least Rated"];
   const [coinCharts, setCoinCharts] = useState<any>();
   const [filter, setFilter] = useState<string>("Most Recent");
@@ -57,6 +58,10 @@ const OtherCharts = ({ coinId }: CoinId) => {
         .sort((a, b) => (a.upVotes < b.upVotes ? -1 : 1));
       setCoinCharts(leastRated);
     }
+  };
+
+  const selectChart = (chartInfo: any) => {
+    nav(`/chart/${chartInfo._id}`);
   };
 
   if (!coinCharts) {
