@@ -16,9 +16,29 @@ const userSeed = [
   {
     username: "Sammy",
     password: "12345678",
+    subTitle: "Expertish",
     email: "sammy@google.com",
     bio: "Crypto is very interesting and i am keen to get into the space.",
   },
 ];
 
-module.exports = { userSeed };
+const coinSeed = [
+  {
+    coinId: "bitcoin",
+    coinName: "Bitcoin",
+    symbol: "btc",
+    image: "http://something",
+  },
+  {
+    coinId: "1x-short-bitcoin-cash-token",
+    symbol: "bchhedge",
+    coinName: "1X Short Bitcoin Cash Token",
+  },
+  {
+    coinId: "2omb-finance",
+    symbol: "2omb",
+    coinName: "2omb",
+  },
+];
+
+module.exports = { userSeed, coinSeed };
