@@ -198,6 +198,8 @@ export const QUERY_ALL_COIN_CHARTS = gql`
         userId
         imageSmall
         createdAt
+        coinId
+        coinName
       }
     }
   }
@@ -221,6 +223,27 @@ export const QUERY_CHART = gql`
         commentText
         createdAt
       }
+      upVotes
+      downVotes
+      createdAt
+    }
+  }
+`;
+
+export const QUERY_ALL_CHARTS = gql`
+  query QueryAllCharts {
+    charts {
+      _id
+      coinId
+      coinName
+      symbol
+      chartTitle
+      chartDescription
+      username
+      userId
+      imageThumbnail
+      imageMedium
+      imageSmall
       upVotes
       downVotes
       createdAt
