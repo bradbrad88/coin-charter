@@ -41,7 +41,7 @@ const App = () => {
             <Route path="charts" element={<Charts />} />
             <Route path="coin/:coinId" element={<CoinProfile />} />
             {/* // ! will change to coin/:chartId for the chart of a coin */}
-            <Route path="chart" element={<ChartCoin />} />
+            <Route path="chart/:chartId" element={<ChartCoin />} />
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<Signup />} />
             <Route path="profile/:profileId" element={<ReadOnlyProfile />} />

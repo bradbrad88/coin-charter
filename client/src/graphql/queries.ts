@@ -207,7 +207,7 @@ export const QUERY_ALL_COIN_CHARTS = gql`
 
 export const QUERY_CHART = gql`
   query Query($chartId: ID!) {
-    chart(id: $chartId) {
+    chart(chartId: $chartId) {
       _id
       coinId
       coinName
@@ -215,6 +215,7 @@ export const QUERY_CHART = gql`
       chartTitle
       chartDescription
       username
+      userId
       imageThumbnail
       imageMedium
       imageSmall

@@ -54,6 +54,10 @@ const TopCharts = ({ coinId }: CoinId) => {
     nav(`/profile/${topRatedChart.userId}`);
   };
 
+  const selectChart = () => {
+    nav(`/chart/${topRatedChart._id}`);
+  };
+
   if (!topRatedChart) {
     return <div>Loading...</div>;
   }
@@ -86,7 +90,8 @@ const TopCharts = ({ coinId }: CoinId) => {
           <p>{topRatedChart.chartDescription}</p>
           <img
             src={topRatedChart.imageThumbnail}
-            className="h-[400px] w-full mt-2"
+            className="h-[400px] w-full mt-2 hover:brightness-50 hover:cursor-pointer"
+            onClick={selectChart}
           />
         </div>
       </div>
