@@ -1,12 +1,27 @@
 import { QUERY_ALL_COIN_CHARTS } from "../../../graphql/queries";
 import { useQuery } from "@apollo/client";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface CoinId {
   coinId: string;
 }
 
+interface CoinDataTypes {
+  _id: string;
+  chartTitle: string;
+  downVotes: number;
+  upVotes: number;
+  username: string;
+  userId: string;
+  imageSmall: string;
+  createdAt: number;
+  coinId: string;
+  coinName: string;
+}
+
 const OtherCharts = ({ coinId }: CoinId) => {
+  const nav = useNavigate();
   const filterOptions = ["Most Recent", "Oldest", "Top Rated", "Least Rated"];
   const [coinCharts, setCoinCharts] = useState<any>();
   const [filter, setFilter] = useState<string>("Most Recent");
@@ -21,7 +36,7 @@ const OtherCharts = ({ coinId }: CoinId) => {
     }
   }, [filter, data]);
 
-  let checkFilter = (chartData: any[]) => {
+  let checkFilter = (chartData: CoinDataTypes[]) => {
     if (filter === "Most Recent") {
       let recent = chartData
         .slice(0)
@@ -43,6 +58,10 @@ const OtherCharts = ({ coinId }: CoinId) => {
         .sort((a, b) => (a.upVotes < b.upVotes ? -1 : 1));
       setCoinCharts(leastRated);
     }
+  };
+
+  const selectChart = (chartInfo: any) => {
+    nav(`/chart/${chartInfo._id}`);
   };
 
   if (!coinCharts) {
@@ -67,6 +86,7 @@ const OtherCharts = ({ coinId }: CoinId) => {
           <li
             key={info.chartTitle + index}
             className="flex flex-col group transition-all hover:bg-indigo-100 hover:rounded-lg hover:border-2 hover:border-indigo-100 hover:cursor-pointer p-2"
+            onClick={() => selectChart(info)}
           >
             <div className="flex justify-between">
               <div className="flex flex-col w-5/6 h-[40px]">

@@ -79,9 +79,9 @@ const resolvers = {
         .populate({ path: "chartComments", populate: "users" });
     },
     chart: async (parent, { chartId }) => {
-      return await Charts.findById(chartId);
-      // .populate("comments");
-      // .populate({ path: "comments", populate: "users" });
+      return await Charts.findById(chartId)
+        .populate("chartComments")
+        .populate({ path: "chartComments", populate: "users" });
     },
     searchUsers: async (parent, { query }) => {
       const regex = new RegExp(`.*${query}.*`, "i");

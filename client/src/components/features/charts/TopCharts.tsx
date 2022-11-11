@@ -5,6 +5,24 @@ import { useRef } from "react";
 import { useEffect, useState } from "react";
 import { QUERY_ALL_CHARTS } from "src/graphql/queries";
 import { useQuery } from "@apollo/client";
+import { useNavigate } from "react-router-dom";
+
+interface ChartsDataTypes {
+  _id: string;
+  coinId: string;
+  coinName: string;
+  symbol: string;
+  chartTitle: string;
+  chartDescription: string;
+  username: string;
+  userId: string;
+  imageThumbnail: string;
+  imageMedium: string;
+  imageSmall: string;
+  upVotes: number;
+  downVotes: number;
+  createdAt: number;
+}
 
 const MostRecent = () => {
   const [topCharts, setTopCharts] = useState<any>([]);

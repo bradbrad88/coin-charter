@@ -5,6 +5,64 @@ import { useState, useEffect } from "react";
 import { useQuery } from "@apollo/client";
 import { QUERY_ALL_COIN_CHARTS } from "../../../graphql/queries";
 import Button from "../../common/Button";
+import { useNavigate } from "react-router-dom";
+
+interface CoinDataTypes {
+  _id: string;
+  chartTitle: string;
+  downVotes: number;
+  upVotes: number;
+  username: string;
+  userId: string;
+  imageSmall: string;
+  createdAt: number;
+  coinId: string;
+  coinName: string;
+}
+
+const coinOption = ["Top Rated", "Most Recent", "Oldest", "Least Rated"];
+const data = [
+  {
+    title: "This is what i see happening this month",
+    name: "Ben Smerd",
+    upVotes: 1202,
+    downVotes: 12,
+    createdAt: "24/12/2022",
+    chart: "https://source.unsplash.com/random/?person/",
+  },
+  {
+    title: "We are going UP!",
+    name: "Brad Teague",
+    upVotes: 3203,
+    downVotes: 2,
+    createdAt: "21/03/2022",
+    chart: "https://source.unsplash.com/random/?person/",
+  },
+  {
+    title: "Going DOWN!",
+    name: "Sam March",
+    upVotes: 1022,
+    downVotes: 1223,
+    createdAt: "24/12/2020",
+    chart: "https://source.unsplash.com/random/?person/",
+  },
+  {
+    title: "This i think will happen very soon in this market",
+    name: "Sally Peterson",
+    upVotes: 1230,
+    downVotes: 122,
+    createdAt: "04/05/2022",
+    chart: "https://source.unsplash.com/random/?person/",
+  },
+  {
+    title: "This is what i see happening this month",
+    name: "Ben Smerdsssssssss",
+    upVotes: 1202,
+    downVotes: 12,
+    createdAt: "24/12/2022",
+    chart: "https://source.unsplash.com/random/?person/",
+  },
+];
 
 const coinOption = ["Top Rated", "Most Recent", "Oldest", "Least Rated"];
 const data = [
@@ -51,6 +109,7 @@ const data = [
 ];
 
 const ChartsOfCoins = () => {
+  const nav = useNavigate();
   const coinOption = ["Most Recent", "Oldest", "Top Rated", "Least Rated"];
   const [searchInput, setSearchInput] = useState<string>("");
   const [search, setSearch] = useState<string>("bitcoin");
@@ -74,7 +133,7 @@ const ChartsOfCoins = () => {
     setSearch(lowerSearch);
   };
 
-  let checkFilter = (chartData: any[]) => {
+  let checkFilter = (chartData: CoinDataTypes[]) => {
     if (filter === "Most Recent") {
       let recent = chartData
         .slice(0)
@@ -96,6 +155,10 @@ const ChartsOfCoins = () => {
         .sort((a, b) => (a.upVotes < b.upVotes ? -1 : 1));
       setChartList(leastRated);
     }
+  };
+
+  const selectChart = (chartInfo: any) => {
+    nav(`/chart/${chartInfo._id}`);
   };
 
   if (!chartList) {
