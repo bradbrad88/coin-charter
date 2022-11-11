@@ -18,6 +18,26 @@ const requestSchema = new Schema(
   },
 );
 
+const favCoinSchema = new Schema(
+  {
+    coin: {
+      type: Schema.Types.ObjectId,
+      ref: "coins",
+    },
+  },
+  { timestamps: true },
+);
+
+const friendSchema = new Schema(
+  {
+    friend: {
+      type: Schema.Types.ObjectId,
+      ref: "users",
+    },
+  },
+  { timestamps: true },
+);
+
 // Users schema
 const userSchema = new Schema(
   {
@@ -60,19 +80,9 @@ const userSchema = new Schema(
         ref: "comments",
       },
     ],
-    friends: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "users",
-      },
-    ],
-    receivedFriendRequests: [{ type: requestSchema }],
-    favCoins: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "coins",
-      },
-    ],
+    friends: [friendSchema],
+    receivedFriendRequests: [requestSchema],
+    favCoins: [favCoinSchema],
     charts: [
       {
         type: Schema.Types.ObjectId,
