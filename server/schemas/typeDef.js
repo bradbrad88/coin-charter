@@ -80,8 +80,8 @@ const typeDefs = gql`
     imageMedium: String
     imageSmall: String
     chartComments: [Comment]
-    upVotes: Int
-    downVotes: Int
+    upVotes: [User]
+    downVotes: [User]
     createdAt: DateTime!
   }
 
@@ -125,6 +125,8 @@ const typeDefs = gql`
       imageMedium: String
       imageSmall: String
     ): Chart
+    upVoteChart(id: ID!, vote: Boolean): Chart
+    downVoteChart(id: ID!, vote: Boolean): Chart
     sendFriendRequest(
       friendId: ID!
       userId: ID!
