@@ -1,5 +1,4 @@
 import { useQuery } from "@apollo/client";
-import { User } from "src/contexts/UserContext";
 import { FRIEND_ACTIVITY } from "src/graphql/queries";
 
 // ? for activity- Commented on a coin, commented on a chart, favourited a coin, newly added friend, upvoted/downvoted a comment, upvoted/downvoted a chart, posted a new chart, posted a new comment

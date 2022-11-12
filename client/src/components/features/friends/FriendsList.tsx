@@ -1,5 +1,3 @@
-import type { User } from "contexts/UserContext";
-
 interface Proptypes {
   friends: {
     friend: User;

@@ -1,61 +1,36 @@
-import { QUERY_COIN_CHART } from "../../../graphql/queries";
-import { useQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import TopRated from "../charts/TopRated";
+import { Link } from "react-router-dom";
+import { useQuery } from "@apollo/client";
+import { QUERY_COIN_CHART } from "src/graphql/queries";
 
 interface CoinId {
   coinId: string;
 }
 
-interface CoinData {
-  reduce(arg0: (prev: any, current: any) => any): unknown;
-  _id: string;
-  coinId: string;
-  coinName: string;
-  symbol: string;
-  chartTitle?: string;
-  chartDescription?: string;
-  username?: string;
-  imageThumbnail?: string;
-  imageMedium: string;
-  imageSmall: string;
-  chartComments: string;
-  upVotes?: number;
-  downVotes?: number;
-}
-
 const TopCharts = ({ coinId }: CoinId) => {
-  const nav = useNavigate();
-  const chartId = coinId;
-  const { loading, error, data } = useQuery(QUERY_COIN_CHART, {
+  const { data } = useQuery(QUERY_COIN_CHART, {
     variables: { coinId },
   });
-  const [topRatedChart, setTopRatedChart] = useState<any>();
+  const [topRatedChart, setTopRatedChart] = useState<Chart | null>(null);
 
   useEffect(() => {
-    let coinData = data?.coin?.coinCharts;
+    const coinData = data?.coin?.coinCharts;
     if (coinData) {
       topRated(coinData);
     }
   }, [data]);
 
-  const topRated = (coinData: CoinData) => {
-    const mostUpvotedChart = coinData.reduce(function (
-      prev: any,
-      current: any,
-    ) {
-      return prev.upVotes > current.upVotes ? prev : current;
-    });
+  const topRated = (coinData: Chart[]) => {
+    const mostUpvotedChart = coinData.reduce<Chart | null>(
+      (topChart, currentChart) => {
+        if (!topChart) return currentChart;
+        return currentChart.upVotes > topChart.upVotes
+          ? topChart
+          : currentChart;
+      },
+      null,
+    );
     setTopRatedChart(mostUpvotedChart);
-  };
-
-  const selectUser = () => {
-    nav(`/profile/${topRatedChart.userId}`);
-  };
-
-  const selectChart = () => {
-    nav(`/chart/${topRatedChart._id}`);
   };
 
   if (!topRatedChart) {
@@ -74,9 +49,11 @@ const TopCharts = ({ coinId }: CoinId) => {
             </h1>
             <p className="italic font-bold text-sm text-slate-500">
               By{" "}
-              <span className="hover:cursor-pointer" onClick={selectUser}>
-                {topRatedChart.username}
-              </span>
+              <Link to={`/profile/${topRatedChart.userId}`}>
+                <span className="hover:cursor-pointer">
+                  {topRatedChart.username}
+                </span>
+              </Link>
             </p>
             <div className="flex flex-col">
               <i className="fa-regular fa-thumbs-up text-[14px]"></i>
@@ -88,11 +65,12 @@ const TopCharts = ({ coinId }: CoinId) => {
             </div>
           </div>
           <p>{topRatedChart.chartDescription}</p>
-          <img
-            src={topRatedChart.imageThumbnail}
-            className="h-[400px] w-full mt-2 hover:brightness-50 hover:cursor-pointer"
-            onClick={selectChart}
-          />
+          <Link to={`/chart/${topRatedChart._id}`}>
+            <img
+              src={topRatedChart.imageThumbnail}
+              className="h-[400px] w-full mt-2 hover:brightness-50 hover:cursor-pointer"
+            />
+          </Link>
         </div>
       </div>
     </div>

@@ -1,7 +1,7 @@
 import { QUERY_ALL_COIN_CHARTS } from "../../../graphql/queries";
 import { useQuery } from "@apollo/client";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 interface CoinId {
   coinId: string;
@@ -21,18 +21,17 @@ interface CoinDataTypes {
 }
 
 const OtherCharts = ({ coinId }: CoinId) => {
-  const nav = useNavigate();
   const filterOptions = ["Most Recent", "Oldest", "Top Rated", "Least Rated"];
   const [coinCharts, setCoinCharts] = useState<any>();
   const [filter, setFilter] = useState<string>("Most Recent");
-  const { loading, error, data } = useQuery(QUERY_ALL_COIN_CHARTS, {
+  const { data } = useQuery(QUERY_ALL_COIN_CHARTS, {
     variables: { coinId },
   });
 
   useEffect(() => {
     let chartData = data?.coin?.coinCharts;
     if (chartData) {
-      checkFilter(chartData);
+      checkFilter([...chartData]);
     }
   }, [filter, data]);
 
@@ -60,10 +59,6 @@ const OtherCharts = ({ coinId }: CoinId) => {
     }
   };
 
-  const selectChart = (chartInfo: any) => {
-    nav(`/chart/${chartInfo._id}`);
-  };
-
   if (!coinCharts) {
     return <div>Loading...</div>;
   }
@@ -86,36 +81,36 @@ const OtherCharts = ({ coinId }: CoinId) => {
           <li
             key={info.chartTitle + index}
             className="flex flex-col group transition-all hover:bg-indigo-100 hover:rounded-lg hover:border-2 hover:border-indigo-100 hover:cursor-pointer p-2"
-            onClick={() => selectChart(info)}
           >
-            <div className="flex justify-between">
-              <div className="flex flex-col w-5/6 h-[40px]">
-                <h1 className="truncate font-bold text-md text-indigo-600">
-                  {info.chartTitle}
-                </h1>
-                <div className="flex justify-between">
-                  <p className="italic font-bold text-xs text-slate-500">
-                    By {info.username}
-                  </p>
-                  <p className="text-gray-500 text-xs">
-                    Posted On: {info.createdAt}
-                  </p>
+            <Link to={`/chart/${info._id}`}>
+              <div className="flex justify-between">
+                <div className="flex flex-col w-5/6 h-[40px]">
+                  <h1 className="truncate font-bold text-md text-indigo-600">
+                    {info.chartTitle}
+                  </h1>
+                  <div className="flex justify-between">
+                    <p className="italic font-bold text-xs text-slate-500">
+                      By {info.username}
+                    </p>
+                    <p className="text-gray-500 text-xs">
+                      Posted Ontoday: {info.createdAt}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex flex-col justify-center">
+                  <i className="fa-regular fa-thumbs-up text-[14px]"></i>
+                  <p className="text-[8px]">{info.upVotes}</p>
+                </div>
+                <div className="flex flex-col justify-center">
+                  <i className="fa-regular fa-thumbs-down text-[14px]"></i>
+                  <p className="text-[8px]">{info.downVotes}</p>
                 </div>
               </div>
-
-              <div className="flex flex-col justify-center">
-                <i className="fa-regular fa-thumbs-up text-[14px]"></i>
-                <p className="text-[8px]">{info.upVotes}</p>
-              </div>
-              <div className="flex flex-col justify-center">
-                <i className="fa-regular fa-thumbs-down text-[14px]"></i>
-                <p className="text-[8px]">{info.downVotes}</p>
-              </div>
-            </div>
-            <img
-              src={info.imageSmall}
-              className="w-full h-[120px] group-hover:brightness-75"
-            />
+              <img
+                src={info.imageSmall}
+                className="w-full h-[120px] group-hover:brightness-75"
+              />
+            </Link>
           </li>
         ))}
       </ul>

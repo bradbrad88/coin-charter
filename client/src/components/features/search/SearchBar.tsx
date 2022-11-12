@@ -4,7 +4,6 @@ import { useLazyQuery, useMutation } from "@apollo/client";
 import { AiOutlineClose } from "react-icons/ai";
 import useUserContext from "contexts/UserContext";
 import { SEARCH_USERS, SEND_FRIEND_REQUEST } from "src/graphql/queries";
-import { User } from "src/contexts/UserContext";
 import useFetch, { Config } from "hooks/useFetch";
 import Favourite from "src/components/common/Favourite";
 
