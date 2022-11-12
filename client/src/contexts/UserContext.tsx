@@ -36,31 +36,6 @@ interface Ctx {
   removeCoin: (coinId: string) => void;
 }
 
-export interface User {
-  _id: string;
-  username: string;
-  subTitle: string;
-  bio: string;
-  friendCount: number;
-  postCount: number;
-  image?: string;
-  favCoins: FavCoin[];
-  favCoinCount: number;
-  chartCount: number;
-}
-
-interface FavCoin {
-  coin: Coin;
-  updatedAt: string;
-}
-
-interface Coin {
-  coinId: string;
-  coinName: string;
-  symbol: string;
-  image: string;
-}
-
 interface Prototypes {
   children: React.ReactNode;
 }

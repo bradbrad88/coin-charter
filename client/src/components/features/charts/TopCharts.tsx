@@ -1,34 +1,16 @@
-import Container from "src/components/common/Container";
+import { useEffect, useState, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useQuery } from "@apollo/client";
 import { IoIosArrowRoundUp, IoIosArrowRoundDown } from "react-icons/io";
 import { TfiArrowCircleLeft, TfiArrowCircleRight } from "react-icons/tfi";
-import { useRef } from "react";
-import { useEffect, useState } from "react";
+import Container from "src/components/common/Container";
 import { QUERY_ALL_CHARTS } from "src/graphql/queries";
-import { useQuery } from "@apollo/client";
-import { useNavigate } from "react-router-dom";
-
-interface ChartsDataTypes {
-  _id: string;
-  coinId: string;
-  coinName: string;
-  symbol: string;
-  chartTitle: string;
-  chartDescription: string;
-  username: string;
-  userId: string;
-  imageThumbnail: string;
-  imageMedium: string;
-  imageSmall: string;
-  upVotes: number;
-  downVotes: number;
-  createdAt: number;
-}
 
 const MostRecent = () => {
   const nav = useNavigate();
   const [topRated, setTopRated] = useState<any>();
   const [topCharts, setTopCharts] = useState<any>([]);
-  const { loading, error, data } = useQuery(QUERY_ALL_CHARTS);
+  const { data } = useQuery(QUERY_ALL_CHARTS);
   const ref = useRef<HTMLUListElement>(null);
 
   useEffect(() => {
@@ -39,14 +21,14 @@ const MostRecent = () => {
     }
   }, [data]);
 
-  const topRatedChart = (info: ChartsDataTypes[]) => {
+  const topRatedChart = (info: Chart[]) => {
     const mostUpvotedChart = info.reduce(function (prev: any, current: any) {
       return prev.upVotes > current.upVotes ? prev : current;
     });
     setTopRated(mostUpvotedChart);
   };
 
-  const topRatedChartList = (info: ChartsDataTypes[]) => {
+  const topRatedChartList = (info: Chart[]) => {
     let topRated = info
       .slice(0)
       .sort((a, b) => (a.upVotes > b.upVotes ? -1 : 1));
@@ -54,7 +36,9 @@ const MostRecent = () => {
   };
 
   const renderChartItems = () => {
-    return topCharts?.map((item: ChartsDataTypes) => <ChartItem info={item} />);
+    return topCharts?.map((item: Chart) => (
+      <ChartItem key={item._id} info={item} />
+    ));
   };
 
   const slideLeft = () => {
@@ -67,18 +51,6 @@ const MostRecent = () => {
     ref.current.scrollLeft = ref.current.scrollLeft + 300;
   };
 
-  const selectChart = () => {
-    nav(`/chart/${topRated._id}`);
-  };
-
-  const selectUser = () => {
-    nav(`/profile/${topRated.userId}`);
-  };
-
-  const selectCoin = () => {
-    nav(`/coin/${topRated.coinId}`);
-  };
-
   if (!topRated) {
     return <div>Loading...</div>;
   }
@@ -88,23 +60,21 @@ const MostRecent = () => {
       <div className="p-5">
         <div>
           <h1 className="text-lg font-bold text-center">Top Rated Charts</h1>
-          <h1
-            className="text-lg font-semibold text-center hover:cursor-pointer"
-            onClick={() => selectCoin()}
-          >
-            {topRated.coinName}
-          </h1>
+          <Link to={`/coin/${topRated.coinId}`}>
+            <h1 className="text-lg font-semibold text-center hover:cursor-pointer">
+              {topRated.coinName}
+            </h1>
+          </Link>
         </div>
         <div className="flex gap-3 items-center">
           <h1 className="font-bold text-md text-indigo-600">
             {topRated.chartTitle}
           </h1>
-          <p
-            className="italic font-bold text-sm text-slate-500 hover:cursor-pointer"
-            onClick={() => selectUser()}
-          >
-            By {topRated.username}
-          </p>
+          <Link to={`/profile/${topRated.userId}`}>
+            <p className="italic font-bold text-sm text-slate-500 hover:cursor-pointer">
+              By {topRated.username}
+            </p>
+          </Link>
           <div className="flex flex-row gap-3">
             <div>
               <IoIosArrowRoundUp className="text-green-500" />
@@ -118,13 +88,14 @@ const MostRecent = () => {
         </div>
         <p>{topRated.chartDescription}</p>
       </div>
-      <div className="">
-        <img
-          src={topRated.imageMedium}
-          className="max-h-[400px] w-full hover:brightness-50 hover:cursor-pointer"
-          onClick={() => selectChart()}
-        />
-      </div>
+      <Link to={`/chart/${topRated._id}`}>
+        <div className="">
+          <img
+            src={topRated.imageMedium}
+            className="max-h-[400px] w-full hover:brightness-50 hover:cursor-pointer"
+          />
+        </div>
+      </Link>
       <div className="">
         <h1 className="font-bold text-lg text-center p-5 bg-white border-b border-t">
           Top Charts
@@ -153,7 +124,7 @@ const MostRecent = () => {
 export default MostRecent;
 
 interface ChartItemProps {
-  info: ChartsDataTypes;
+  info: Chart;
 }
 
 const ChartItem = ({ info }: ChartItemProps) => {
@@ -164,7 +135,10 @@ const ChartItem = ({ info }: ChartItemProps) => {
   };
 
   return (
-    <li className="w-[300px] h-full inline-block p-2 cursor-pointer hover:bg-indigo-100 ease-in-out duration-300" onClick={() => selectChart()}>
+    <li
+      className="w-[300px] h-full inline-block p-2 cursor-pointer hover:bg-indigo-100 ease-in-out duration-300"
+      onClick={() => selectChart()}
+    >
       <div>
         <h1 className="truncate font-bold text-md text-indigo-600">
           {info.chartTitle}
@@ -193,7 +167,6 @@ const ChartItem = ({ info }: ChartItemProps) => {
           </div>
         </div>
       </div>
-
       <img
         src={info.imageSmall}
         className="w-full h-[120px] rounded-sm snap-center"
