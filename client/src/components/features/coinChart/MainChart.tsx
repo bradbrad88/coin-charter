@@ -15,6 +15,10 @@ const MainChart = ({ chartInfo }: any) => {
     nav(`/profile/${chartData.userId}`);
   };
 
+  const selectCoin = () => {
+    nav(`/coin/${chartData.coinId}`);
+  };
+
   if (!chartData) {
     return <div>Loading...</div>;
   }
@@ -26,7 +30,12 @@ const MainChart = ({ chartInfo }: any) => {
           <div className="flex justify-between items-center">
             <h1 className="text-lg font-bold">
               Chart for:{" "}
-              <span className="text-indigo-600">{chartData.coinName}</span>
+              <span
+                className="text-indigo-600 hover:cursor-pointer"
+                onClick={selectCoin}
+              >
+                {chartData.coinName}
+              </span>
             </h1>
             <h1 className="text-lg font-bold">
               Created by:{" "}
