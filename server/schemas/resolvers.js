@@ -3,13 +3,6 @@ const { AuthenticationError } = require("apollo-server-express");
 const { signToken, setCookie } = require("../utils/auth");
 const { GraphQLScalarType, Kind } = require("graphql");
 
-// TODO add in sorting filters
-
-// ? can make into seperate folders
-
-// https://www.mongodb.com/community/forums/t/graphql-and-mongoose-relationship/106136
-// * info about the relationships for resolvers
-
 const resolvers = {
   DateTime: new GraphQLScalarType({
     name: "DateTime",
@@ -34,7 +27,6 @@ const resolvers = {
 
   Query: {
     users: async () => {
-      // ? not sure if populate with Users again because of self-reference
       const users = await Users.find({})
         .populate("comments")
         .populate({ path: "favCoins", populate: "coin" })
@@ -47,11 +39,6 @@ const resolvers = {
         .populate({ path: "favCoins", populate: "coin" });
       return user;
     },
-    comments: async () => {
-      return await Comments.find({})
-        .populate("users")
-        .populate({ path: "users", populate: "comments" });
-    },
     comment: async (parent, args) => {
       return await Comments.findById(args.id)
         .populate("users")
@@ -60,7 +47,11 @@ const resolvers = {
     coin: async (parent, { coinId }) => {
       const findCoin = await Coins.findOne({ coinId })
         .populate("coinCharts")
-        .populate({ path: "coinCharts", populate: "chartComments" });
+        .populate({ path: "coinCharts", populate: "chartComments" })
+        .populate("coinComments")
+        .populate({ path: "coinComments", populate: "userId" })
+        .populate("coinComments")
+        .populate({ path: "coinComments", populate: "image" });
 
       if (!findCoin) {
         throw new AuthenticationError();
@@ -221,7 +212,61 @@ const resolvers = {
       ).populate({ path: "favCoins", populate: "coin" });
       return updatedUser;
     },
+    addChartComment: async (
+      parent,
+      { commentText, chartId },
+      { user: userId },
+    ) => {
+      if (!userId) throw new AuthenticationError();
+      const findUser = await Users.findById(userId);
+      const newComment = await Comments.create({
+        commentText,
+        username: findUser.username,
+        userId: userId,
+        chartId,
+      });
 
+      await Charts.findOneAndUpdate(
+        { chartId },
+        { $push: { chartComments: newComment._id } },
+        { new: true },
+      );
+      const updatedUser = await findUser.updateOne(
+        {
+          $push: { comments: newComment._id },
+        },
+        { new: true },
+      );
+
+      return updatedUser;
+    },
+    addCoinComment: async (
+      parent,
+      { commentText, coinId, coinName },
+      { user: userId },
+    ) => {
+      if (!userId) throw new AuthenticationError();
+      const findUser = await Users.findById(userId);
+      const newComment = await Comments.create({
+        commentText,
+        username: findUser.username,
+        userId: userId,
+        coinId,
+        coinName,
+      });
+      await Coins.findOneAndUpdate(
+        { coinId },
+        { $push: { coinComments: newComment._id } },
+        { new: true },
+      );
+      const updatedUser = await findUser.updateOne(
+        {
+          $push: { comments: newComment._id },
+        },
+        { new: true },
+      );
+      return updatedUser;
+    },
     addChart: async (
       parent,
       {
@@ -237,14 +282,12 @@ const resolvers = {
       { user: userId },
     ) => {
       if (!userId) throw new AuthenticationError();
-
       const newCoin = await Coins.findOne({ coinId: coinId });
       if (!newCoin) {
         await Coins.create({ coinName, coinId, symbol });
       }
 
       const user = await Users.findById(userId);
-
       const newChart = await Charts.create({
         coinId,
         coinName,
@@ -257,13 +300,11 @@ const resolvers = {
         imageMedium,
         imageSmall,
       });
-
       await Coins.findOneAndUpdate(
         { coinId },
         { $push: { coinCharts: newChart._id } },
         { new: true },
       );
-
       const updatedUser = await user.updateOne(
         {
           $push: { charts: newChart._id },

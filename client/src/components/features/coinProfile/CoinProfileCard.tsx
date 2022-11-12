@@ -53,7 +53,7 @@ const CoinProfileCard = ({ coin }: PropTypes) => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row rounded-sm gap-5 shadow-lg shadow-gray-400 p-5 m-5 w-[95%] lg:w-[1050px] lg:h-[400px]">
+    <div className="flex flex-col lg:flex-row rounded-sm gap-5 shadow-lg shadow-gray-400 p-5 m-5 w-[95%] lg:w-[1050px] lg:h-[500px]">
       <div className="flex flex-col ">
         <div className="flex items-start justify-start gap-3">
           <div className="flex flex-col justify-end items-center">
@@ -77,8 +77,8 @@ const CoinProfileCard = ({ coin }: PropTypes) => {
           {priceDifference("24h", coin.market_data.price_change_percentage_24h)}
         </div>
 
-        <div className="flex flex-col gap-5">
-          <ul className="flex flex-col gap-1 border-b pt-2 pb-5 md:w-[500px] w-[300px]">
+        <div className="flex flex-col gap-7">
+          <ul className="flex flex-col gap-5 border-b pt-2 pb-5 md:w-[500px] w-[300px]">
             {dataTimeFrame.map((info) =>
               priceDifference(info.timeframe, info.data),
             )}
@@ -104,7 +104,7 @@ const CoinProfileCard = ({ coin }: PropTypes) => {
       </div>
       <div className="">
         <h3 className="font-bold">Description</h3>
-        <p className="overflow-y-scroll h-[340px] w-[500px] text-clip">
+        <p className="overflow-y-scroll h-[390px] w-[500px] text-clip">
           {coin.description.en}
         </p>
       </div>
