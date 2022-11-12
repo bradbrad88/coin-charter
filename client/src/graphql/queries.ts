@@ -158,8 +158,14 @@ export const QUERY_COIN_CHART = gql`
         imageThumbnail
         imageMedium
         imageSmall
-        upVotes
-        downVotes
+        upVotes {
+          _id
+          username
+        }
+        downVotes {
+          _id
+          username
+        }
         chartComments {
           _id
           commentText
@@ -176,8 +182,14 @@ export const QUERY_ALL_COIN_CHARTS = gql`
       coinCharts {
         _id
         chartTitle
-        downVotes
-        upVotes
+        downVotes {
+          _id
+          username
+        }
+        upVotes {
+          _id
+          username
+        }
         username
         userId
         imageSmall
@@ -208,8 +220,14 @@ export const QUERY_CHART = gql`
         commentText
         createdAt
       }
-      upVotes
-      downVotes
+      upVotes {
+        _id
+        username
+      }
+      downVotes {
+        _id
+        username
+      }
       createdAt
     }
   }
@@ -229,8 +247,14 @@ export const QUERY_ALL_CHARTS = gql`
       imageThumbnail
       imageMedium
       imageSmall
-      upVotes
-      downVotes
+      upVotes {
+        _id
+        username
+      }
+      downVotes {
+        _id
+        username
+      }
       createdAt
     }
   }
@@ -309,6 +333,22 @@ export const ADD_CHART = gql`
       imageThumbnail
       imageMedium
       imageSmall
+    }
+  }
+`;
+
+export const UPVOTE_CHART = gql`
+  mutation UpVoteChart($id: ID!, $vote: Boolean!) {
+    upVoteChart(id: $id, vote: $vote) {
+      _id
+    }
+  }
+`;
+
+export const DOWNVOTE_CHART = gql`
+  mutation DownVoteChart($id: ID!, $vote: Boolean!) {
+    downVoteChart(id: $id, vote: $vote) {
+      _id
     }
   }
 `;
@@ -411,8 +451,14 @@ export const GET_FRIENDS = gql`
           imageThumbnail
           imageMedium
           imageSmall
-          upVotes
-          downVotes
+          upVotes {
+            _id
+            username
+          }
+          downVotes {
+            _id
+            username
+          }
         }
         image
       }
