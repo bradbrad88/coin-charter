@@ -54,7 +54,14 @@ const typeDefs = gql`
     _id: ID
     commentText: String
     createdAt: DateTime
-    username: User
+    username: String
+    image: String
+    userId: ID
+    coinId: String
+    coinName: String
+    chartId: String
+    upVotes: Int
+    downVotes: Int
   }
 
   type Coin {
@@ -87,11 +94,10 @@ const typeDefs = gql`
 
   type Query {
     users: [User]
-    comments: [Comment]
     coins: [Coin]
     charts: [Chart]
     user(id: ID!): User
-    comment(comment: ID!): Comment
+    comment(commentId: ID!): Comment
     coin(coinId: String!): Coin
     chart(chartId: ID!): Chart
     searchUsers(query: String!): [User]
@@ -106,6 +112,12 @@ const typeDefs = gql`
     logoutUser: Boolean
     addImage(image: String!): String
     addBio(bio: String!): String
+    addChartComment(commentText: String!, chartId: String!): Comment
+    addCoinComment(
+      commentText: String!
+      coinId: String!
+      coinName: String!
+    ): Comment
     addCoin(
       coinId: String!
       coinName: String!

@@ -41,7 +41,6 @@ const TopCharts = ({ coinId }: CoinId) => {
     <div className="flex w-4/6 h-full">
       <div className="border-r pr-4 flex flex-col w-full h-full">
         <h1 className="text-lg font-bold">Top Rated Chart</h1>
-        {/* HAVE THIS PART DYNAMIC COMPONENT FROM DATABASE*/}
         <div className="flex flex-col h-full">
           <div className="flex gap-3 items-center">
             <h1 className="font-bold text-md text-indigo-600">

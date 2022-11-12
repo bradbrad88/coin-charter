@@ -281,6 +281,23 @@ export const QUERY_ALL_CHARTS = gql`
   }
 `;
 
+export const QUERY_COIN_COMMENTS = gql`
+  query Query($coinId: String!) {
+    coin(coinId: $coinId) {
+      coinComments {
+        coinId
+        coinName
+        commentText
+        createdAt
+        downVotes
+        image
+        upVotes
+        username
+      }
+    }
+  }
+`;
+
 export const ADD_COIN = gql`
   mutation AddCoin(
     $coinId: String!
@@ -319,6 +336,43 @@ export const REMOVE_COIN = gql`
           _id
         }
       }
+    }
+  }
+`;
+
+export const ADD_CHART_COMMENT = gql`
+  mutation addChartComment($commentText: String!, $chartId: String!) {
+    addChartComment(commentText: $commentText, chartId: $chartId) {
+      commentText
+      createdAt
+      username
+      userId
+      chartId
+      upVotes
+      downVotes
+    }
+  }
+`;
+
+export const ADD_COIN_COMMENT = gql`
+  mutation addCoinComment(
+    $commentText: String!
+    $coinId: String!
+    $coinName: String!
+  ) {
+    addCoinComment(
+      commentText: $commentText
+      coinId: $coinId
+      coinName: $coinName
+    ) {
+      commentText
+      createdAt
+      username
+      userId
+      coinId
+      coinName
+      upVotes
+      downVotes
     }
   }
 `;

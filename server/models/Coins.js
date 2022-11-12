@@ -10,7 +10,6 @@ const coinSchema = new Schema(
       type: String,
       required: true,
     },
-    // ID given from the third party API that can be used to select the coin from the database and used to get the coin info from the API
     coinId: {
       type: String,
       required: true,
