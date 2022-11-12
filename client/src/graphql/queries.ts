@@ -19,24 +19,6 @@ export const ADD_USER = gql`
           image
         }
       }
-      friends {
-        _id
-        username
-        subTitle
-        bio
-        image
-        friendCount
-        postCount
-        favCoins {
-          coin {
-            _id
-            coinId
-            coinName
-            symbol
-            image
-          }
-        }
-      }
     }
   }
 `;
