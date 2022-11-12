@@ -1,3 +1,6 @@
+import { Link } from "react-router-dom";
+import Container from "src/components/common/Container";
+
 interface Proptypes {
   friends: {
     friend: User;
@@ -6,56 +9,73 @@ interface Proptypes {
 
 const FriendsList = ({ friends }: Proptypes) => {
   return (
-    <div className="flex flex-col rounded-sm shadow-lg shadow-gray-400 p-5 m-4 mr-2 w-[95%] h-[500px] text-sm md:h-[600px] md:text-md md:w-4/6">
-      <div className="flex justify-between">
-        <h1 className="text-xl font-bold">Friends List</h1>
-        <h1>Friends: 2312</h1>
+    <Container>
+      <div className="flex flex-col p-5 w-full h-full md:h-[600px]">
+        <ul
+          className="order-1 grid gap-3 w-full h-full overflow-y-auto"
+          style={{
+            gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+          }}
+        >
+          {friends.map(({ friend }) => (
+            <FriendCard friend={friend} />
+          ))}
+        </ul>
+        {/* Header component below content so the sticky header will display above content without changing z-indexes (order-1 on ul component puts it back in the correct order) */}
+        <div className="flex justify-between sticky top-0 bg-white p-5">
+          <h1 className="text-xl font-bold">Friends List</h1>
+          <h1>Friends: {friends.length}</h1>
+        </div>
       </div>
-      <ul className="flex flex-col gap-1 w-full h-full overflow-y-auto">
-        {friends.map(({ friend }) => (
-          <li className="border-b w-full h-[100px] flex justify-start p-1">
-            <div className="flex gap-1 w-full">
-              <div className="flex w-2/6 gap-2">
+    </Container>
+  );
+};
+
+interface FriendProps {
+  friend: User;
+}
+
+const FriendCard = ({ friend }: FriendProps) => {
+  return (
+    <li className="w-full aspect-[4/3]">
+      <Link to={`/profile/${friend._id}`}>
+        <article className="relative w-full h-full bg-white group p-2 text-black shadow-gray-300 shadow-md border-[1px] border-gray-100 hover:bg-primary hover:text-white rounded-md transition-all duration-300">
+          {/* Divide top and bottom half */}
+          <div className="h-full grid grid-rows-[min-content,_minmax(0,_1fr)] gap-3">
+            {/* Break image and top right content */}
+            <div className="grid grid-cols-2 w-full">
+              {/* Image */}
+              <div className="relative w-full group-hover:w-2/3 aspect-square rounded-full overflow-hidden transition-all shadow-lg shadow-gray-300 group-hover:shadow-none group-hover:border-primary duration-300 bg-white">
                 <img
+                  className="object-cover aspect-square"
                   src={friend.image}
-                  className="h-[45px] w-[35px] rounded-lg md:h-[90px] md:w-[70px]"
                 />
-                <div className="flex flex-col leading-4 w-5/6">
-                  <h1 className="font-bold text-md text-indigo-600 hover:text-indigo-200 hover:cursor-pointer">
-                    {friend.username}
-                  </h1>
-                  <p className="italic text-sm">{friend.subTitle}</p>
-                  <p className="hidden text-sm w-full leading-4 md:flex overflow-y-auto">
-                    {friend.bio}
-                  </p>
-                </div>
               </div>
-              <div className="flex w-2/6 hidden md:flex">
-                <div className=" flex flex-col w-[100px] h-full justify-center items-center">
-                  <p className="font-bold text-sm text-indigo-600">Friends #</p>
-                  <p>{friend.friendCount}</p>
-                </div>
-                <div className=" flex flex-col w-[100px] h-full justify-center items-center">
-                  <p className="font-bold text-sm text-indigo-600">Charts #</p>
-                  <p>{friend.chartCount}</p>
-                </div>
-                <div className=" flex flex-col w-[100px] h-full justify-center items-center">
-                  <p className="font-bold text-sm text-indigo-600">
-                    Fav Coins #
-                  </p>
-                  <p>{friend.favCoinCount}</p>
-                </div>
-              </div>
-              <div className=" w-3/6 md:w-2/6 h-full leading-4">
-                <h1 className="font-bold text-md text-indigo-600">
-                  Recent Activity
-                </h1>
+
+              <div className="flex flex-col text-right justify-end text-gray-500 group-hover:text-indigo-100">
+                <p>Friends: {friend.friendCount}</p>
+                <p>Charts: {friend.chartCount}</p>
+                <p>Fav Coins: {friend.favCoinCount}</p>
               </div>
             </div>
-          </li>
-        ))}
-      </ul>
-    </div>
+            <div className="grid grid-rows-[min-content,_minmax(0,_1fr)] h-full w-full bg-blue-3000">
+              <div className="flex items-end gap-3">
+                <h2 className="text-lg font-bold">{friend.username}</h2>
+                <h2 className="text-primary group-hover:text-indigo-100">
+                  {friend.subTitle}
+                </h2>
+              </div>
+
+              <div className="h-full w-full overflow-hidden group-hover:overflow-y-auto">
+                <p className="italic text-white pl-5 w-full opacity-0 group-hover:opacity-100 duration-500 delay-200">
+                  {friend.bio}
+                </p>
+              </div>
+            </div>
+          </div>
+        </article>
+      </Link>
+    </li>
   );
 };
 
