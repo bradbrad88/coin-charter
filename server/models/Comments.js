@@ -9,21 +9,47 @@ const commentSchema = new Schema(
       minLength: 1,
       maxLength: 250,
     },
-    createdAt: {
-      type: Date,
-      default: () => Date.now(),
-      get: (date) => timeSince(date),
-    },
     username: {
+      type: String,
+      required: true,
+    },
+    image: {
+      type: String,
+      ref: "users",
+      required: false,
+    },
+    userId: {
       type: Schema.Types.ObjectId,
       ref: "users",
       required: true,
+    },
+    coinId: {
+      type: String,
+      ref: "coins",
+      required: true,
+    },
+    coinName: {
+      type: String,
+      required: true,
+    },
+    chartId: {
+      type: Schema.Types.ObjectId,
+      ref: "charts",
+    },
+    upVotes: {
+      type: Number,
+      default: 0,
+    },
+    downVotes: {
+      type: Number,
+      default: 0,
     },
   },
   {
     toJSON: {
       virtuals: true,
     },
+    timestamps: true,
     id: false,
   },
 );

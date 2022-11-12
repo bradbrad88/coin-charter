@@ -61,7 +61,7 @@ const CoinProfile = () => {
         <div className="flex flex-col">
           <div className="flex flex-col lg:flex-row">
             <CoinProfileCard coin={coin} />
-            <CoinComments />
+            <CoinComments coin={coin} />
           </div>
           <Chart coin={coin} />
           <CoinCharts coin={coin} />
