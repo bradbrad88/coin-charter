@@ -37,7 +37,8 @@ const resolvers = {
       // ? not sure if populate with Users again because of self-reference
       const users = await Users.find({})
         .populate("comments")
-        .populate({ path: "favCoins", populate: "coin" });
+        .populate({ path: "favCoins", populate: "coin" })
+        .populate({ path: "friends", populate: "friend" });
       return users;
     },
     user: async (parent, args) => {
@@ -306,7 +307,10 @@ const resolvers = {
         { new: true, timestamps: true },
       );
 
-      await friend.updateOne({ $addToSet: { friends: user._id } });
+      await friend.updateOne(
+        { $addToSet: { friends: { friend: user._id } } },
+        { timestamps: true },
+      );
       return updatedUser;
     },
     declineFriendRequest: async (parent, { friendId }, { user: userId }) => {
