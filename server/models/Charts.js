@@ -53,14 +53,18 @@ const chartSchema = new Schema(
         ref: "comments",
       },
     ],
-    upVotes: {
-      type: Number,
-      default: 0,
-    },
-    downVotes: {
-      type: Number,
-      default: 0,
-    },
+    upVotes: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "users",
+      },
+    ],
+    downVotes: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "users",
+      },
+    ],
   },
   {
     toJSON: {
