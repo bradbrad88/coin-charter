@@ -149,11 +149,13 @@ export const QUERY_USER = gql`
       friendCount
       postCount
       favCoins {
-        _id
-        coinId
-        coinName
-        symbol
-        image
+        coin {
+          _id
+          coinId
+          coinName
+          symbol
+          image
+        }
       }
     }
   }
