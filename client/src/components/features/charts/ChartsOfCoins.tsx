@@ -1,6 +1,6 @@
 import Container from "src/components/common/Container";
-import { IoIosArrowRoundUp } from "react-icons/Io";
-import { IoIosArrowRoundDown } from "react-icons/Io";
+import { IoIosArrowRoundUp } from "react-icons/io";
+import { IoIosArrowRoundDown } from "react-icons/io";
 
 const coinOption = ["Top Rated", "Most Recent", "Oldest", "Least Rated"];
 const data = [

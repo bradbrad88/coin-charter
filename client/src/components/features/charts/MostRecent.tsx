@@ -1,6 +1,6 @@
 import Container from "src/components/common/Container";
-import { IoIosArrowRoundUp, IoIosArrowRoundDown } from "react-icons/Io";
-import { TfiArrowCircleLeft, TfiArrowCircleRight } from "react-icons/Tfi";
+import { IoIosArrowRoundUp, IoIosArrowRoundDown } from "react-icons/io";
+import { TfiArrowCircleLeft, TfiArrowCircleRight } from "react-icons/tfi";
 import { useRef } from "react";
 
 const data = [
