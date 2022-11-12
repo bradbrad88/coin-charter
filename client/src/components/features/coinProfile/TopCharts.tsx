@@ -57,11 +57,11 @@ const TopCharts = ({ coinId }: CoinId) => {
             </p>
             <div className="flex flex-col">
               <i className="fa-regular fa-thumbs-up text-[14px]"></i>
-              <p className="text-[8px]">{topRatedChart.upVotes}</p>
+              <p className="text-[8px]">{topRatedChart.upVotes.length}</p>
             </div>
             <div className="flex flex-col">
               <i className="fa-regular fa-thumbs-down text-[14px]"></i>
-              <p className="text-[8px]">{topRatedChart.downVotes}</p>
+              <p className="text-[8px]">{topRatedChart.downVotes.length}</p>
             </div>
           </div>
           <p>{topRatedChart.chartDescription}</p>
