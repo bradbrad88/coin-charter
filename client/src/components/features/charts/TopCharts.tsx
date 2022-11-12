@@ -1,44 +1,60 @@
-import { useEffect, useState, useRef } from "react";
+import { useRef, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { IoIosArrowRoundUp, IoIosArrowRoundDown } from "react-icons/io";
 import { TfiArrowCircleLeft, TfiArrowCircleRight } from "react-icons/tfi";
+import useUserContext from "contexts/UserContext";
 import Container from "src/components/common/Container";
-import { QUERY_ALL_CHARTS } from "src/graphql/queries";
+import {
+  DOWNVOTE_CHART,
+  QUERY_ALL_CHARTS,
+  UPVOTE_CHART,
+} from "src/graphql/queries";
+import VoteWidget from "src/components/common/VoteWidget";
+
+interface Query {
+  charts: Chart[];
+}
 
 const MostRecent = () => {
-  const nav = useNavigate();
-  const [topRated, setTopRated] = useState<any>();
-  const [topCharts, setTopCharts] = useState<any>([]);
-  const { data } = useQuery(QUERY_ALL_CHARTS);
+  const { user } = useUserContext();
+  const { data, refetch } = useQuery<Query>(QUERY_ALL_CHARTS);
+  const [upVoteMutation] = useMutation(UPVOTE_CHART);
+  const [downVoteMutation] = useMutation(DOWNVOTE_CHART);
   const ref = useRef<HTMLUListElement>(null);
 
-  useEffect(() => {
-    const info = data?.charts;
-    if (info) {
-      topRatedChart(info);
-      topRatedChartList(info);
-    }
-  }, [data]);
-
-  const topRatedChart = (info: Chart[]) => {
-    const mostUpvotedChart = info.reduce(function (prev: any, current: any) {
+  const topRated = useMemo(() => {
+    if (!data || data.charts.length < 1) return null;
+    return data.charts.reduce(function (prev: any, current: any) {
       return prev.upVotes > current.upVotes ? prev : current;
     });
-    setTopRated(mostUpvotedChart);
+  }, [data]);
+
+  const topCharts = useMemo(() => {
+    if (!data) return [];
+    return [...data.charts]
+      .sort((a, b) => b.upVotes.length - a.upVotes.length)
+      .map((chart) => <ChartItem key={chart._id} info={chart} />);
+  }, [data]);
+
+  const upVote = useMemo(() => {
+    if (!topRated) return false;
+    return topRated.upVotes.some((vote) => vote._id === user?._id);
+  }, [data]);
+
+  const downVote = useMemo(() => {
+    if (!topRated) return false;
+    return topRated.downVotes.some((vote) => vote._id === user?._id);
+  }, [data]);
+
+  const handleUpVote = async (id: string, vote: boolean) => {
+    await upVoteMutation({ variables: { id, vote } });
+    refetch();
   };
 
-  const topRatedChartList = (info: Chart[]) => {
-    let topRated = info
-      .slice(0)
-      .sort((a, b) => (a.upVotes > b.upVotes ? -1 : 1));
-    setTopCharts(topRated);
-  };
-
-  const renderChartItems = () => {
-    return topCharts?.map((item: Chart) => (
-      <ChartItem key={item._id} info={item} />
-    ));
+  const handleDownVote = async (id: string, vote: boolean) => {
+    await downVoteMutation({ variables: { id, vote } });
+    refetch();
   };
 
   const slideLeft = () => {
@@ -58,10 +74,10 @@ const MostRecent = () => {
   return (
     <Container>
       <div className="p-5">
-        <div>
+        <div className="flex flex-col items-center">
           <h1 className="text-lg font-bold text-center">Top Rated Charts</h1>
-          <Link to={`/coin/${topRated.coinId}`}>
-            <h1 className="text-lg font-semibold text-center hover:cursor-pointer">
+          <Link to={`/coin/${topRated.coinId}`} className="w-fit">
+            <h1 className="text-lg font-semibold text-center hover:cursor-pointer w-fit">
               {topRated.coinName}
             </h1>
           </Link>
@@ -75,16 +91,14 @@ const MostRecent = () => {
               By {topRated.username}
             </p>
           </Link>
-          <div className="flex flex-row gap-3">
-            <div>
-              <IoIosArrowRoundUp className="text-green-500" />
-              <p className="text-[8px]">{topRated.upVotes}</p>
-            </div>
-            <div>
-              <IoIosArrowRoundDown className="text-red-500" />
-              <p className="text-[8px]">{topRated.downVotes}</p>
-            </div>
-          </div>
+          <VoteWidget
+            handleUpVote={(vote) => handleUpVote(topRated._id, vote)}
+            handleDownVote={(vote) => handleDownVote(topRated._id, vote)}
+            downVote={downVote}
+            upVote={upVote}
+            downVoteCount={topRated.downVotes.length}
+            upVoteCount={topRated.upVotes.length}
+          />
         </div>
         <p>{topRated.chartDescription}</p>
       </div>
@@ -105,7 +119,7 @@ const MostRecent = () => {
             ref={ref}
             className="h-full w-full overflow-x-scroll overflow-y-hidden whitespace-nowrap scroll-smooth"
           >
-            {renderChartItems()}
+            {topCharts}
           </ul>
           <TfiArrowCircleLeft
             onClick={slideLeft}
@@ -157,11 +171,11 @@ const ChartItem = ({ info }: ChartItemProps) => {
             <div className="flex justify-center gap-2">
               <div className="">
                 <IoIosArrowRoundUp className="text-green-500" />
-                <p className="text-[8px]">{info.upVotes}</p>
+                <p className="text-[8px]">{info.upVotes.length}</p>
               </div>
               <div className="">
                 <IoIosArrowRoundDown className="text-red-500" />
-                <p className="text-[8px]">{info.downVotes}</p>
+                <p className="text-[8px]">{info.downVotes.length}</p>
               </div>
             </div>
           </div>
