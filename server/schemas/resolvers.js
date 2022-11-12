@@ -77,12 +77,14 @@ const resolvers = {
     charts: async () => {
       return await Charts.find({})
         .populate("chartComments")
-        .populate({ path: "chartComments", populate: "users" });
+        .populate({ path: "chartComments", populate: "users" })
+        .populate("upVotes");
     },
     chart: async (parent, { chartId }) => {
       return await Charts.findById(chartId)
         .populate("chartComments")
-        .populate({ path: "chartComments", populate: "users" });
+        .populate({ path: "chartComments", populate: "users" })
+        .populate("upVotes");
     },
     searchUsers: async (parent, { query }) => {
       const regex = new RegExp(`.*${query}.*`, "i");
@@ -271,6 +273,49 @@ const resolvers = {
 
       return updatedUser;
     },
+
+    upVoteChart: async (_, { id, vote }, { user }) => {
+      if (!user) throw new AuthenticationError();
+
+      if (vote) {
+        const chart = await Charts.findByIdAndUpdate(
+          id,
+          { $addToSet: { upVotes: user._id } },
+          { new: true },
+        );
+        return await chart.updateOne(
+          { $pull: { downVotes: user._id } },
+          { new: true },
+        );
+      } else {
+        const chart = await Charts.findByIdAndUpdate(id, {
+          $pull: { upVotes: user._id },
+        });
+        return chart;
+      }
+    },
+    downVoteChart: async (_, { id, vote }, { user }) => {
+      if (!user) throw new AuthenticationError();
+
+      if (vote) {
+        const chart = await Charts.findByIdAndUpdate(
+          id,
+          { $addToSet: { downVotes: user._id } },
+          { new: true },
+        );
+        return await chart.updateOne(
+          { $pull: { upVotes: user._id } },
+          { new: true },
+        );
+      } else {
+        return await Charts.findByIdAndUpdate(
+          id,
+          { $pull: { downVotes: user._id } },
+          { new: true },
+        );
+      }
+    },
+
     sendFriendRequest: async (parent, args, { user }) => {
       if (!user) throw new AuthenticationError();
       const request = { ...args };
