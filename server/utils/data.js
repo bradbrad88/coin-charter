@@ -41,4 +41,49 @@ const coinSeed = [
   },
 ];
 
-module.exports = { userSeed, coinSeed };
+const chartSeed = [
+  {
+    coinId: "bitcoin",
+    coinName: "Bitcoin",
+    symbol: "btc",
+    chartTitle: "My first chart",
+    chartDescription:
+      "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Commodi quasi recusandae volufugit asperiores. Ea, consequatur?",
+    imageThumbnail:
+      "https://coin-charter.s3.ap-southeast-2.amazonaws.com/636c7f962e0c02f33ba29d48btc4ae6ab4e-5167-46f8-9860-e20492d2472ethumbnail.avif",
+    imageMedium:
+      "https://coin-charter.s3.ap-southeast-2.amazonaws.com/636c7f962e0c02f33ba29d48btccba1bd9a-b27c-4903-a80c-cd562c7135b7medium.avif",
+    imageSmall:
+      "https://coin-charter.s3.ap-southeast-2.amazonaws.com/636c7f962e0c02f33ba29d48btc705b2647-dc22-4df0-b40b-fd981d802971small.avif",
+  },
+  {
+    coinId: "bitcoin",
+    coinName: "Bitcoin",
+    symbol: "btc",
+    chartTitle: "Bitcoin done",
+    chartDescription:
+      "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Commodi quasi recusandae voluptates r delectus quidem in sapiente doloribus dicta, fugit asperiores. Ea, consequatur?",
+    imageThumbnail:
+      "https://coin-charter.s3.ap-southeast-2.amazonaws.com/636c7f962e0c02f33ba29d48btc4ae6ab4e-5167-46f8-9860-e20492d2472ethumbnail.avif",
+    imageMedium:
+      "https://coin-charter.s3.ap-southeast-2.amazonaws.com/636c7f962e0c02f33ba29d48btccba1bd9a-b27c-4903-a80c-cd562c7135b7medium.avif",
+    imageSmall:
+      "https://coin-charter.s3.ap-southeast-2.amazonaws.com/636c7f962e0c02f33ba29d48btc705b2647-dc22-4df0-b40b-fd981d802971small.avif",
+  },
+  {
+    coinId: "bitcoin",
+    coinName: "Bitcoin",
+    symbol: "btc",
+    chartTitle: "Im excited",
+    chartDescription:
+      "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Commodi quasi recusandae voluptates rationconsequatur?",
+    imageThumbnail:
+      "https://coin-charter.s3.ap-southeast-2.amazonaws.com/636c7f962e0c02f33ba29d48btc4ae6ab4e-5167-46f8-9860-e20492d2472ethumbnail.avif",
+    imageMedium:
+      "https://coin-charter.s3.ap-southeast-2.amazonaws.com/636c7f962e0c02f33ba29d48btccba1bd9a-b27c-4903-a80c-cd562c7135b7medium.avif",
+    imageSmall:
+      "https://coin-charter.s3.ap-southeast-2.amazonaws.com/636c7f962e0c02f33ba29d48btc705b2647-dc22-4df0-b40b-fd981d802971small.avif",
+  },
+];
+
+module.exports = { userSeed, coinSeed, chartSeed };

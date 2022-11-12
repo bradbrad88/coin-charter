@@ -1,7 +1,7 @@
 // Import connection, models and seed data
 const connection = require("../config/connection");
-const { Users, Coins } = require("../models");
-const { userSeed, coinSeed } = require("./data");
+const { Users, Coins, Charts } = require("../models");
+const { userSeed, coinSeed, chartSeed } = require("./data");
 
 connection.on("error", (err) => err);
 
@@ -46,6 +46,20 @@ connection.once("open", async () => {
   });
 
   const newUsers = await Promise.all(friendPromises);
+
+  await Charts.deleteMany({});
+
+  const mappedCharts = chartSeed.map((chart) => {
+    const { _id, username } = users[Math.floor(Math.random() * users.length)];
+    return {
+      ...chart,
+      userId: _id,
+      username,
+    };
+  });
+
+  console.log(mappedCharts);
+  await Charts.insertMany(mappedCharts);
 
   console.log("Seed complete");
   process.exit();
