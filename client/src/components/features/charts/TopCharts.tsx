@@ -25,12 +25,36 @@ interface ChartsDataTypes {
 }
 
 const MostRecent = () => {
+  const nav = useNavigate();
+  const [topRated, setTopRated] = useState<any>();
   const [topCharts, setTopCharts] = useState<any>([]);
   const { loading, error, data } = useQuery(QUERY_ALL_CHARTS);
   const ref = useRef<HTMLUListElement>(null);
 
+  useEffect(() => {
+    const info = data?.charts;
+    if (info) {
+      topRatedChart(info);
+      topRatedChartList(info);
+    }
+  }, [data]);
+
+  const topRatedChart = (info: ChartsDataTypes[]) => {
+    const mostUpvotedChart = info.reduce(function (prev: any, current: any) {
+      return prev.upVotes > current.upVotes ? prev : current;
+    });
+    setTopRated(mostUpvotedChart);
+  };
+
+  const topRatedChartList = (info: ChartsDataTypes[]) => {
+    let topRated = info
+      .slice(0)
+      .sort((a, b) => (a.upVotes > b.upVotes ? -1 : 1));
+    setTopCharts(topRated);
+  };
+
   const renderChartItems = () => {
-    return data.map((item) => <ChartItem info={item} />);
+    return topCharts?.map((item: ChartsDataTypes) => <ChartItem info={item} />);
   };
 
   const slideLeft = () => {
@@ -43,41 +67,62 @@ const MostRecent = () => {
     ref.current.scrollLeft = ref.current.scrollLeft + 300;
   };
 
+  const selectChart = () => {
+    nav(`/chart/${topRated._id}`);
+  };
+
+  const selectUser = () => {
+    nav(`/profile/${topRated.userId}`);
+  };
+
+  const selectCoin = () => {
+    nav(`/coin/${topRated.coinId}`);
+  };
+
+  if (!topRated) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <Container>
       <div className="p-5">
         <div>
           <h1 className="text-lg font-bold text-center">Top Rated Charts</h1>
-          <h1 className="text-lg font-semibold text-center">Ethereum</h1>
+          <h1
+            className="text-lg font-semibold text-center hover:cursor-pointer"
+            onClick={() => selectCoin()}
+          >
+            {topRated.coinName}
+          </h1>
         </div>
         <div className="flex gap-3 items-center">
           <h1 className="font-bold text-md text-indigo-600">
-            Ethereum Is Going Down
+            {topRated.chartTitle}
           </h1>
-          <p className="italic font-bold text-sm text-slate-500">
-            By Ben Smerd
+          <p
+            className="italic font-bold text-sm text-slate-500 hover:cursor-pointer"
+            onClick={() => selectUser()}
+          >
+            By {topRated.username}
           </p>
           <div className="flex flex-row gap-3">
             <div>
               <IoIosArrowRoundUp className="text-green-500" />
-              <p className="text-[8px]">121230</p>
+              <p className="text-[8px]">{topRated.upVotes}</p>
             </div>
             <div>
               <IoIosArrowRoundDown className="text-red-500" />
-              <p className="text-[8px]">51230</p>
+              <p className="text-[8px]">{topRated.downVotes}</p>
             </div>
           </div>
         </div>
-        <p>
-          From my statistical analysis of the next 4 weeks combned with the
-          price movement from the past 5 weeks i think that the price of
-          ethereum will go down by 12% to this price point in red.
-        </p>
+        <p>{topRated.chartDescription}</p>
       </div>
       <div className="">
         <img
-          src="https://source.unsplash.com/random/?person/"
-          className="max-h-[400px] w-full"
+          src={topRated.imageMedium}
+          className="max-h-[400px] w-full hover:brightness-50 hover:cursor-pointer"
+          onClick={() => selectChart()}
         />
       </div>
       <div className="">
@@ -107,32 +152,28 @@ const MostRecent = () => {
 
 export default MostRecent;
 
-interface ChartItem {
-  title: string;
-  name: string;
-  coin: string;
-  upVotes: number;
-  downVotes: number;
-  createdAt: string;
-  chart: string;
-}
-
 interface ChartItemProps {
-  info: ChartItem;
+  info: ChartsDataTypes;
 }
 
 const ChartItem = ({ info }: ChartItemProps) => {
+  const nav = useNavigate();
+
+  const selectChart = () => {
+    nav(`/chart/${info._id}`);
+  };
+
   return (
-    <li className="w-[300px] h-full inline-block p-2 cursor-pointer hover:bg-indigo-100 ease-in-out duration-300">
+    <li className="w-[300px] h-full inline-block p-2 cursor-pointer hover:bg-indigo-100 ease-in-out duration-300" onClick={() => selectChart()}>
       <div>
         <h1 className="truncate font-bold text-md text-indigo-600">
-          {info.title}
+          {info.chartTitle}
         </h1>
         <div className="inline-flex">
           <div className="grid-flow-col">
-            <h1 className="truncate font-bold text-sm">{info.coin}</h1>
+            <h1 className="truncate font-bold text-sm">{info.coinName}</h1>
             <p className="truncate italic font-bold text-xs text-slate-500 w-[110px]">
-              By {info.name}
+              By {info.username}
             </p>
           </div>
           <div className="grid-flow-col">
@@ -154,7 +195,7 @@ const ChartItem = ({ info }: ChartItemProps) => {
       </div>
 
       <img
-        src={info.chart}
+        src={info.imageSmall}
         className="w-full h-[120px] rounded-sm snap-center"
       />
     </li>

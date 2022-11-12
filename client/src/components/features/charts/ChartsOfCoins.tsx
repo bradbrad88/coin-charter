@@ -20,94 +20,6 @@ interface CoinDataTypes {
   coinName: string;
 }
 
-const coinOption = ["Top Rated", "Most Recent", "Oldest", "Least Rated"];
-const data = [
-  {
-    title: "This is what i see happening this month",
-    name: "Ben Smerd",
-    upVotes: 1202,
-    downVotes: 12,
-    createdAt: "24/12/2022",
-    chart: "https://source.unsplash.com/random/?person/",
-  },
-  {
-    title: "We are going UP!",
-    name: "Brad Teague",
-    upVotes: 3203,
-    downVotes: 2,
-    createdAt: "21/03/2022",
-    chart: "https://source.unsplash.com/random/?person/",
-  },
-  {
-    title: "Going DOWN!",
-    name: "Sam March",
-    upVotes: 1022,
-    downVotes: 1223,
-    createdAt: "24/12/2020",
-    chart: "https://source.unsplash.com/random/?person/",
-  },
-  {
-    title: "This i think will happen very soon in this market",
-    name: "Sally Peterson",
-    upVotes: 1230,
-    downVotes: 122,
-    createdAt: "04/05/2022",
-    chart: "https://source.unsplash.com/random/?person/",
-  },
-  {
-    title: "This is what i see happening this month",
-    name: "Ben Smerdsssssssss",
-    upVotes: 1202,
-    downVotes: 12,
-    createdAt: "24/12/2022",
-    chart: "https://source.unsplash.com/random/?person/",
-  },
-];
-
-const coinOption = ["Top Rated", "Most Recent", "Oldest", "Least Rated"];
-const data = [
-  {
-    title: "This is what i see happening this month",
-    name: "Ben Smerd",
-    upVotes: 1202,
-    downVotes: 12,
-    createdAt: "24/12/2022",
-    chart: "https://source.unsplash.com/random/?person/",
-  },
-  {
-    title: "We are going UP!",
-    name: "Brad Teague",
-    upVotes: 3203,
-    downVotes: 2,
-    createdAt: "21/03/2022",
-    chart: "https://source.unsplash.com/random/?person/",
-  },
-  {
-    title: "Going DOWN!",
-    name: "Sam March",
-    upVotes: 1022,
-    downVotes: 1223,
-    createdAt: "24/12/2020",
-    chart: "https://source.unsplash.com/random/?person/",
-  },
-  {
-    title: "This i think will happen very soon in this market",
-    name: "Sally Peterson",
-    upVotes: 1230,
-    downVotes: 122,
-    createdAt: "04/05/2022",
-    chart: "https://source.unsplash.com/random/?person/",
-  },
-  {
-    title: "This is what i see happening this month",
-    name: "Ben Smerdsssssssss",
-    upVotes: 1202,
-    downVotes: 12,
-    createdAt: "24/12/2022",
-    chart: "https://source.unsplash.com/random/?person/",
-  },
-];
-
 const ChartsOfCoins = () => {
   const nav = useNavigate();
   const coinOption = ["Most Recent", "Oldest", "Top Rated", "Least Rated"];
@@ -182,11 +94,7 @@ const ChartsOfCoins = () => {
               className="border-black-50 border-2 rounded-full p-1 text-center"
             />
             <Button onClick={submitSearch}>Search</Button>
-            <select
-              value={filter}
-              onChange={(e) => setFilter(e.target.value)}
-            ></select>
-            <select>
+            <select value={filter} onChange={(e) => setFilter(e.target.value)}>
               {coinOption.map((option) => (
                 <option value={option} key={option}>
                   {option}
@@ -205,6 +113,7 @@ const ChartsOfCoins = () => {
               <li
                 className=" hover:bg-indigo-100 hover:border-indigo-100 hover:cursor-pointer flex flex-col p-2"
                 key={info.username + index}
+                onClick={() => selectChart(info)}
               >
                 <div className="flex justify-between">
                   <div className="flex flex-col w-5/6 h-[50px] gap-1">
