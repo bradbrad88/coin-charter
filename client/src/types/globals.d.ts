@@ -13,8 +13,8 @@ declare global {
     imageThumbnail: string;
     imageMedium: string;
     imageSmall: string;
-    upVotes: number;
-    downVotes: number;
+    upVotes: User[];
+    downVotes: User[];
     createdAt: number;
   }
 
