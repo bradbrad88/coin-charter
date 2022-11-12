@@ -38,7 +38,9 @@ const Coins = () => {
   const { user } = useUserContext();
 
   const renderCoins = () =>
-    user!.favCoins.map((favCoin) => <Coin coin={favCoin.coin} />);
+    user!.favCoins.map((favCoin) => (
+      <Coin key={favCoin.coin.coinId} coin={favCoin.coin} />
+    ));
 
   return (
     <div className="flex flex-col gap-2 rounded-md h-full overflow-auto max-h-[520px]">
