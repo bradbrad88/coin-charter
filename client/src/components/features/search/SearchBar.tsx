@@ -37,6 +37,16 @@ const SearchBar = ({ closeSidebar }: Proptypes) => {
 
   const { fetchJSON } = useFetch();
 
+  // If user clicks away from the search bar, close it
+  useEffect(() => {
+    const close = () => {
+      setQuery("");
+      setHideSearch(true);
+    };
+    window.addEventListener("pointerdown", close);
+    return () => window.removeEventListener("pointerdown", close);
+  }, []);
+
   // If user data changes in graphql query, ensure hideSearch is not enabled
   useEffect(() => {
     if (userData && hideSearch) {
@@ -48,6 +58,7 @@ const SearchBar = ({ closeSidebar }: Proptypes) => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     if (!query) return;
     timeoutRef.current = setTimeout(async () => {
+      setHideSearch(false);
       getSearchResults({ variables: { query } });
       const params = new URLSearchParams();
       params.append("query", query);
@@ -74,7 +85,10 @@ const SearchBar = ({ closeSidebar }: Proptypes) => {
   };
 
   return (
-    <div className="relative w-full z-50">
+    <div
+      className="relative w-full z-50"
+      onPointerDown={(e) => e.stopPropagation()}
+    >
       <input
         spellCheck={false}
         value={query}
