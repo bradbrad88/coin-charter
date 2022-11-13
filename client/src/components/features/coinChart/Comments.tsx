@@ -76,7 +76,61 @@ const hardcode = [
   },
 ];
 
-const Comments = ({ chartInfo }: any) => {
+import { useState, useEffect } from "react";
+import { QUERY_CHART, ADD_CHART_COMMENT } from "src/graphql/queries";
+import { useQuery, useMutation } from "@apollo/client";
+import Button from "src/components/common/Button";
+
+const CreateComment = ({ chartId }: any) => {
+  const [commentInput, setCommentInput] = useState<string>("");
+  const [addChartComment, { error, data }] = useMutation(ADD_CHART_COMMENT);
+
+  console.log(chartId);
+
+  const submitComment = () => {
+    const variables = {
+      commentText: commentInput,
+      chartId,
+    };
+    addChartComment({ variables });
+  };
+
+  if (error) {
+    console.log(error);
+  }
+
+  return (
+    <div>
+      <h1>Add Comment</h1>
+      <form>
+        <textarea
+          className="w-full text-sm"
+          placeholder="Add text here..."
+          rows={3}
+          value={commentInput}
+          onChange={(e) => setCommentInput(e.target.value)}
+        ></textarea>
+        <Button onClick={submitComment}>Submit</Button>
+      </form>
+    </div>
+  );
+};
+
+const Comments = (chartInfo: any) => {
+  const chartId = chartInfo?._id;
+  const [commentsList, setCommentsList] = useState<any>();
+  const { loading, error, data } = useQuery(QUERY_CHART, {
+    variables: { chartId },
+  });
+
+  useEffect(() => {
+    let chartData = data?.chart;
+    if (chartData) {
+      console.log(chartData);
+    }
+  }, [data]);
+
+  console.log(chartId);
   return (
     <div className="w-full md:w-2/6 flex flex-col">
       <div className="flex gap-2">
@@ -113,6 +167,7 @@ const Comments = ({ chartInfo }: any) => {
           </li>
         ))}
       </ul>
+      <CreateComment chartId={chartId} />
     </div>
   );
 };
