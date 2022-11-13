@@ -16,6 +16,8 @@ import {
 } from "@apollo/client";
 import Signup from "./pages/Signup";
 import { Provider as UserProvider } from "contexts/UserContext";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // Construct our main GraphQL API endpoint
 const httpLink = createHttpLink({
@@ -32,6 +34,12 @@ const App = () => {
   return (
     <ApolloProvider client={client}>
       <UserProvider>
+        <ToastContainer
+          position="top-left"
+          theme="colored"
+          toastClassName="toasty"
+          autoClose={3000}
+        />
         <div>
           <Header />
           <Routes>
