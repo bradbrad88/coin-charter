@@ -59,7 +59,7 @@ const typeDefs = gql`
     userId: ID
     coinId: String
     coinName: String
-    chartId: String
+    chartId: ID
     upVotes: Int
     downVotes: Int
   }
@@ -98,6 +98,8 @@ const typeDefs = gql`
     charts: [Chart]
     user(id: ID!): User
     comment(commentId: ID!): Comment
+    chartComments(chartId: ID!): [Comment]
+    coinComments(coinId: String!): [Comment]
     coin(coinId: String!): Coin
     chart(chartId: ID!): Chart
     searchUsers(query: String!): [User]
@@ -112,7 +114,7 @@ const typeDefs = gql`
     logoutUser: Boolean
     addImage(image: String!): String
     addBio(bio: String!): String
-    addChartComment(commentText: String!, chartId: String!): Comment
+    addChartComment(commentText: String!, chartId: ID!): Comment
     addCoinComment(
       commentText: String!
       coinId: String!

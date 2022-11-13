@@ -44,14 +44,18 @@ const resolvers = {
         .populate("users")
         .populate({ path: "users", populate: "comments" });
     },
+    chartComments: async (parent, { chartId }) => {
+      return await Comments.find({ chartId });
+    },
+    coinComments: async (parent, { coinId }) => {
+      return await Comments.find({ coinId });
+    },
     coin: async (parent, { coinId }) => {
       const findCoin = await Coins.findOne({ coinId })
         .populate("coinCharts")
         .populate({ path: "coinCharts", populate: "chartComments" })
         .populate("coinComments")
-        .populate({ path: "coinComments", populate: "userId" })
-        .populate("coinComments")
-        .populate({ path: "coinComments", populate: "image" });
+        .populate({ path: "coinComments", populate: "userId" });
 
       if (!findCoin) {
         throw new AuthenticationError();
@@ -68,13 +72,13 @@ const resolvers = {
     charts: async () => {
       return await Charts.find({})
         .populate("chartComments")
-        .populate({ path: "chartComments", populate: "users" })
+        .populate({ path: "chartComments", populate: "userId" })
         .populate("upVotes");
     },
     chart: async (parent, { chartId }) => {
       return await Charts.findById(chartId)
         .populate("chartComments")
-        .populate({ path: "chartComments", populate: "users" })
+        .populate({ path: "chartComments", populate: "userId" })
         .populate("upVotes");
     },
     searchUsers: async (parent, { query }) => {
@@ -223,11 +227,13 @@ const resolvers = {
         commentText,
         username: findUser.username,
         userId: userId,
+        image: findUser.image,
         chartId,
       });
 
-      await Charts.findOneAndUpdate(
-        { chartId },
+      const findChart = await Charts.findById(chartId);
+
+      await findChart.updateOne(
         { $push: { chartComments: newComment._id } },
         { new: true },
       );
@@ -251,6 +257,7 @@ const resolvers = {
         commentText,
         username: findUser.username,
         userId: userId,
+        image: findUser.image,
         coinId,
         coinName,
       });
