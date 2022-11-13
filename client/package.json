@@ -30,6 +30,7 @@
     "react-router-dom": "^6.4.2",
     "react-sparklines": "^1.7.0",
     "react-spinners": "^0.13.6",
+    "react-toastify": "^9.1.1",
     "react-ts-tradingview-widgets": "^1.0.12",
     "uuid": "^9.0.0"
   },
