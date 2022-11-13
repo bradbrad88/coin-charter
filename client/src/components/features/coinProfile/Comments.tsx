@@ -2,6 +2,7 @@ import Button from "src/components/common/Button";
 import { useState, useEffect } from "react";
 import { ADD_COIN_COMMENT, QUERY_COIN_COMMENTS } from "src/graphql/queries";
 import { useMutation, useQuery } from "@apollo/client";
+import { Link } from "react-router-dom";
 
 interface CoinInfo {
   coinName: string;
@@ -49,7 +50,7 @@ const Comments = ({ coinName, coinId }: CoinInfo) => {
   });
 
   useEffect(() => {
-    let commentsData = data?.coin?.coinComments;
+    let commentsData = data?.coinComments;
     if (commentsData) {
       setCommentsList(commentsData);
     }
@@ -86,7 +87,11 @@ const Comments = ({ coinName, coinId }: CoinInfo) => {
             </div>
             <div className=" flex flex-col w-5/6 h-5/6">
               <div className="flex gap-2 items-center">
-                <h3 className="font-bold text-sm">{info.username}</h3>
+                <Link to={`/profile/${info.userId}`}>
+                  <span className="font-bold text-sm text-indigo-600">
+                    {info.username}
+                  </span>
+                </Link>
                 <p className="text-gray-500 text-xs">{info.createdAt}</p>
               </div>
 
