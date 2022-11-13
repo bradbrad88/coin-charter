@@ -16,7 +16,6 @@ const commentSchema = new Schema(
     image: {
       type: String,
       ref: "users",
-      required: false,
     },
     userId: {
       type: Schema.Types.ObjectId,
@@ -26,11 +25,9 @@ const commentSchema = new Schema(
     coinId: {
       type: String,
       ref: "coins",
-      required: true,
     },
     coinName: {
       type: String,
-      required: true,
     },
     chartId: {
       type: Schema.Types.ObjectId,
