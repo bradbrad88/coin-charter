@@ -88,7 +88,9 @@ const typeDefs = gql`
     imageSmall: String
     chartComments: [Comment]
     upVotes: [User]
+    upVoteCount: Int
     downVotes: [User]
+    downVoteCount: Int
     createdAt: DateTime!
   }
 
@@ -102,6 +104,7 @@ const typeDefs = gql`
     coinComments(coinId: String!): [Comment]
     coin(coinId: String!): Coin
     chart(chartId: ID!): Chart
+    userCharts(userId: ID!): [Chart]
     searchUsers(query: String!): [User]
     friendRequests: [FriendRequest]
     friends: [Friend]
