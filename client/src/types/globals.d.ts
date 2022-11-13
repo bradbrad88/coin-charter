@@ -18,7 +18,9 @@ declare global {
     imageSmall: string;
     upVotes: User[];
     downVotes: User[];
-    createdAt: number;
+    createdAt: string;
+    upVoteCount: number;
+    downVoteCount: number;
   }
 
   interface User {

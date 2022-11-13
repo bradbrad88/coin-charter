@@ -562,3 +562,19 @@ export const FRIEND_ACTIVITY = gql`
     }
   }
 `;
+
+export const USER_CHARTS = gql`
+  query Query($userId: ID!) {
+    userCharts(userId: $userId) {
+      _id
+      coinId
+      coinName
+      symbol
+      chartTitle
+      imageSmall
+      createdAt
+      upVoteCount
+      downVoteCount
+    }
+  }
+`;
