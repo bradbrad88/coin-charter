@@ -1,36 +1,3 @@
-const hardcode = [
-  {
-    name: "Ben",
-    comment:
-      "I really enjoy this coin because it is so good and i love it so much because it is so good and so good",
-    upVotes: 1290,
-    downVotes: 13,
-    profilePic: "https://source.unsplash.com/random/?person/",
-  },
-  {
-    name: "Brad",
-    comment: "I LOVE THIS COIN SO MUCH",
-    upVotes: 390,
-    downVotes: 1123,
-    profilePic: "https://source.unsplash.com/random/?person/",
-  },
-  {
-    name: "Same",
-    comment: "I am in love with this and and so good",
-    upVotes: 3910,
-    downVotes: 1332,
-    profilePic: "https://source.unsplash.com/random/?person/",
-  },
-  {
-    name: "Jamie",
-    comment:
-      "I rasd love it so much sooooo much THE BESTTTeally enjoy this coin because it is so good and i love it so much because it is so good and so good",
-    upVotes: 390,
-    downVotes: 13,
-    profilePic: "https://source.unsplash.com/random/?person/",
-  },
-];
-
 import Button from "src/components/common/Button";
 import { useState, useEffect } from "react";
 import { ADD_COIN_COMMENT, QUERY_COIN_COMMENTS } from "src/graphql/queries";
@@ -87,7 +54,6 @@ const Comments = ({ coinName, coinId }: CoinInfo) => {
       setCommentsList(commentsData);
     }
   }, [data]);
-  console.log(commentsList);
 
   if (error) {
     console.log(error);
