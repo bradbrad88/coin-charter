@@ -8,6 +8,8 @@ declare global {
     symbol: string;
     chartTitle: string;
     chartDescription: string;
+    chartComments: Comment[];
+    coinComments: Comment[];
     username: string;
     userId: string;
     imageThumbnail: string;
@@ -29,6 +31,20 @@ declare global {
     favCoins: FavCoin[];
     favCoinCount: number;
     chartCount: number;
+  }
+
+  interface Comment {
+    _id: string;
+    commentText: string;
+    username: string;
+    image: string;
+    userId: string;
+    coinId: string;
+    coinName: string;
+    chartId: string;
+    upVotes: number;
+    downVotes: number;
+    createdAt: number;
   }
 
   interface FavCoin {
