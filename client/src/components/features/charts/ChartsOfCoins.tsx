@@ -113,6 +113,7 @@ const ChartsOfCoins = () => {
               <li
                 className=" hover:bg-indigo-100 hover:border-indigo-100 hover:cursor-pointer flex flex-col p-2"
                 key={info.username + index}
+                onClick={() => selectChart(info)}
               >
                 <div className="flex justify-between">
                   <div className="flex flex-col w-5/6 h-[50px] gap-1">
@@ -131,19 +132,19 @@ const ChartsOfCoins = () => {
 
                   <div className="flex flex-col">
                     <IoIosArrowRoundUp className="text-green-500" />
-                    <p className="text-[8px]">{info.upVotes}</p>
+                    <p className="text-[8px]">{info.upVotes.length}</p>
                   </div>
                   <div className="flex flex-col">
                     <IoIosArrowRoundDown className="text-red-500" />
-                    <p className="text-[8px]">{info.downVotes}</p>
+                    <p className="text-[8px]">{info.downVotes.length}</p>
                   </div>
                   <div className="flex flex-col">
                     <IoIosArrowRoundUp className="text-green-500" />
-                    <p className="text-[8px]">{info.upVotes}</p>
+                    <p className="text-[8px]">{info.upVotes.length}</p>
                   </div>
                   <div className="flex flex-col">
                     <IoIosArrowRoundDown className="text-red-500" />
-                    <p className="text-[8px]">{info.downVotes}</p>
+                    <p className="text-[8px]">{info.downVotes.length}</p>
                   </div>
                 </div>
                 <img

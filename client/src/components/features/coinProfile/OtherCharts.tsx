@@ -21,7 +21,6 @@ interface CoinDataTypes {
 }
 
 const OtherCharts = ({ coinId }: CoinId) => {
-  const nav = useNavigate();
   const filterOptions = ["Most Recent", "Oldest", "Top Rated", "Least Rated"];
   const [coinCharts, setCoinCharts] = useState<any>();
   const [filter, setFilter] = useState<string>("Most Recent");
@@ -60,10 +59,6 @@ const OtherCharts = ({ coinId }: CoinId) => {
     }
   };
 
-  const selectChart = (chartInfo: any) => {
-    nav(`/chart/${chartInfo._id}`);
-  };
-
   if (!coinCharts) {
     return <div>Loading...</div>;
   }
@@ -86,7 +81,7 @@ const OtherCharts = ({ coinId }: CoinId) => {
           <li
             key={info.chartTitle + index}
             className="flex flex-col group transition-all hover:bg-indigo-100 hover:rounded-lg hover:border-2 hover:border-indigo-100 hover:cursor-pointer p-2"
-            onClick={() => selectChart(info)}
+            // onClick={() => selectChart(info)}
           >
             <Link to={`/chart/${info._id}`}>
               <div className="flex justify-between">
@@ -99,17 +94,17 @@ const OtherCharts = ({ coinId }: CoinId) => {
                       By {info.username}
                     </p>
                     <p className="text-gray-500 text-xs">
-                      Posted Ontoday: {info.createdAt}
+                      Posted On: {info.createdAt}
                     </p>
                   </div>
                 </div>
                 <div className="flex flex-col justify-center">
                   <i className="fa-regular fa-thumbs-up text-[14px]"></i>
-                  <p className="text-[8px]">{info.upVotes}</p>
+                  <p className="text-[8px]">{info.upVotes.length}</p>
                 </div>
                 <div className="flex flex-col justify-center">
                   <i className="fa-regular fa-thumbs-down text-[14px]"></i>
-                  <p className="text-[8px]">{info.downVotes}</p>
+                  <p className="text-[8px]">{info.downVotes.length}</p>
                 </div>
               </div>
               <img
