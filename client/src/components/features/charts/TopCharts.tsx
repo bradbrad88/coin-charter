@@ -75,7 +75,7 @@ const MostRecent = () => {
     <Container>
       <div className="p-5">
         <div className="flex flex-col items-center">
-          <h1 className="text-lg font-bold text-center">Top Rated Charts</h1>
+          <h1 className="text-lg font-bold text-center">Featured Top Chart</h1>
           <Link to={`/coin/${topRated.coinId}`} className="w-fit">
             <h1 className="text-lg font-semibold text-center hover:cursor-pointer w-fit">
               {topRated.coinName}
@@ -100,7 +100,12 @@ const MostRecent = () => {
             upVoteCount={topRated.upVotes.length}
           />
         </div>
-        <p>{topRated.chartDescription}</p>
+        <div className="flex">
+          <p>{topRated.chartDescription}</p>
+          <p className="text-gray-500 text-xs whitespace-normal text-right">
+            Posted On: {topRated.createdAt}
+          </p>
+        </div>
       </div>
       <Link to={`/chart/${topRated._id}`}>
         <div className="">
@@ -117,17 +122,17 @@ const MostRecent = () => {
         <div className="relative h-[240px]">
           <ul
             ref={ref}
-            className="h-full w-full overflow-x-scroll overflow-y-hidden whitespace-nowrap scroll-smooth"
+            className="h-full w-full overflow-x-scroll whitespace-nowrap scroll-smooth scrollbar-thin"
           >
             {topCharts}
           </ul>
           <TfiArrowCircleLeft
             onClick={slideLeft}
-            className="absolute top-1/2 left-0 text-3xl text-white bg-primary rounded-full p-2 cursor-pointer hidden lg:block"
+            className="absolute top-1/2 left-2 text-3xl text-white bg-primary rounded-full p-2 cursor-pointer hidden lg:block"
           />
           <TfiArrowCircleRight
             onClick={slideRight}
-            className="absolute top-1/2 right-0 text-3xl text-white bg-primary rounded-full p-2 cursor-pointer hidden lg:block"
+            className="absolute top-1/2 right-2 text-3xl text-white bg-primary rounded-full p-2 cursor-pointer hidden lg:block"
           />
         </div>
       </div>
@@ -154,9 +159,21 @@ const ChartItem = ({ info }: ChartItemProps) => {
       onClick={() => selectChart()}
     >
       <div>
-        <h1 className="truncate font-bold text-md text-indigo-600">
-          {info.chartTitle}
-        </h1>
+        <div className="flex place-content-between">
+          <h1 className="truncate font-bold text-md text-indigo-600">
+            {info.chartTitle}
+          </h1>
+          <div className="inline-flex">
+            <div className="">
+              <IoIosArrowRoundUp className="text-green-500" />
+              <p className="text-[10px] text-center">{info.upVotes.length}</p>
+            </div>
+            <div className="">
+              <IoIosArrowRoundDown className="text-red-500" />
+              <p className="text-[10px] text-center">{info.downVotes.length}</p>
+            </div>
+          </div>
+        </div>
         <div className="inline-flex">
           <div className="grid-flow-col">
             <h1 className="truncate font-bold text-sm">{info.coinName}</h1>
@@ -165,26 +182,13 @@ const ChartItem = ({ info }: ChartItemProps) => {
             </p>
           </div>
           <div className="grid-flow-col">
-            <p className="text-gray-500 text-xs whitespace-normal">
+            <p className="text-gray-500 text-xs whitespace-normal text-right">
               Posted On: {info.createdAt}
             </p>
-            <div className="flex justify-center gap-2">
-              <div className="">
-                <IoIosArrowRoundUp className="text-green-500" />
-                <p className="text-[8px]">{info.upVotes.length}</p>
-              </div>
-              <div className="">
-                <IoIosArrowRoundDown className="text-red-500" />
-                <p className="text-[8px]">{info.downVotes.length}</p>
-              </div>
-            </div>
           </div>
         </div>
       </div>
-      <img
-        src={info.imageSmall}
-        className="w-full h-[120px] rounded-sm snap-center"
-      />
+      <img src={info.imageSmall} className="w-full h-[120px] rounded-sm" />
     </li>
   );
 };

@@ -81,19 +81,19 @@ const ChartsOfCoins = () => {
 
   return (
     <Container>
-      <div className="flex flex-col h-[880px]">
+      <div className="flex flex-col">
         <form className="p-5 sticky top-0 bg-white border-b border-t lg:static">
           <h1 className="font-bold text-center ">
             View Charts For:{" "}
             <span className="italic font-semibold capitalize">{search}</span>
           </h1>
-          <div className="flex justify-center gap-5 p-5">
+          <div className="flex flex-col justify-center p-5 gap-2">
             <input
               type="text"
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
               placeholder="Search Coin"
-              className="border-black-50 border-2 rounded-full p-1 text-center"
+              className="border-black-50 border-[1px] rounded-full p-1 text-center"
             />
             <Button onClick={submitSearch}>Search</Button>
             <select value={filter} onChange={(e) => setFilter(e.target.value)}>
