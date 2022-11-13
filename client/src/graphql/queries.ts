@@ -192,6 +192,23 @@ export const QUERY_COIN_CHART = gql`
   }
 `;
 
+export const QUERY_COIN_COMMENTS = gql`
+  query Query($coinId: String!) {
+    coin(coinId: $coinId) {
+      coinComments {
+        coinId
+        coinName
+        commentText
+        createdAt
+        downVotes
+        image
+        upVotes
+        username
+      }
+    }
+  }
+`;
+
 export const QUERY_ALL_COIN_CHARTS = gql`
   query GetCoinCharts($coinId: String!) {
     coin(coinId: $coinId) {
@@ -235,6 +252,14 @@ export const QUERY_CHART = gql`
         _id
         commentText
         createdAt
+        username
+        image
+        userId
+        coinId
+        coinName
+        chartId
+        upVotes
+        downVotes
       }
       upVotes {
         _id
@@ -293,23 +318,6 @@ export const QUERY_ALL_CHARTS = gql`
       upVotes
       downVotes
       createdAt
-    }
-  }
-`;
-
-export const QUERY_COIN_COMMENTS = gql`
-  query Query($coinId: String!) {
-    coin(coinId: $coinId) {
-      coinComments {
-        coinId
-        coinName
-        commentText
-        createdAt
-        downVotes
-        image
-        upVotes
-        username
-      }
     }
   }
 `;
