@@ -8,6 +8,11 @@ const resolvers = {
     name: "DateTime",
     description: "DateTime scalar type",
 
+    serialize(value) {
+      const date = new Date(value);
+
+      return date.toUTCString();
+    },
     parseValue(value) {
       return new Date(value);
     },
