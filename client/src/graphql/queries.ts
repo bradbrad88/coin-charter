@@ -109,6 +109,22 @@ export const QUERY_USERS = gql`
   }
 `;
 
+export const SEARCH_USER_QUERY = gql`
+  query SearchUsers($query: String!) {
+    searchUsers(query: $query) {
+      _id
+      username
+      subTitle
+      image
+    }
+    friends {
+      friend {
+        _id
+      }
+    }
+  }
+`;
+
 export const SEARCH_USERS = gql`
   query searchUsers($query: String!) {
     searchUsers(query: $query) {

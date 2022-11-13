@@ -8,6 +8,7 @@ interface Proptypes {
 const Favourite = ({ fav, onClick }: Proptypes) => {
   const handleClick: React.PointerEventHandler<HTMLDivElement> = (e) => {
     e.stopPropagation();
+    e.preventDefault();
     onClick();
   };
 
