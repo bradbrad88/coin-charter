@@ -194,17 +194,33 @@ export const QUERY_COIN_CHART = gql`
 
 export const QUERY_COIN_COMMENTS = gql`
   query Query($coinId: String!) {
-    coin(coinId: $coinId) {
-      coinComments {
-        coinId
-        coinName
-        commentText
-        createdAt
-        downVotes
-        image
-        upVotes
-        username
-      }
+    coinComments(coinId: $coinId) {
+      coinId
+      coinName
+      commentText
+      createdAt
+      downVotes
+      image
+      upVotes
+      userId
+      username
+      _id
+    }
+  }
+`;
+
+export const QUERY_CHART_COMMENTS = gql`
+  query ChartComments($chartId: ID!) {
+    chartComments(chartId: $chartId) {
+      _id
+      chartId
+      commentText
+      createdAt
+      downVotes
+      image
+      upVotes
+      userId
+      username
     }
   }
 `;
@@ -248,19 +264,6 @@ export const QUERY_CHART = gql`
       imageThumbnail
       imageMedium
       imageSmall
-      chartComments {
-        _id
-        commentText
-        createdAt
-        username
-        image
-        userId
-        coinId
-        coinName
-        chartId
-        upVotes
-        downVotes
-      }
       upVotes {
         _id
         username
@@ -296,27 +299,6 @@ export const QUERY_ALL_CHARTS = gql`
         _id
         username
       }
-      createdAt
-    }
-  }
-`;
-
-export const QUERY_ALL_CHARTS = gql`
-  query QueryAllCharts {
-    charts {
-      _id
-      coinId
-      coinName
-      symbol
-      chartTitle
-      chartDescription
-      username
-      userId
-      imageThumbnail
-      imageMedium
-      imageSmall
-      upVotes
-      downVotes
       createdAt
     }
   }
@@ -365,11 +347,12 @@ export const REMOVE_COIN = gql`
 `;
 
 export const ADD_CHART_COMMENT = gql`
-  mutation addChartComment($commentText: String!, $chartId: String!) {
+  mutation addChartComment($commentText: String!, $chartId: ID!) {
     addChartComment(commentText: $commentText, chartId: $chartId) {
       commentText
       createdAt
       username
+      image
       userId
       chartId
       upVotes
@@ -392,6 +375,7 @@ export const ADD_COIN_COMMENT = gql`
       commentText
       createdAt
       username
+      image
       userId
       coinId
       coinName
