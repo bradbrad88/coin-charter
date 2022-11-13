@@ -81,6 +81,14 @@ chartSchema.virtual("commentCount").get(function () {
   return this.chartComments.length;
 });
 
+chartSchema.virtual("upVoteCount").get(function () {
+  return this.upVotes.length;
+});
+
+chartSchema.virtual("downVoteCount").get(function () {
+  return this.downVotes.length;
+});
+
 // Create Charts model with chartSchema
 const Charts = model("charts", chartSchema);
 

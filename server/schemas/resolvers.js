@@ -20,8 +20,9 @@ const resolvers = {
     },
     serialize(value) {
       const date = new Date(value);
-
-      return date.toISOString();
+      return new Intl.DateTimeFormat("en-au", { dateStyle: "short" }).format(
+        date,
+      );
     },
   }),
 
@@ -80,6 +81,10 @@ const resolvers = {
         .populate("chartComments")
         .populate({ path: "chartComments", populate: "userId" })
         .populate("upVotes");
+    },
+    userCharts: async (parent, { userId }) => {
+      const user = await Users.findById(userId).populate("charts");
+      return user.charts;
     },
     searchUsers: async (parent, { query }) => {
       const regex = new RegExp(`.*${query}.*`, "i");
