@@ -1,3 +1,4 @@
+import { AxiosRequestConfig } from "axios";
 export {};
 
 declare global {
@@ -42,4 +43,6 @@ declare global {
     symbol: string;
     image: string;
   }
+
+  type Config = AxiosRequestConfig;
 }
