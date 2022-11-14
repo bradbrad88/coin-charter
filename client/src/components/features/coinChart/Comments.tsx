@@ -33,7 +33,7 @@ const CreateComment = ({ chart }: Proptypes) => {
       <h1 className="text-center">Add Comment:</h1>
       <form>
         <textarea
-          className="w-full text-sm bg-slate-200"
+          className="w-full text-sm border border-solid border-gray-300 rounded p-1"
           placeholder="Add text here..."
           rows={3}
           value={commentInput}
@@ -77,7 +77,7 @@ const Comments = ({ chart }: Proptypes) => {
           {commentsList.map((info: any, index: number) => (
             <li
               key={info.username + index}
-              className="border-black-50 border-solid border-2 flex flex-row justify-between h-[92px]"
+              className="border-black-50 border-solid border-2 flex flex-row justify-between h-[92px] p-2"
             >
               <div className="flex">
                 <div className="">
