@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
+import { useMutation, useQuery } from "@apollo/client";
+import { ADD_COIN, GET_FAV_COINS, REMOVE_COIN } from "src/graphql/queries";
 import useUserContext from "contexts/UserContext";
 import Favourite from "common/Favourite";
+
 import type { CoinApi } from "./CoinSearch";
 
 interface Proptypes {
@@ -8,22 +11,34 @@ interface Proptypes {
   onCoinSelect: () => void;
 }
 
+interface Query {
+  favCoins: FavCoin[];
+}
+
 const CoinSearch = ({ coin, onCoinSelect }: Proptypes) => {
-  const { isLoggedIn, user, addCoin, removeCoin } = useUserContext();
-
+  const { isLoggedIn } = useUserContext();
+  const { data } = useQuery<Query>(GET_FAV_COINS);
+  const favCoins = data?.favCoins || [];
+  const [addCoin] = useMutation(ADD_COIN, {
+    refetchQueries: [{ query: GET_FAV_COINS }],
+  });
+  const [removeCoin] = useMutation(REMOVE_COIN, {
+    refetchQueries: [{ query: GET_FAV_COINS }],
+  });
   const fav =
-    user?.favCoins.some((userCoin) => coin.id === userCoin.coin.coinId) ||
-    false;
+    favCoins.some((userCoin) => coin.id === userCoin.coin.coinId) || false;
 
-  const onFavourite = () => {
+  const onFavourite = async () => {
     if (fav) {
-      removeCoin(coin.id);
+      await removeCoin({ variables: { coinId: coin.id } });
     } else {
-      addCoin({
-        coinId: coin.id,
-        coinName: coin.name,
-        image: coin.thumb,
-        symbol: coin.symbol,
+      await addCoin({
+        variables: {
+          coinId: coin.id,
+          coinName: coin.name,
+          image: coin.thumb,
+          symbol: coin.symbol,
+        },
       });
     }
   };
