@@ -12,6 +12,7 @@ interface Query {
 }
 
 interface Activity {
+  _id: string;
   username: string;
   createdAt: string;
   text: string;
@@ -28,7 +29,10 @@ const FriendsActivity = () => {
       <h1 className="text-xl font-bold">Friends Activity</h1>
       <ul className="w-full h-full flex flex-col overflow-y-auto">
         {activity.map((item) => (
-          <li className="border-b flex w-full h-[40px] justify-between items-center group hover:bg-indigo-100 hover:cursor-pointer md:h-[80px]">
+          <li
+            key={item._id}
+            className="border-b flex w-full h-[40px] justify-between items-center group hover:bg-indigo-100 hover:cursor-pointer md:h-[80px]"
+          >
             <div className="flex flex-col">
               <h1 className="font-bold text-sm text-indigo-600 hover:cursor-pointer word-wrap">
                 {item.username}
