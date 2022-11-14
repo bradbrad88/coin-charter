@@ -59,10 +59,6 @@ const OtherCharts = ({ coinId }: CoinId) => {
     }
   };
 
-  if (!coinCharts) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <div className="flex flex-col w-2/6 h-full pl-2">
       <div className="flex gap-2">
@@ -76,45 +72,49 @@ const OtherCharts = ({ coinId }: CoinId) => {
           ))}
         </select>
       </div>
-      <ul className="flex flex-col gap-1 h-[510px] w-full overflow-y-scroll">
-        {coinCharts.map((info: any, index: number) => (
-          <li
-            key={info.chartTitle + index}
-            className="flex flex-col group transition-all hover:bg-indigo-100 hover:rounded-lg hover:border-2 hover:border-indigo-100 hover:cursor-pointer p-2"
-            // onClick={() => selectChart(info)}
-          >
-            <Link to={`/chart/${info._id}`}>
-              <div className="flex justify-between">
-                <div className="flex flex-col w-5/6 h-[40px]">
-                  <h1 className="truncate font-bold text-md text-indigo-600">
-                    {info.chartTitle}
-                  </h1>
-                  <div className="flex justify-between">
-                    <p className="italic font-bold text-xs text-slate-500">
-                      By {info.username}
-                    </p>
-                    <p className="text-gray-500 text-xs">
-                      Posted On: {info.createdAt}
-                    </p>
+      {!coinCharts ? (
+        <div className="w-full">No charts have been made yet.</div>
+      ) : (
+        <ul className="flex flex-col gap-1 h-[510px] w-full overflow-y-scroll">
+          {coinCharts.map((info: any, index: number) => (
+            <li
+              key={info.chartTitle + index}
+              className="flex flex-col group transition-all hover:bg-indigo-100 hover:rounded-lg hover:border-2 hover:border-indigo-100 hover:cursor-pointer p-2"
+              // onClick={() => selectChart(info)}
+            >
+              <Link to={`/chart/${info._id}`}>
+                <div className="flex justify-between">
+                  <div className="flex flex-col w-5/6 h-[40px]">
+                    <h1 className="truncate font-bold text-md text-indigo-600">
+                      {info.chartTitle}
+                    </h1>
+                    <div className="flex justify-between">
+                      <p className="italic font-bold text-xs text-slate-500">
+                        By {info.username}
+                      </p>
+                      <p className="text-gray-500 text-xs">
+                        Posted On: {info.createdAt}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex flex-col justify-center">
+                    <i className="fa-regular fa-thumbs-up text-[14px]"></i>
+                    <p className="text-[8px]">{info.upVotes.length}</p>
+                  </div>
+                  <div className="flex flex-col justify-center">
+                    <i className="fa-regular fa-thumbs-down text-[14px]"></i>
+                    <p className="text-[8px]">{info.downVotes.length}</p>
                   </div>
                 </div>
-                <div className="flex flex-col justify-center">
-                  <i className="fa-regular fa-thumbs-up text-[14px]"></i>
-                  <p className="text-[8px]">{info.upVotes.length}</p>
-                </div>
-                <div className="flex flex-col justify-center">
-                  <i className="fa-regular fa-thumbs-down text-[14px]"></i>
-                  <p className="text-[8px]">{info.downVotes.length}</p>
-                </div>
-              </div>
-              <img
-                src={info.imageSmall}
-                className="w-full h-[120px] group-hover:brightness-75"
-              />
-            </Link>
-          </li>
-        ))}
-      </ul>
+                <img
+                  src={info.imageSmall}
+                  className="w-full h-[120px] group-hover:brightness-75"
+                />
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };
