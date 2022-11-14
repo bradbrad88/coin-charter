@@ -5,7 +5,7 @@ const TOKEN_AGE = 1000 * 60 * 60 * 24;
 
 if (!secret) throw new Error("JWT_SECRET missing from server .env file");
 
-const expiration = "2h";
+const expiration = "24h";
 
 const authMiddleware = (req, res) => {
   let token =
