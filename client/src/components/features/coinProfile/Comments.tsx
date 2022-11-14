@@ -68,7 +68,7 @@ const Comments = ({ coinName, coinId }: CoinInfo) => {
     <>
       {commentsList.length === 0 ? (
         <div className="h-4/6">
-          No comments made yet, would you like to be the first?
+          No comments made yet, would you like to be the first? Comment below...
         </div>
       ) : (
         <ul className="flex flex-col gap-1 overflow-y-scroll h-4/6">
