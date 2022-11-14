@@ -17,12 +17,12 @@ const ChartCoin = () => {
 
   return (
     <div>
-      <div className="flex flex-col md:flex-row gap-4 rounded-sm shadow-lg shadow-gray-400 p-5 m-5 w-[95%] md:h-[600px]">
+      <div className="md:p-5 gap-5 max-h-screen w-screen">
         {chart && (
-          <>
+          <div>
             <MainChart chart={chart} />
             <Comments chart={chart} />
-          </>
+          </div>
         )}
       </div>
     </div>
