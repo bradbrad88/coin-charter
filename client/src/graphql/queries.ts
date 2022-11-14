@@ -347,6 +347,20 @@ export const REMOVE_COIN = gql`
   }
 `;
 
+export const GET_FAV_COINS = gql`
+  query FavCoins {
+    favCoins {
+      coin {
+        symbol
+        image
+        coinName
+        coinId
+        _id
+      }
+    }
+  }
+`;
+
 export const ADD_CHART_COMMENT = gql`
   mutation addChartComment($commentText: String!, $chartId: ID!) {
     addChartComment(commentText: $commentText, chartId: $chartId) {
@@ -553,7 +567,7 @@ export const GET_FRIENDS = gql`
 export const FRIEND_ACTIVITY = gql`
   query FriendActivity {
     recentActivity {
-      id
+      _id
       username
       createdAt
       text
