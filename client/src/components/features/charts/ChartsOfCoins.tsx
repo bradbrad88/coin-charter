@@ -6,18 +6,10 @@ import { useQuery } from "@apollo/client";
 import { QUERY_ALL_COIN_CHARTS } from "src/graphql/queries";
 import Button from "../../common/Button";
 import { useNavigate } from "react-router-dom";
+import ChartListItem from "./ChartListItem";
 
-interface CoinDataTypes {
-  _id: string;
-  chartTitle: string;
-  downVotes: number;
-  upVotes: number;
-  username: string;
-  userId: string;
-  imageSmall: string;
-  createdAt: number;
-  coinId: string;
-  coinName: string;
+interface Query {
+  coin: Coin;
 }
 
 const ChartsOfCoins = () => {
@@ -26,8 +18,8 @@ const ChartsOfCoins = () => {
   const [searchInput, setSearchInput] = useState<string>("");
   const [search, setSearch] = useState<string>("bitcoin");
   const [filter, setFilter] = useState<string>("Most Recent");
-  const [chartList, setChartList] = useState<any>([]);
-  const { loading, error, data } = useQuery(QUERY_ALL_COIN_CHARTS, {
+  const [chartList, setChartList] = useState<Chart[]>([]);
+  const { loading, error, data } = useQuery<Query>(QUERY_ALL_COIN_CHARTS, {
     variables: { coinId: search },
   });
 
@@ -45,7 +37,7 @@ const ChartsOfCoins = () => {
     setSearch(lowerSearch);
   };
 
-  let checkFilter = (chartData: CoinDataTypes[]) => {
+  let checkFilter = (chartData: Chart[]) => {
     if (filter === "Most Recent") {
       let recent = chartData
         .slice(0)
@@ -81,8 +73,8 @@ const ChartsOfCoins = () => {
 
   return (
     <Container>
-      <div className="flex flex-col">
-        <form className="p-5 sticky top-0 bg-white border-b border-t lg:static">
+      <div className="flex flex-col w-full">
+        <form className="p-5 sticky top-0 bg-white border-b lg:static">
           <h1 className="font-bold text-center ">
             View Charts For:{" "}
             <span className="italic font-semibold capitalize">{search}</span>
@@ -111,40 +103,8 @@ const ChartsOfCoins = () => {
           <div>No charts for this coin yet.</div>
         ) : (
           <ul className="flex flex-col gap-1 h-full w-full overflow-y-scroll scrollbar hover:scrollbar-track-slate-200">
-            {chartList.map((info: any, index: number) => (
-              <li
-                className=" hover:bg-indigo-100 hover:border-indigo-100 hover:cursor-pointer flex flex-col p-2"
-                key={info.username + index}
-                onClick={() => selectChart(info)}
-              >
-                <div className="flex justify-between">
-                  <div className="flex flex-col w-5/6 h-[50px] gap-1">
-                    <h1 className="truncate font-bold text-md text-indigo-600">
-                      {info.chartTitle}
-                    </h1>
-                    <div className="flex justify-between">
-                      <p className="truncate italic font-bold text-xs text-slate-500 w-[110px]">
-                        By {info.username}
-                      </p>
-                      <p className="text-gray-500 text-xs">
-                        Posted On: {info.createdAt}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex flex-col">
-                    <IoIosArrowRoundUp className="text-green-500" />
-                    <p className="text-[8px]">{info.upVotes.length}</p>
-                  </div>
-                  <div className="flex flex-col">
-                    <IoIosArrowRoundDown className="text-red-500" />
-                    <p className="text-[8px]">{info.downVotes.length}</p>
-                  </div>
-                </div>
-                <img
-                  src={info.imageSmall}
-                  className="w-full h-[120px] rounded-sm"
-                />
-              </li>
+            {chartList.map((chart, index: number) => (
+              <ChartListItem key={chart._id} chart={chart} imageHeight={120} />
             ))}
           </ul>
         )}
