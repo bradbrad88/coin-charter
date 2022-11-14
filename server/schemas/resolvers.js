@@ -126,7 +126,7 @@ const resolvers = {
     recentActivity: async (parent, args, { user: userId }) => {
       if (!userId) throw new AuthenticationError();
 
-      const user = await Users.findOne({ username: "Bennyboy" }).populate({
+      const user = await Users.findById(userId).populate({
         path: "friends",
         populate: "friend",
       });
@@ -138,7 +138,7 @@ const resolvers = {
         }),
       );
       activities.sort((a, b) => b.time - a.time);
-      const filteredActivities = activities.slice(0, 2);
+      const filteredActivities = activities.slice(0, 10);
       return filteredActivities;
     },
   },
@@ -175,7 +175,20 @@ const resolvers = {
     },
     addBio: async (parent, { bio }, { user }) => {
       if (!user) throw new AuthenticationError();
-      await Users.findByIdAndUpdate(user._id, { $set: { bio } }, { new: true });
+      let updatedUser = await Users.findByIdAndUpdate(
+        user._id,
+        { $set: { bio } },
+        { new: true },
+      );
+
+      const activity = {
+        text: "updated their bio",
+        value: null,
+        path: `/profile/${user._id}`,
+      };
+
+      await addRecentActivity(user._id, activity);
+
       return bio;
     },
     addCoin: async (parent, { coinId, coinName, symbol, image }, { user }) => {
@@ -194,9 +207,7 @@ const resolvers = {
       const activity = {
         text: "favourited a new coin:",
         value: symbol,
-        image: updatedUser.image,
         path: `/coin/${coinId}`,
-        username: updatedUser.username,
       };
 
       updatedUser = await addRecentActivity(updatedUser, activity);
@@ -316,6 +327,14 @@ const resolvers = {
         { new: true },
       );
 
+      const activity = {
+        text: "added a new chart:",
+        value: chartTitle,
+        path: `/chart/${newChart._id}`,
+      };
+
+      await addRecentActivity(user._id, activity);
+
       return updatedUser;
     },
 
@@ -392,8 +411,9 @@ const resolvers = {
       const friend = await Users.findById(friendId);
       if (!friend) throw new Error("they don't exist");
 
-      const updatedUser = user.updateOne(
-        { $addToSet: { friends: { friend: friendId } } },
+      const updatedUser = Users.updateOne(
+        { _id: user._id, "friends.friend": { $ne: friend._id } },
+        { $push: { friends: { friend: friendId } } },
         { new: true, timestamps: true },
       );
 
@@ -417,9 +437,12 @@ const resolvers = {
 
 async function addRecentActivity(userId, item) {
   if (!userId) return;
+  const user = await Users.findById(userId);
+  if (!user) return;
+  const activity = { ...item, username: user.username, image: user.image };
   let updatedUser = await Users.findByIdAndUpdate(
     userId,
-    { $push: { recentActivity: { $each: [item], $position: 0 } } },
+    { $push: { recentActivity: { $each: [activity], $position: 0 } } },
     { timestamps: true, new: true },
   );
   if (updatedUser.recentActivity.length > 20) {
