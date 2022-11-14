@@ -1,4 +1,5 @@
 import { CoinType } from "pages/CoinProfile";
+import sanitizeHtml from "sanitize-html";
 
 interface PropTypes {
   coin: CoinType;
@@ -51,6 +52,11 @@ const CoinProfileCard = ({ coin }: PropTypes) => {
       );
     }
   };
+
+  const descriptionClean = sanitizeHtml(coin.description.en, {
+    allowedTags: [],
+    allowedAttributes: {},
+  });
 
   return (
     <div className="flex flex-col lg:flex-row rounded-sm gap-5 shadow-lg shadow-gray-400 p-5 m-5 w-[95%] lg:w-[1050px] lg:h-[500px]">
@@ -105,7 +111,7 @@ const CoinProfileCard = ({ coin }: PropTypes) => {
       <div className="">
         <h3 className="font-bold">Description</h3>
         <p className="overflow-y-scroll h-[390px] w-[500px] text-clip">
-          {coin.description.en}
+          {descriptionClean}
         </p>
       </div>
     </div>
