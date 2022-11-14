@@ -32,8 +32,6 @@ interface Ctx {
   updateImage: (image: File, crop: Crop) => void;
   addBio: (bio: string) => void;
   addFriend: (friendId: string) => void;
-  addCoin: (coin: AddCoin) => void;
-  removeCoin: (coinId: string) => void;
 }
 
 interface Prototypes {
@@ -65,9 +63,6 @@ export const Provider = ({ children }: Prototypes) => {
   const [addProfileImage, { data: imageData }] = useMutation(ADD_PROFILE_IMAGE);
   const [addBioMutation, { data: bioData }] = useMutation(ADD_BIO);
   const [addFriendMutation, { data: friendData }] = useMutation(ADD_FRIEND);
-  const [addCoinMutation, { data: coinData }] = useMutation(ADD_COIN);
-  const [removeCoinMutation, { data: removeCoinData }] =
-    useMutation(REMOVE_COIN);
 
   // Update local storage with user state data whenever it changes
   useEffect(() => {
@@ -128,30 +123,6 @@ export const Provider = ({ children }: Prototypes) => {
     }
   }, [friendData]);
 
-  useEffect(() => {
-    if (coinData) {
-      setUser((prevState) => {
-        if (!prevState) return null;
-        return {
-          ...prevState,
-          favCoins: coinData.addCoin.favCoins,
-        };
-      });
-    }
-  }, [coinData]);
-
-  useEffect(() => {
-    if (removeCoinData) {
-      setUser((prevState) => {
-        if (!prevState) return null;
-        return {
-          ...prevState,
-          favCoins: removeCoinData.removeCoin.favCoins,
-        };
-      });
-    }
-  }, [removeCoinData]);
-
   // Helper function
   const authenticateUser = (user: User) => {
     setUser(user);
@@ -208,14 +179,6 @@ export const Provider = ({ children }: Prototypes) => {
     addFriendMutation({ variables: { friendId } });
   };
 
-  const addCoin = (coin: AddCoin) => {
-    addCoinMutation({ variables: { ...coin } });
-  };
-
-  const removeCoin = (coinId: string) => {
-    removeCoinMutation({ variables: { coinId } });
-  };
-
   // Property exposed to context consumer for checking if a user exists in state
   const isLoggedIn = !!user;
 
@@ -231,8 +194,6 @@ export const Provider = ({ children }: Prototypes) => {
         updateImage,
         addBio,
         addFriend,
-        addCoin,
-        removeCoin,
       }}
     >
       {children}
