@@ -61,8 +61,6 @@ const ChartsOfCoins = () => {
     }
   };
 
-  console.log(chartList);
-
   const selectChart = (chartInfo: any) => {
     nav(`/chart/${chartInfo._id}`);
   };
