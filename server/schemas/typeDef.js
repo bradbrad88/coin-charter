@@ -41,9 +41,9 @@ const typeDefs = gql`
   }
 
   type Activity {
-    id: ID
+    _id: ID
     username: String
-    createdAt: String
+    createdAt: DateTime
     text: String
     value: String
     path: String
@@ -104,6 +104,7 @@ const typeDefs = gql`
     coinComments(coinId: String!): [Comment]
     coin(coinId: String!): Coin
     chart(chartId: ID!): Chart
+    favCoins: [FavouriteCoin]
     userCharts(userId: ID!): [Chart]
     searchUsers(query: String!): [User]
     friendRequests: [FriendRequest]
