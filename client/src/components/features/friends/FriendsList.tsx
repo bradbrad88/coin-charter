@@ -18,7 +18,7 @@ const FriendsList = ({ friends }: Proptypes) => {
           }}
         >
           {friends.map(({ friend }) => (
-            <FriendCard friend={friend} />
+            <FriendCard key={friend._id} friend={friend} />
           ))}
         </ul>
         {/* Header component below content so the sticky header will display above content without changing z-indexes (order-1 on ul component puts it back in the correct order) */}
