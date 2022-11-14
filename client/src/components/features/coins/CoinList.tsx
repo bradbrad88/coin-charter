@@ -65,7 +65,7 @@ const CoinList = () => {
     const req: Config = {
       url: "https://api.coingecko.com/api/v3/coins/markets",
       params: {
-        vs_currency: "aud",
+        vs_currency: "usd",
         order,
         per_page: "20",
         page: "1",
