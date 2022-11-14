@@ -27,11 +27,10 @@ declare global {
     _id: string;
     username: string;
     subTitle: string;
-    bio: string;
+    bio?: string;
     friendCount: number;
     postCount: number;
     image?: string;
-    favCoins: FavCoin[];
     favCoinCount: number;
     chartCount: number;
   }
