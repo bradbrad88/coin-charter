@@ -3,43 +3,27 @@ import { MdEdit } from "react-icons/md";
 import useUserContext from "contexts/UserContext";
 import ImageEditor from "features/image-editor/ImageEditor";
 import Button from "common/Button";
-
-import type { ChangeEventHandler } from "react";
 import Container from "src/components/common/Container";
 
 interface Proptypes {
-  _id: string;
-  username: string;
-  subTitle: string;
-  image?: string;
-  bio: string;
-  friendCount: number;
-  postCount: number;
+  user: User;
   edit?: boolean;
 }
 
-const ProfileCard = ({
-  _id,
-  username,
-  subTitle,
-  image,
-  bio,
-  friendCount,
-  postCount,
-  edit = false,
-}: Proptypes) => {
+const ProfileCard = ({ user, edit = false }: Proptypes) => {
+  const { _id, friendCount, postCount, subTitle, username, image } = user;
   const { updateImage, addBio, addFriend } = useUserContext();
   const [editImage, setEditImage] = useState<File | null>();
   const imageRef = useRef<HTMLInputElement>(null);
   const [editBio, setEditBio] = useState(false);
-  const [newBio, setNewBio] = useState(bio || "");
+  const [newBio, setNewBio] = useState(user.bio || "");
 
   // Remove the file loaded in input element on every change - this allows the same file to be opened twice in a row
   useEffect(() => {
     if (imageRef.current) imageRef.current.value = "";
   }, [editImage]);
 
-  const onImageEdit: ChangeEventHandler<HTMLInputElement> = (e) => {
+  const onImageEdit: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     const image = e.target.files![0];
     if (!image) return;
     setEditImage(image);
