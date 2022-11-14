@@ -75,6 +75,13 @@ const resolvers = {
         .populate("charts")
         .populate({ path: "charts", populate: "comments" });
     },
+    favCoins: async (_, __, { user: userId }) => {
+      const user = await Users.findById(userId).populate({
+        path: "favCoins",
+        populate: "coin",
+      });
+      return user.favCoins;
+    },
     charts: async () => {
       return await Charts.find({})
         .populate("chartComments")
@@ -119,51 +126,20 @@ const resolvers = {
     recentActivity: async (parent, args, { user: userId }) => {
       if (!userId) throw new AuthenticationError();
 
-      const user = await Users.findById(userId)
-        .populate({
-          path: "friends",
-          populate: {
-            path: "friend",
-            populate: { path: "favCoins", populate: "coin" },
-          },
-        })
-        .populate("charts")
-        .populate({ path: "favCoins", populate: "coin" });
-
-      const operations = [
-        (user) => {
-          console.log(user);
-          return user.favCoins.map((favCoin) => ({
-            createdAt: favCoin.updatedAt,
-            text: "liked a new coin:",
-            value: favCoin.coin.coinName,
-            path: `coins/${favCoin.coinId}`,
-          }));
-        },
-        (user) => {
-          return user.charts.map((chart) => ({
-            createdAt: chart.updatedAt,
-            text: "created a new chart for ",
-            value: chart.coin,
-            path: `charts/${chart._id}`,
-          }));
-        },
-      ];
-
-      const activities = user.friends.flatMap(({ friend }) => {
-        const parseOperations = (operations) => {
-          return operations.flatMap((fn) =>
-            fn(friend).map((item) => ({
-              ...item,
-              username: friend.username,
-              image: friend.image,
-            })),
-          );
-        };
-        const activities = parseOperations(operations);
-        return activities;
+      const user = await Users.findOne({ username: "Bennyboy" }).populate({
+        path: "friends",
+        populate: "friend",
       });
-      return activities;
+      const activities = user.friends.flatMap(({ friend }) =>
+        friend.recentActivity.map((activity) => {
+          const newActivity = activity.toJSON();
+          newActivity.time = new Date(activity.createdAt).getTime();
+          return newActivity;
+        }),
+      );
+      activities.sort((a, b) => b.time - a.time);
+      const filteredActivities = activities.slice(0, 2);
+      return filteredActivities;
     },
   },
   Mutation: {
@@ -209,11 +185,22 @@ const resolvers = {
         { $set: { coinId, coinName, symbol, image } },
         { new: true, upsert: true },
       );
-      const updatedUser = await Users.findByIdAndUpdate(
+      let updatedUser = await Users.findByIdAndUpdate(
         user,
         { $push: { favCoins: { $each: [{ coin: coin._id }], $position: 0 } } },
         { new: true, timestamps: true },
       ).populate({ path: "favCoins", populate: "coin" });
+
+      const activity = {
+        text: "favourited a new coin:",
+        value: symbol,
+        image: updatedUser.image,
+        path: `/coin/${coinId}`,
+        username: updatedUser.username,
+      };
+
+      updatedUser = await addRecentActivity(updatedUser, activity);
+
       return updatedUser;
     },
     removeCoin: async (parent, { coinId }, { user }) => {
@@ -276,7 +263,7 @@ const resolvers = {
         { $push: { coinComments: newComment._id } },
         { new: true },
       );
-      const updatedUser = await findUser.updateOne(
+      let updatedUser = await findUser.updateOne(
         {
           $push: { comments: newComment._id },
         },
@@ -427,5 +414,21 @@ const resolvers = {
     },
   },
 };
+
+async function addRecentActivity(userId, item) {
+  if (!userId) return;
+  let updatedUser = await Users.findByIdAndUpdate(
+    userId,
+    { $push: { recentActivity: { $each: [item], $position: 0 } } },
+    { timestamps: true, new: true },
+  );
+  if (updatedUser.recentActivity.length > 20) {
+    updatedUser = await Users.findByIdAndUpdate(userId, {
+      $pop: { recentActivity: 1 },
+    });
+  }
+
+  return updatedUser;
+}
 
 module.exports = resolvers;

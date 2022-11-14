@@ -38,6 +38,17 @@ const friendSchema = new Schema(
   { timestamps: true },
 );
 
+const recentActivitySchema = new Schema(
+  {
+    text: String,
+    value: String,
+    path: String,
+    image: String,
+    username: String,
+  },
+  { timestamps: true },
+);
+
 // Users schema
 const userSchema = new Schema(
   {
@@ -90,6 +101,7 @@ const userSchema = new Schema(
       },
     ],
     image: { type: String, required: false },
+    recentActivity: [recentActivitySchema],
   },
   {
     toJSON: {
