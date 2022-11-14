@@ -62,6 +62,8 @@ const Comments = ({ chart }: Proptypes) => {
     }
   }, [data]);
 
+  console.log(commentsList);
+
   if (!commentsList) {
     return <div>Loading...</div>;
   }
