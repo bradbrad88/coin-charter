@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import Container from "src/components/common/Container";
+import VoteWidget from "src/components/common/VoteWidget";
 
 interface Proptypes {
   chart: Chart;
@@ -10,7 +12,7 @@ const MainChart = ({ chart }: Proptypes) => {
   }
 
   return (
-    <>
+    <Container>
       <div className="md:h-[600px] w-full md:w-4/6 flex flex-col">
         <div className="flex flex-col">
           <div className="flex justify-between items-center">
@@ -35,14 +37,14 @@ const MainChart = ({ chart }: Proptypes) => {
             </h1>
             <h1 className="text-sm text-gray-500">Posted: {chart.createdAt}</h1>
             <div className="flex gap-5 pl-2">
-              <h1>
-                <i className="fa-regular fa-thumbs-up"></i>{" "}
-                {chart.upVotes.length}
-              </h1>
-              <h1>
-                <i className="fa-regular fa-thumbs-down"></i>{" "}
-                {chart.downVotes.length}
-              </h1>
+              <VoteWidget
+                handleUpVote={(vote) => {}}
+                handleDownVote={(vote) => {}}
+                downVote={true}
+                upVote={true}
+                downVoteCount={1}
+                upVoteCount={2}
+              />
             </div>
           </div>
           <p className="text-lg font-bold text-indigo-600">
@@ -55,7 +57,7 @@ const MainChart = ({ chart }: Proptypes) => {
 
         <img className=" h-3/6 md:h-4/6" src={chart.imageThumbnail} />
       </div>
-    </>
+    </Container>
   );
 };
 

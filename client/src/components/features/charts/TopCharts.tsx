@@ -74,31 +74,36 @@ const MostRecent = () => {
   return (
     <Container>
       <div className="p-5">
-        <div className="flex flex-col items-center">
-          <h1 className="text-lg font-bold text-center">Featured Top Chart</h1>
-          <Link to={`/coin/${topRated.coinId}`} className="w-fit">
-            <h1 className="text-lg font-semibold text-center hover:cursor-pointer w-fit">
-              {topRated.coinName}
-            </h1>
-          </Link>
+        <div className="flex flex-col items-center gap-3">
+          <h1 className="text-lg font-bold text-center">Featured Chart</h1>
         </div>
-        <div className="flex gap-3 items-center">
-          <h1 className="font-bold text-md text-indigo-600">
-            {topRated.chartTitle}
-          </h1>
-          <Link to={`/profile/${topRated.userId}`}>
-            <p className="italic font-bold text-sm text-slate-500 hover:cursor-pointer">
-              By {topRated.username}
-            </p>
-          </Link>
-          <VoteWidget
-            handleUpVote={(vote) => handleUpVote(topRated._id, vote)}
-            handleDownVote={(vote) => handleDownVote(topRated._id, vote)}
-            downVote={downVote}
-            upVote={upVote}
-            downVoteCount={topRated.downVotes.length}
-            upVoteCount={topRated.upVotes.length}
-          />
+        <div className="flex justify-between mb-2">
+          <div className="flex flex-col">
+            <h1 className="font-bold text-xl text-black">
+              <Link
+                to={`/coin/${topRated.coinId}`}
+                className="w-fit text-indigo-600 uppercase"
+              >
+                {topRated.coinName}
+              </Link>
+              {" - "} {topRated.chartTitle}
+            </h1>
+            <Link to={`/profile/${topRated.userId}`}>
+              <p className="italic font-bold text-sm text-gray-600 hover:text-indigo-600 hover:cursor-pointer underline">
+                By {topRated.username}
+              </p>
+            </Link>
+          </div>
+          <div className="mt-auto">
+            <VoteWidget
+              handleUpVote={(vote) => handleUpVote(topRated._id, vote)}
+              handleDownVote={(vote) => handleDownVote(topRated._id, vote)}
+              downVote={downVote}
+              upVote={upVote}
+              downVoteCount={topRated.downVotes.length}
+              upVoteCount={topRated.upVotes.length}
+            />
+          </div>
         </div>
         <div className="flex">
           <p>{topRated.chartDescription}</p>
@@ -160,7 +165,7 @@ const ChartItem = ({ info }: ChartItemProps) => {
     >
       <div>
         <div className="flex place-content-between">
-          <h1 className="truncate font-bold text-md text-indigo-600">
+          <h1 className="truncate font-bold text-md text-black">
             {info.chartTitle}
           </h1>
           <div className="inline-flex">
@@ -176,7 +181,9 @@ const ChartItem = ({ info }: ChartItemProps) => {
         </div>
         <div className="inline-flex">
           <div className="grid-flow-col">
-            <h1 className="truncate font-bold text-sm">{info.coinName}</h1>
+            <h1 className="truncate font-bold text-sm uppercase text-indigo-600">
+              {info.coinName}
+            </h1>
             <p className="truncate italic font-bold text-xs text-slate-500 w-[110px]">
               By {info.username}
             </p>
