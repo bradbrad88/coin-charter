@@ -14,7 +14,11 @@ const Favourite = ({ fav, onClick }: Proptypes) => {
 
   return (
     <div onClick={handleClick}>
-      {fav ? <AiFillStar fill="orange" /> : <AiOutlineStar />}
+      {fav ? (
+        <AiFillStar fill="orange" size={20} />
+      ) : (
+        <AiOutlineStar size={20} />
+      )}
     </div>
   );
 };

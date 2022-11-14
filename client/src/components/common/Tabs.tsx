@@ -31,7 +31,9 @@ const TabComponent = ({ componentList }: Proptypes) => {
   return (
     <div className="flex flex-col h-full">
       <div className="flex w-fit gap-1 text-white">{renderTabs()}</div>
-      <div className="p-2 bg-primary h-full">{component}</div>
+      <div className="p-2 bg-primary h-full max-h-[520px]">
+        <div className="overflow-y-auto h-full">{component}</div>
+      </div>
     </div>
   );
 };

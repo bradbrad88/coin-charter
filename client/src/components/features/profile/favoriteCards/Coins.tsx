@@ -1,7 +1,10 @@
-import useUserContext from "contexts/UserContext";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { AiOutlineCloseCircle } from "react-icons/ai";
+import { useMutation, useQuery } from "@apollo/client";
+import { GET_FAV_COINS, REMOVE_COIN } from "src/graphql/queries";
 import useFetch, { Config } from "src/hooks/useFetch";
-import { formatCurrency, formatPercentage } from "src/utils/strings";
+import { formatCurrency } from "src/utils/strings";
 
 interface ApiResponse {
   symbol?: string;
@@ -34,18 +37,21 @@ interface ApiResponse {
   };
 }
 
+interface Query {
+  favCoins: FavCoin[];
+}
+
 const Coins = () => {
-  const { user } = useUserContext();
+  const { data } = useQuery<Query>(GET_FAV_COINS);
+  const favCoins = data?.favCoins || [];
 
   const renderCoins = () =>
-    user!.favCoins.map((favCoin) => (
-      <Coin key={favCoin.coin.coinId} coin={favCoin.coin} />
+    favCoins.map((favCoin) => (
+      <Coin key={favCoin.coin._id} coin={favCoin.coin} />
     ));
 
   return (
-    <div className="flex flex-col gap-2 rounded-md h-full overflow-auto max-h-[520px]">
-      {user && renderCoins()}
-    </div>
+    <ul className="flex flex-col gap-2 overflow-x-visible">{renderCoins()}</ul>
   );
 };
 
@@ -59,7 +65,9 @@ interface Coin {
 }
 
 const Coin = ({ coin }: { coin: Coin }) => {
-  const { removeCoin } = useUserContext();
+  const [removeCoin] = useMutation(REMOVE_COIN, {
+    refetchQueries: [{ query: GET_FAV_COINS }],
+  });
   const [data, setData] = useState<ApiResponse>({});
   const { fetchJSON } = useFetch();
 
@@ -76,32 +84,42 @@ const Coin = ({ coin }: { coin: Coin }) => {
     getCoinData();
   }, []);
 
-  const handleRemove = () => {
-    removeCoin(coin.coinId);
+  const handleRemove: React.PointerEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault();
+    removeCoin({ variables: { coinId: coin.coinId } });
   };
 
   return (
-    <div className="flex bg-white p-2 gap-3">
-      <div className="w-8 h-8">
-        <img className="block" src={coin.image} alt="" />
-      </div>
-      <div className="flex flex-col">
-        <h2 className="leading-none text-primary">{coin.coinName}</h2>
-        <h2 className="">{coin.symbol.toUpperCase()}</h2>
-      </div>
-      <div className="flex flex-col">
-        <div>
-          <p className="text-primary leading-none">Market Cap</p>
+    <li className="bg-white rounded-sm hover:bg-indigo-200 hover:translate-x-[2px] transition-all duration-200">
+      <Link to={`/coin/${coin.coinId}`}>
+        <div className="flex gap-3 p-2">
+          <div className="w-8 h-8">
+            <img className="block" src={coin.image} alt="" />
+          </div>
+          <div className="flex flex-col">
+            <h2 className="leading-none text-primary">{coin.coinName}</h2>
+            <h2 className="">{coin.symbol?.toUpperCase()}</h2>
+          </div>
+          <div className="flex flex-col">
+            <div>
+              <p className="text-primary leading-none">Market Cap</p>
+            </div>
+            <div>
+              <p className="">
+                {formatCurrency(data.market_data?.market_cap?.aud || 0)}
+              </p>
+            </div>
+          </div>
+          <div className="flex justify-center ml-auto">
+            <button className="" onClick={handleRemove}>
+              <AiOutlineCloseCircle
+                size={24}
+                className="fill-orange-500 hover:fill-orange-600 transition-all"
+              />
+            </button>
+          </div>
         </div>
-        <div>
-          <p className="">
-            {formatCurrency(data.market_data?.market_cap?.aud || 0)}
-          </p>
-        </div>
-      </div>
-      <div className="ml-auto">
-        <button onClick={handleRemove}>Remove</button>
-      </div>
-    </div>
+      </Link>
+    </li>
   );
 };

@@ -21,7 +21,6 @@ const Charts = () => {
 
   return (
     <div>
-      <div>Charts</div>
       <ul className="flex flex-col gap-3">{renderCharts()}</ul>
     </div>
   );
