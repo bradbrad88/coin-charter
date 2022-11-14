@@ -242,6 +242,7 @@ export const QUERY_ALL_COIN_CHARTS = gql`
         username
         userId
         imageSmall
+        imageThumbnail
         createdAt
         coinId
         coinName
