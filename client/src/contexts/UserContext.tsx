@@ -32,7 +32,7 @@ interface Ctx {
   updateImage: (image: File, crop: Crop) => void;
   addBio: (bio: string) => void;
   addFriend: (friendId: string) => void;
-  addCoin: (coin: Coin) => void;
+  addCoin: (coin: AddCoin) => void;
   removeCoin: (coinId: string) => void;
 }
 
@@ -44,6 +44,13 @@ interface NewUser {
   username: string;
   email: string;
   password: string;
+}
+
+interface AddCoin {
+  coinId: string;
+  coinName: string;
+  symbol: string;
+  image: string;
 }
 
 const localUser = JSON.parse(localStorage.getItem("user") as string) || null;
@@ -201,7 +208,7 @@ export const Provider = ({ children }: Prototypes) => {
     addFriendMutation({ variables: { friendId } });
   };
 
-  const addCoin = (coin: Coin) => {
+  const addCoin = (coin: AddCoin) => {
     addCoinMutation({ variables: { ...coin } });
   };
 

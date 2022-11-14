@@ -60,6 +60,9 @@ declare global {
     coinName: string;
     symbol: string;
     image: string;
+    _id: string;
+    coinCharts: Chart[];
+    coinComments: Comment[];
   }
 
   type Config = AxiosRequestConfig;
