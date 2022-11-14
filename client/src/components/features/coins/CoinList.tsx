@@ -7,6 +7,8 @@ import Favourite from "src/components/common/Favourite";
 import { formatCurrency, formatPercentage } from "src/utils/strings";
 import NumberHighlight from "common/NumberHighlight";
 import FieldSorter from "src/components/common/FieldSorter";
+import { useMutation, useQuery } from "@apollo/client";
+import { ADD_COIN, GET_FAV_COINS, REMOVE_COIN } from "src/graphql/queries";
 
 export interface CoinMarketType {
   id: string;
@@ -54,7 +56,7 @@ type CoinMarketOrder =
 const DEFAULT_ORDER = "gecko_desc";
 
 const CoinList = () => {
-  const { user, addCoin, removeCoin } = useUserContext();
+  const { user } = useUserContext();
   const [data, setData] = useState<CoinMarketType[]>([]);
   const [order, setOrder] = useState<CoinMarketOrder>(DEFAULT_ORDER);
   const { fetchJSON, working } = useFetch();
@@ -93,31 +95,8 @@ const CoinList = () => {
     {
       title: "",
       processor(item) {
-        const onClick = () => {
-          if (
-            user?.favCoins.some((favCoin) => favCoin.coin.coinId === item.id)
-          ) {
-            removeCoin(item.id);
-          } else {
-            addCoin({
-              coinId: item.id,
-              coinName: item.name,
-              symbol: item.symbol,
-              image: item.image,
-            });
-          }
-        };
         if (!user) return null;
-        return (
-          <Favourite
-            fav={
-              user?.favCoins.some(
-                (favCoin) => favCoin.coin.coinId === item.id,
-              ) || false
-            }
-            onClick={onClick}
-          />
-        );
+        return <FavouriteCoin item={item} />;
       },
       width: 20,
       weight: 1,
@@ -231,6 +210,47 @@ const CoinList = () => {
       headers={headers}
       urlGetter={urlGetter}
       working={working}
+    />
+  );
+};
+
+interface FavouriteProptypes {
+  item: CoinMarketType;
+}
+
+interface Query {
+  favCoins: FavCoin[];
+}
+
+const FavouriteCoin = ({ item }: FavouriteProptypes) => {
+  const { data, refetch } = useQuery<Query>(GET_FAV_COINS);
+  const [addCoin] = useMutation(ADD_COIN, {
+    refetchQueries: [{ query: GET_FAV_COINS }],
+  });
+  const [removeCoin] = useMutation(REMOVE_COIN, {
+    refetchQueries: [{ query: GET_FAV_COINS }],
+  });
+  const favCoins = data?.favCoins || [];
+  const onClick = async () => {
+    if (favCoins.some((favCoin) => favCoin.coin.coinId === item.id)) {
+      await removeCoin({ variables: { coinId: item.id } });
+    } else {
+      await addCoin({
+        variables: {
+          coinId: item.id,
+          coinName: item.name,
+          symbol: item.symbol,
+          image: item.image,
+        },
+      });
+    }
+    refetch();
+  };
+
+  return (
+    <Favourite
+      fav={favCoins.some((favCoin) => favCoin.coin.coinId === item.id) || false}
+      onClick={onClick}
     />
   );
 };
