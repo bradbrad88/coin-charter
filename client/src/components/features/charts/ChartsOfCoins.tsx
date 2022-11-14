@@ -69,6 +69,8 @@ const ChartsOfCoins = () => {
     }
   };
 
+  console.log(chartList);
+
   const selectChart = (chartInfo: any) => {
     nav(`/chart/${chartInfo._id}`);
   };
@@ -128,15 +130,6 @@ const ChartsOfCoins = () => {
                         Posted On: {info.createdAt}
                       </p>
                     </div>
-                  </div>
-
-                  <div className="flex flex-col">
-                    <IoIosArrowRoundUp className="text-green-500" />
-                    <p className="text-[8px]">{info.upVotes.length}</p>
-                  </div>
-                  <div className="flex flex-col">
-                    <IoIosArrowRoundDown className="text-red-500" />
-                    <p className="text-[8px]">{info.downVotes.length}</p>
                   </div>
                   <div className="flex flex-col">
                     <IoIosArrowRoundUp className="text-green-500" />
