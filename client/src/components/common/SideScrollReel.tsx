@@ -22,7 +22,7 @@ const SideScrollReel = ({ children }: PropTypes) => {
     <div className="relative h-[240px]">
       <ul
         ref={ref}
-        className="h-full w-full overflow-x-scroll whitespace-nowrap scroll-smooth scrollbar-thin"
+        className="space-x-3 h-full w-full overflow-x-scroll whitespace-nowrap scroll-smooth scrollbar-thin"
       >
         {children}
       </ul>

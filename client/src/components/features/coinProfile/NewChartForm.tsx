@@ -33,11 +33,11 @@ const FormInput = ({ coin }: PropTypes) => {
     medium: "",
     small: "",
   });
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [description, setDescription] = useState<string>("");
   const [title, setTitle] = useState<string>("");
   const [addChart, { error, data }] = useMutation(ADD_CHART);
 
-  const inputRef = useRef<HTMLInputElement>(null);
   const { postRequest, working } = useFetch();
   let { user } = useUser();
 
@@ -60,10 +60,16 @@ const FormInput = ({ coin }: PropTypes) => {
     }
   }, [imageData]);
 
+  const onImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setImageFile(file);
+  };
+  const validSubmit = imageFile && title && description;
+
   const downloadFile = async () => {
-    const image = inputRef.current?.files![0];
+    if (!validSubmit) return;
     const data = new FormData();
-    data.append("image", image!);
+    data.append("image", imageFile);
 
     const config: Config = {
       data,
@@ -81,27 +87,44 @@ const FormInput = ({ coin }: PropTypes) => {
 
   return (
     <Container>
-      <form className="flex w-full justify-between p-5">
-        <div className="flex flex-col w-full p-5 gap-4">
-          <input
-            type="text"
-            placeholder="Chart Title Here"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="w-full text-sm border border-solid border-gray-300 rounded p-1"
-          />
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            rows={5}
-            placeholder="Chart Description Here"
-            className="w-full text-sm border border-solid border-gray-300 rounded p-1"
-          ></textarea>
+      <form className="flex flex-col md:flex-row w-full md:justify-between p-5 gap-3">
+        <div className="flex flex-col w-full gap-4">
+          <h1 className="text-xl font-semibold text-gray-500 text-left">
+            Create Your Own Analysis
+          </h1>
+          <div>
+            <label>
+              Chart Title
+              <input
+                type="text"
+                placeholder="Chart Title Here"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="w-full border border-solid border-gray-300 rounded p-1"
+              />
+            </label>
+          </div>
+          <div>
+            <label>
+              Chart Description
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                rows={5}
+                placeholder="Chart Description Here"
+                className="w-full border border-solid border-gray-300 rounded block p-1"
+              ></textarea>
+            </label>
+          </div>
         </div>
-        <div className="flex flex-col justify-between p-5">
-          <input type="file" ref={inputRef} />
-          <Button loading={working} onClick={downloadFile}>
-            Upload
+        <div className="flex flex-col gap-3 justify-between">
+          <input type="file" onChange={onImageChange} className="mt-auto" />
+          <Button
+            loading={working}
+            disabled={!validSubmit}
+            onClick={downloadFile}
+          >
+            Post Your Analysis
           </Button>
         </div>
       </form>

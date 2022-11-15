@@ -11,7 +11,7 @@ const CoinCharts = ({ coin }: PropTypes) => {
   const coinId = coin.id;
   return (
     <Container>
-      <div className="flex flex-col">
+      <div className="flex flex-col p-5 gap-3">
         <TopCharts coinId={coinId} />
         <OtherCharts coinId={coinId} />
       </div>
