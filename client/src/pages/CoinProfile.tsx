@@ -1,10 +1,11 @@
 import CoinProfileCard from "../components/features/coinProfile/CoinProfileCard";
 import CoinComments from "../components/features/coinProfile/CoinComments";
 import CoinCharts from "../components/features/coinProfile/CoinCharts";
-import { BrowserRouter, Routes, Route, useParams } from "react-router-dom";
-import Chart from "../components/common/Chart";
+import { useParams } from "react-router-dom";
+import TechChart from "features/charts/TechnicalAnalysisChart";
+import NewChartForm from "features/coinProfile/NewChartForm";
 import useFetch, { Config } from "../hooks/useFetch";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { PropagateLoader } from "react-spinners";
 
 export interface CoinType {
@@ -56,14 +57,13 @@ const CoinProfile = () => {
   }, [coinId]);
 
   return (
-    <div className="flex">
+    <>
       {coin && (
-        <div className="flex flex-col">
-          <div className="flex flex-col lg:flex-row">
-            <CoinProfileCard coin={coin} />
-            <CoinComments coin={coin} />
-          </div>
-          <Chart coin={coin} />
+        <div className="grid grid-cols-1 auto-rows-min w-full">
+          <CoinProfileCard coin={coin} />
+          <TechChart coin={coin} />
+          <NewChartForm coin={coin} />
+          <CoinComments coin={coin} />
           <CoinCharts coin={coin} />
         </div>
       )}
@@ -79,7 +79,7 @@ const CoinProfile = () => {
           />
         </div>
       )}
-    </div>
+    </>
   );
 };
 
