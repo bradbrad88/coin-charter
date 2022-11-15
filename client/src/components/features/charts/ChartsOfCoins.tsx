@@ -1,6 +1,4 @@
 import Container from "src/components/common/Container";
-import { IoIosArrowRoundUp } from "react-icons/io";
-import { IoIosArrowRoundDown } from "react-icons/io";
 import { useState, useEffect } from "react";
 import { useQuery } from "@apollo/client";
 import { QUERY_ALL_COIN_CHARTS } from "src/graphql/queries";
@@ -19,7 +17,7 @@ const ChartsOfCoins = () => {
   const [search, setSearch] = useState<string>("bitcoin");
   const [filter, setFilter] = useState<string>("Most Recent");
   const [chartList, setChartList] = useState<Chart[]>([]);
-  const { loading, error, data } = useQuery<Query>(QUERY_ALL_COIN_CHARTS, {
+  const { error, data } = useQuery<Query>(QUERY_ALL_COIN_CHARTS, {
     variables: { coinId: search },
   });
 
@@ -61,12 +59,6 @@ const ChartsOfCoins = () => {
     }
   };
 
-  console.log(chartList);
-
-  const selectChart = (chartInfo: any) => {
-    nav(`/chart/${chartInfo._id}`);
-  };
-
   if (!chartList) {
     return <div>Loading...</div>;
   }
@@ -103,7 +95,7 @@ const ChartsOfCoins = () => {
           <div>No charts for this coin yet.</div>
         ) : (
           <ul className="flex flex-col gap-1 h-full w-full overflow-y-scroll scrollbar hover:scrollbar-track-slate-200">
-            {chartList.map((chart, index: number) => (
+            {chartList.map((chart) => (
               <ChartListItem key={chart._id} chart={chart} imageHeight={120} />
             ))}
           </ul>
