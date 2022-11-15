@@ -273,6 +273,8 @@ export const QUERY_CHART = gql`
         _id
         username
       }
+      upVoteCount
+      downVoteCount
       createdAt
     }
   }
