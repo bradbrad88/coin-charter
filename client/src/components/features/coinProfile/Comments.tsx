@@ -11,7 +11,9 @@ interface CoinInfo {
 
 const CreateComment = ({ coinName, coinId }: CoinInfo) => {
   const [commentInput, setCommentInput] = useState<string>("");
-  const [addCoinComment, { error, data }] = useMutation(ADD_COIN_COMMENT);
+  const [addCoinComment, { error }] = useMutation(ADD_COIN_COMMENT, {
+    refetchQueries: [{ query: QUERY_COIN_COMMENTS, variables: { coinId } }],
+  });
 
   const submitComment = () => {
     const variables = {
