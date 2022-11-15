@@ -18,7 +18,9 @@ interface Query {
 }
 
 const FriendRequests = () => {
-  const { data, refetch } = useQuery<Query>(GET_FRIEND_REQUESTS);
+  const { data, refetch } = useQuery<Query>(GET_FRIEND_REQUESTS, {
+    fetchPolicy: "network-only",
+  });
   const [acceptRequest] = useMutation(ACCEPT_FRIEND_REQUEST);
   const [declineRequest] = useMutation(DECLINE_FRIEND_REQEST);
   const requests = data?.friendRequests || [];

@@ -384,10 +384,13 @@ const resolvers = {
       if (!user) throw new AuthenticationError();
       const request = { ...args };
       delete request.friendId;
-      await Users.findByIdAndUpdate(
-        args.friendId,
+      await Users.findOneAndUpdate(
         {
-          $addToSet: { receivedFriendRequests: request },
+          _id: args.friendId,
+          "receivedFriendRequests.userId": { $ne: args.userId },
+        },
+        {
+          $push: { receivedFriendRequests: request },
         },
         { new: true },
       );

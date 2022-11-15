@@ -6,9 +6,6 @@ import {
   LOGOUT_USER,
   ADD_PROFILE_IMAGE,
   ADD_BIO,
-  ADD_FRIEND,
-  ADD_COIN,
-  REMOVE_COIN,
 } from "src/graphql/queries";
 import createCtx from "./index";
 import useFetch from "hooks/useFetch";
@@ -31,7 +28,6 @@ interface Ctx {
   signUpUser: (newUser: NewUser) => void;
   updateImage: (image: File, crop: Crop) => void;
   addBio: (bio: string) => void;
-  addFriend: (friendId: string) => void;
 }
 
 interface Prototypes {
@@ -62,7 +58,6 @@ export const Provider = ({ children }: Prototypes) => {
   const [loginUserMutation, { data: loginData }] = useMutation(LOGIN_USER);
   const [addProfileImage, { data: imageData }] = useMutation(ADD_PROFILE_IMAGE);
   const [addBioMutation, { data: bioData }] = useMutation(ADD_BIO);
-  const [addFriendMutation, { data: friendData }] = useMutation(ADD_FRIEND);
 
   // Update local storage with user state data whenever it changes
   useEffect(() => {
@@ -109,19 +104,6 @@ export const Provider = ({ children }: Prototypes) => {
       });
     }
   }, [bioData]);
-
-  // If the friend-data from friend mutation changes then update user state
-  useEffect(() => {
-    if (friendData) {
-      setUser((prevState) => {
-        if (!prevState) return null;
-        return {
-          ...prevState,
-          friendCount: friendData.addFriend.friendCount,
-        };
-      });
-    }
-  }, [friendData]);
 
   // Helper function
   const authenticateUser = (user: User) => {
@@ -175,10 +157,6 @@ export const Provider = ({ children }: Prototypes) => {
     addBioMutation({ variables: { bio } });
   };
 
-  const addFriend = (friendId: string) => {
-    addFriendMutation({ variables: { friendId } });
-  };
-
   // Property exposed to context consumer for checking if a user exists in state
   const isLoggedIn = !!user;
 
@@ -193,7 +171,6 @@ export const Provider = ({ children }: Prototypes) => {
         isLoggedIn,
         updateImage,
         addBio,
-        addFriend,
       }}
     >
       {children}
