@@ -17,9 +17,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(require("cookie-parser")());
 
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../client/dist")));
-}
+app.use(express.static(path.join(__dirname, "../client/dist")));
 
 // Serve the custom api routes
 app.use(router);
@@ -27,6 +25,11 @@ app.use(router);
 // Serve the react client
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/dist/index.html"));
+});
+
+app.get("*", (req, res, next) => {
+  const file = path.join(__dirname, "../client/dist/index.html");
+  res.sendFile(file);
 });
 
 // Function for starting the apollo server
