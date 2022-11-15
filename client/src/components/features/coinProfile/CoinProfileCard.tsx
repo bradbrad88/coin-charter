@@ -70,8 +70,8 @@ const CoinProfileCard = ({ coin }: PropTypes) => {
 
   return (
     <Container>
-      <div className="flex gap-5 p-5 w-full flex-col md:flex-row">
-        <div className="flex flex-col">
+      <div className="flex gap-5 p-5 w-full flex-col md:flex-row h-full">
+        <div className="flex flex-col h-full">
           <div className="flex gap-3">
             <div className="flex">
               <div className="w-[40px] aspect-square">
@@ -102,7 +102,7 @@ const CoinProfileCard = ({ coin }: PropTypes) => {
             )}
           </div>
 
-          <div className="flex flex-col">
+          <div className="flex flex-col justify-between h-full">
             <ul className="flex flex-col gap-1 border-b">
               {dataTimeFrame.map((info) =>
                 priceDifference(info.timeframe, info.data),
@@ -120,7 +120,7 @@ const CoinProfileCard = ({ coin }: PropTypes) => {
                 <span>{coin.market_data.circulating_supply}</span>
               </li>
             </ul>
-            <div className="flex flex-row justify-between">
+            <div className="flex justify-between">
               <Button onClick={addFavorite}>Add To Favourites</Button>
               <p className="text-slate-500">9000 people have liked this</p>
             </div>
@@ -128,7 +128,7 @@ const CoinProfileCard = ({ coin }: PropTypes) => {
         </div>
         <div className="flex flex-col">
           <h3 className="font-bold">Description</h3>
-          <div className="max-h-[300px] overflow-y-scroll">
+          <div className="max-h-[300px] md:max-h-full overflow-y-scroll">
             <p className="h-full max-w-[500px] text-clip">{descriptionClean}</p>
           </div>
         </div>

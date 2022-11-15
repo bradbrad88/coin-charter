@@ -67,18 +67,18 @@ const Comments = ({ coinName, coinId }: CoinInfo) => {
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 h-full overflow-hidden">
       <CreateComment coinId={coinId} coinName={coinName} />
       {commentsList.length === 0 ? (
         <div className="">
           No comments made yet, would you like to be the first? Comment below...
         </div>
       ) : (
-        <ul className="flex flex-col gap-1 overflow-y-scroll border-gray-500 border-[1px] p-2">
+        <ul className="flex flex-col gap-1 overflow-y-scroll border-gray-500 border-[1px] p-2 h-full">
           {commentsList.map((info: any, index: number) => (
             <li
               key={info.username + index}
-              className=" flex gap-2 width-full h-fit bg-gray-200 rounded-md p-2"
+              className=" flex gap-2 width-full h-full bg-gray-200 rounded-md p-2"
             >
               <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-primary bg-white">
                 <img src={info.image} className="h-full w-full" />

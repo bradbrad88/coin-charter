@@ -59,7 +59,7 @@ const CoinProfile = () => {
   return (
     <>
       {coin && (
-        <div className="grid grid-cols-1 md:grid-cols-12 auto-rows-min w-full gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-12 auto-rows-min w-full gap-4 md:grid-rows-[500px]">
           <div className="col-span-full md:col-span-8">
             <CoinProfileCard coin={coin} />
           </div>

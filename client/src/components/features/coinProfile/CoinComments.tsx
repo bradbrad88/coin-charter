@@ -11,7 +11,7 @@ const CoinComments = ({ coin }: PropTypes) => {
 
   return (
     <Container>
-      <div className="flex flex-col p-5">
+      <div className="flex flex-col p-5 h-[400px] md:h-full">
         <h1 className="text-xl font-semibold text-gray-500">Comments</h1>
 
         <Comments coinId={coinId} coinName={coinName} />
