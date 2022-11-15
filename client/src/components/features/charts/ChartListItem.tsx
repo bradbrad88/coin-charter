@@ -11,12 +11,12 @@ const ChartListItem = ({ chart, imageHeight, width }: Proptypes) => {
   return (
     <li
       style={{ width: width ? width : "100%" }}
-      className="h-full inline-block p-2 cursor-pointer hover:bg-indigo-100 ease-in-out duration-300"
+      className="h-full inline-block cursor-pointer hover:bg-indigo-100 ease-in-out duration-300"
     >
       <Link to={`/chart/${chart._id}`}>
         <div>
           <div className="flex place-content-between">
-            <h1 className="truncate font-bold text-md text-black capitalize">
+            <h1 className="truncate font-semibold text-md text-gray-800 capitalize">
               {chart.chartTitle}
             </h1>
             <div className="inline-flex gap-1">

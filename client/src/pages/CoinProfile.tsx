@@ -59,12 +59,22 @@ const CoinProfile = () => {
   return (
     <>
       {coin && (
-        <div className="grid grid-cols-1 auto-rows-min w-full">
-          <CoinProfileCard coin={coin} />
-          <TechChart coin={coin} />
-          <NewChartForm coin={coin} />
-          <CoinComments coin={coin} />
-          <CoinCharts coin={coin} />
+        <div className="grid grid-cols-1 md:grid-cols-12 auto-rows-min w-full gap-4">
+          <div className="col-span-full md:col-span-8">
+            <CoinProfileCard coin={coin} />
+          </div>
+          <div className="col-span-full md:h-[500px]">
+            <TechChart coin={coin} />
+          </div>
+          <div className="col-span-full">
+            <NewChartForm coin={coin} />
+          </div>
+          <div className="col-span-full md:row-start-1 md:col-4 md:col-start-9">
+            <CoinComments coin={coin} />
+          </div>
+          <div className="col-span-full">
+            <CoinCharts coin={coin} />
+          </div>
         </div>
       )}
       {working && (

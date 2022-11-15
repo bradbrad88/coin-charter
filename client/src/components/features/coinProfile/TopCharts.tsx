@@ -35,7 +35,9 @@ const TopCharts = ({ coinId }: CoinId) => {
 
   return (
     <div className="flex flex-col w-full h-full">
-      <h1 className="text-lg font-bold">Top Rated Chart</h1>
+      <h1 className="text-xl font-semibold text-gray-500 mb-2">
+        Top Rated Chart
+      </h1>
       {!topRatedChart ? (
         <div className="h-full">
           No charts have been made yet. Submit one above to be the first!

@@ -9,12 +9,10 @@ interface PropTypes {
 const Chart = ({ coin }: PropTypes) => {
   return (
     <Container>
-      <div className="w-full h-fit p-5">
+      <div className="w-full aspect-[14/9] md:aspect-auto md:h-full md:p-5 mb-2">
         <AdvancedRealTimeChart
           theme="dark"
-          height={500}
-          width="full"
-          // autosize={true}
+          autosize={true}
           symbol={`${coin.symbol.toUpperCase()}USDT`}
           show_popup_button
           details

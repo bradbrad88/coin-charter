@@ -1,5 +1,6 @@
 import Comments from "./Comments";
 import { CoinType } from "src/pages/CoinProfile";
+import Container from "src/components/common/Container";
 
 interface PropTypes {
   coin: CoinType;
@@ -9,14 +10,13 @@ const CoinComments = ({ coin }: PropTypes) => {
   const coinName = coin.name;
 
   return (
-    <div className="flex flex-col rounded-sm gap-1 shadow-lg shadow-gray-400 m-4 p-4 w-[95%] lg:w-[397px] h-[500px]">
-      <div className="flex gap-3 items-center">
-        <h1 className="text-lg font-bold">Comments</h1>
-        <i className="fa-regular fa-comments text-lg"></i>
-      </div>
+    <Container>
+      <div className="flex flex-col p-5">
+        <h1 className="text-xl font-semibold text-gray-500">Comments</h1>
 
-      <Comments coinId={coinId} coinName={coinName} />
-    </div>
+        <Comments coinId={coinId} coinName={coinName} />
+      </div>
+    </Container>
   );
 };
 

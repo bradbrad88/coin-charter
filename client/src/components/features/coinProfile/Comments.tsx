@@ -29,7 +29,7 @@ const CreateComment = ({ coinName, coinId }: CoinInfo) => {
   return (
     <div>
       <h1>Add Comment</h1>
-      <form>
+      <form className="flex flex-col gap-2">
         <textarea
           className="w-full text-sm border border-solid border-gray-300 rounded p-1"
           placeholder="Add text here..."
@@ -65,32 +65,23 @@ const Comments = ({ coinName, coinId }: CoinInfo) => {
   }
 
   return (
-    <>
+    <div className="flex flex-col gap-4">
+      <CreateComment coinId={coinId} coinName={coinName} />
       {commentsList.length === 0 ? (
-        <div className="h-4/6">
+        <div className="">
           No comments made yet, would you like to be the first? Comment below...
         </div>
       ) : (
-        <ul className="flex flex-col gap-1 overflow-y-scroll h-4/6">
+        <ul className="flex flex-col gap-1 overflow-y-scroll border-gray-500 border-[1px] p-2">
           {commentsList.map((info: any, index: number) => (
             <li
               key={info.username + index}
-              className="border-black-50 border-solid border-2 flex gap-2 width-5/6 h-[85px]"
+              className=" flex gap-2 width-full h-fit bg-gray-200 rounded-md p-2"
             >
-              <div className="flex flex-col items-center w-1/6 gap-1 p-1">
-                <img src={info.image} className="h-[50px] w-[50px] rounded" />
-                <div className="flex gap-2 items-center">
-                  <div className="flex flex-col">
-                    <i className="fa-regular fa-thumbs-up text-[14px]"></i>
-                    <p className="text-[8px]">{info.upVotes}</p>
-                  </div>
-                  <div className="flex flex-col">
-                    <i className="fa-regular fa-thumbs-down text-[14px]"></i>
-                    <p className="text-[8px]">{info.downVotes}</p>
-                  </div>
-                </div>
+              <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-primary bg-white">
+                <img src={info.image} className="h-full w-full" />
               </div>
-              <div className=" flex flex-col w-5/6 h-5/6">
+              <div className=" flex flex-col">
                 <div className="flex gap-2 items-center">
                   <Link to={`/profile/${info.userId}`}>
                     <span className="font-bold text-sm text-indigo-600">
@@ -106,9 +97,7 @@ const Comments = ({ coinName, coinId }: CoinInfo) => {
           ))}
         </ul>
       )}
-
-      <CreateComment coinId={coinId} coinName={coinName} />
-    </>
+    </div>
   );
 };
 

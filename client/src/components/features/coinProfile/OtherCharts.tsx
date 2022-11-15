@@ -61,10 +61,12 @@ const OtherCharts = ({ coinId }: CoinId) => {
   };
 
   return (
-    <div className="flex flex-col w-fit h-full">
+    <div className="flex flex-col w-full h-full">
       <div className="flex gap-2">
         {/* will need to add in the state for the filter choice */}
-        <h1 className="text-lg font-bold">{filter} Charts</h1>
+        <h1 className="text-xl font-semibold text-gray-500 mb-2">
+          {filter} Charts
+        </h1>
         <select value={filter} onChange={(e) => setFilter(e.target.value)}>
           {filterOptions.map((option) => (
             <option key={option} value={option}>
