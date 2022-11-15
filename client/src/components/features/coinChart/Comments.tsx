@@ -106,14 +106,14 @@ const Comments = ({ chart }: Proptypes) => {
                           </p>
                         </div>
                       </div>
-                      <VoteWidget
+                      {/* <VoteWidget
                         handleUpVote={(vote) => {}}
                         handleDownVote={(vote) => {}}
                         downVote={true}
                         upVote={true}
                         downVoteCount={1}
                         upVoteCount={2}
-                      />
+                      /> */}
                     </div>
                     <div className="bg-white p-2 rounded-md">
                       <p className="">{info.commentText}</p>
