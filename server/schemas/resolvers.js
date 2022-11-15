@@ -100,10 +100,7 @@ const resolvers = {
     },
     searchUsers: async (parent, { query }) => {
       const regex = new RegExp(`.*${query}.*`, "i");
-      const users = await Users.find({ username: regex })
-        .populate("comments")
-        .populate({ path: "comments", populate: "users" });
-
+      const users = await Users.find({ username: regex }).populate("comments");
       return users;
     },
     friendRequests: async (parent, args, { user }) => {
