@@ -2,8 +2,8 @@ import { CoinType } from "pages/CoinProfile";
 import Button from "common/Button";
 import useFetch, { Config } from "hooks/useFetch";
 import useUser from "contexts/UserContext";
-import { useRef, useState, useEffect } from "react";
-import { ADD_CHART } from "src/graphql/queries";
+import { useState, useEffect } from "react";
+import { ADD_CHART, QUERY_ALL_COIN_CHARTS } from "src/graphql/queries";
 import { useMutation } from "@apollo/client";
 import Container from "src/components/common/Container";
 
@@ -36,7 +36,11 @@ const FormInput = ({ coin }: PropTypes) => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [description, setDescription] = useState<string>("");
   const [title, setTitle] = useState<string>("");
-  const [addChart, { error, data }] = useMutation(ADD_CHART);
+  const [addChart] = useMutation(ADD_CHART, {
+    refetchQueries: [
+      { query: QUERY_ALL_COIN_CHARTS, variables: { coinId: coin.id } },
+    ],
+  });
 
   const { postRequest, working } = useFetch();
   let { user } = useUser();
