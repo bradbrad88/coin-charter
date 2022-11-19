@@ -13,20 +13,45 @@ import {
   InMemoryCache,
   ApolloProvider,
   createHttpLink,
+  split,
 } from "@apollo/client";
+import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
+import { createClient } from "graphql-ws";
 import Signup from "./pages/Signup";
 import { Provider as UserProvider } from "contexts/UserContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { getMainDefinition } from "@apollo/client/utilities";
 
 // Construct our main GraphQL API endpoint
 const httpLink = createHttpLink({
   uri: "/graphql",
 });
 
+const wsLink = new GraphQLWsLink(
+  createClient({
+    url: "ws://localhost:3000/graphql",
+    connectionParams: {
+      // authToken: put token here
+    },
+  }),
+);
+
+const splitLink = split(
+  ({ query }) => {
+    const definition = getMainDefinition(query);
+    return (
+      definition.kind === "OperationDefinition" &&
+      definition.operation === "subscription"
+    );
+  },
+  wsLink,
+  httpLink,
+);
+
 const client = new ApolloClient({
   // Set up our client to execute the `authLink` middleware prior to making the request to our GraphQL API
-  link: httpLink,
+  link: splitLink,
   cache: new InMemoryCache(),
 });
 
