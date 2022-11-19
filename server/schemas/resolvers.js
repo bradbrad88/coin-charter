@@ -2,6 +2,9 @@ const { Charts, Coins, Comments, Users, FavCoin } = require("../models");
 const { AuthenticationError } = require("apollo-server-express");
 const { signToken, setCookie } = require("../utils/auth");
 const { GraphQLScalarType, Kind } = require("graphql");
+const { PubSub, withFilter } = require("graphql-subscriptions");
+
+const pubsub = new PubSub();
 
 const resolvers = {
   DateTime: new GraphQLScalarType({
@@ -380,6 +383,9 @@ const resolvers = {
     sendFriendRequest: async (parent, args, { user }) => {
       if (!user) throw new AuthenticationError();
       const request = { ...args };
+      pubsub.publish("NEW_FRIEND_REQUEST", {
+        newFriendRequest: { ...request },
+      });
       delete request.friendId;
       await Users.findOneAndUpdate(
         {
@@ -391,6 +397,7 @@ const resolvers = {
         },
         { new: true },
       );
+
       return true;
     },
     acceptFriendRequest: async (parent, { friendId }, { user: userId }) => {
@@ -431,6 +438,17 @@ const resolvers = {
       });
 
       return true;
+    },
+  },
+  Subscription: {
+    newFriendRequest: {
+      subscribe: withFilter(
+        () => pubsub.asyncIterator(["NEW_FRIEND_REQUEST"]),
+        (payload, variables) => {
+          console.log(payload);
+          return payload.newFriendRequest.friendId === variables.userId;
+        },
+      ),
     },
   },
 };
