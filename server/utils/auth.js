@@ -43,6 +43,11 @@ module.exports = {
     if (!req.user) return res.sendStatus(401);
     next();
   },
+  wsAuthMiddleware: async function (ctx) {
+    // Set connectionParams in link on client then access them on ctx.connectionParams
+
+    return { user: null };
+  },
   signToken: function ({ _id }) {
     const payload = { _id };
     return jwt.sign({ data: payload }, secret, { expiresIn: expiration });
