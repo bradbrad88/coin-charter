@@ -595,3 +595,16 @@ export const USER_CHARTS = gql`
     }
   }
 `;
+
+export const SUBSCRIBE_FRIEND_REQUESTS = gql`
+  subscription NewFriendRequest($userId: ID!) {
+    newFriendRequest(userId: $userId) {
+      userId
+      username
+      image
+      bio
+      subTitle
+      createdAt
+    }
+  }
+`;

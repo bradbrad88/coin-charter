@@ -1,17 +1,19 @@
 import { useEffect, useState } from "react";
-import { useMutation } from "@apollo/client";
+import { useMutation, useSubscription } from "@apollo/client";
 import {
   ADD_USER,
   LOGIN_USER,
   LOGOUT_USER,
   ADD_PROFILE_IMAGE,
   ADD_BIO,
+  SUBSCRIBE_FRIEND_REQUESTS,
 } from "src/graphql/queries";
 import createCtx from "./index";
 import useFetch from "hooks/useFetch";
 
 import type { Crop } from "react-image-crop";
 import type { Config } from "hooks/useFetch";
+import { toast } from "react-toastify";
 
 interface Ctx {
   user: User | null;
@@ -58,6 +60,14 @@ export const Provider = ({ children }: Prototypes) => {
   const [loginUserMutation, { data: loginData }] = useMutation(LOGIN_USER);
   const [addProfileImage, { data: imageData }] = useMutation(ADD_PROFILE_IMAGE);
   const [addBioMutation, { data: bioData }] = useMutation(ADD_BIO);
+  const { data } = useSubscription(SUBSCRIBE_FRIEND_REQUESTS, {
+    variables: { userId: user?._id },
+    onData: (data) => {
+      const user = data?.data?.data?.newFriendRequest || {};
+      console.log("datas", data?.data?.data?.newFriendRequest?.username);
+      toast.info("New friend request from " + user.username);
+    },
+  });
 
   // Update local storage with user state data whenever it changes
   useEffect(() => {
