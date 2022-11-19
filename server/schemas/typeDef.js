@@ -154,6 +154,10 @@ const typeDefs = gql`
     acceptFriendRequest(friendId: ID!): User
     declineFriendRequest(friendId: ID!): Boolean
   }
+
+  type Subscription {
+    newFriendRequest(userId: ID!): FriendRequest
+  }
 `;
 
 module.exports = typeDefs;
