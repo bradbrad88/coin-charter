@@ -1,0 +1,143 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String             @id @default(uuid())
+  username         String             @db.VarChar(20)
+  subtitle         String?            @db.VarChar(24)
+  bio              String?            @db.VarChar(255)
+  image            String?            @db.VarChar(255)
+  VerifiedEmails   VerifiedEmail[]
+  UserVerification UserVerification[]
+  UserIdentity     UserIdentity[]
+  Chart            Chart[]
+  CoinComment      CoinComment[]
+  ChartComment     ChartComment[]
+  ChartVote        ChartVote[]
+  CoinFavourite    CoinFavourite[]
+  ChartCommentVote ChartCommentVote[]
+  CoinCommentVote  CoinCommentVote[]
+}
+
+model VerifiedEmail {
+  id     String @id @default(uuid())
+  user   User   @relation(references: [id], fields: [userId])
+  userId String
+  email  String
+}
+
+model UserVerification {
+  id             String @id @default(uuid())
+  user           User   @relation(references: [id], fields: [userId])
+  userId         String
+  email          String @db.VarChar(255)
+  code           String @db.VarChar(6)
+  provider       String @db.VarChar(255)
+  providerUserId String @db.VarChar(255)
+}
+
+model UserIdentity {
+  id     String @id @default(uuid())
+  user   User   @relation(references: [id], fields: [userId])
+  userId String @db.VarChar(255)
+  method String @db.VarChar(255)
+  lookup String @db.VarChar(255)
+}
+
+model Coin {
+  id            String          @id @default(uuid())
+  coinName      String          @db.VarChar(255)
+  coinId        String          @db.VarChar(255)
+  symbol        String          @db.VarChar(255)
+  image         String          @db.VarChar(255)
+  Chart         Chart[]
+  CoinComment   CoinComment[]
+  CoinFavourite CoinFavourite[]
+}
+
+model Chart {
+  id               String         @id @default(uuid())
+  coin             Coin           @relation(references: [id], fields: [coinId])
+  coinId           String
+  title            String         @db.VarChar(255)
+  description      String         @db.VarChar(255)
+  user             User           @relation(references: [id], fields: [userId])
+  userId           String
+  originalUsername String         @db.VarChar(255)
+  imageThumbnail   String         @db.VarChar(255)
+  imageMedium      String         @db.VarChar(255)
+  imageLarge       String         @db.VarChar(255)
+  ChartComment     ChartComment[]
+  ChartVote        ChartVote[]
+}
+
+model ChartComment {
+  id               String             @id @default(uuid())
+  content          String             @db.Text
+  chart            Chart              @relation(references: [id], fields: [chartId])
+  chartId          String             @db.VarChar(255)
+  userId           String
+  User             User               @relation(fields: [userId], references: [id])
+  ChartCommentVote ChartCommentVote[]
+}
+
+model ChartVote {
+  user         User   @relation(fields: [userId], references: [id])
+  userId       String
+  chartId      String
+  chartComment Chart  @relation(fields: [chartId], references: [id])
+  value        Int
+
+  @@id([userId, chartId])
+}
+
+model ChartCommentVote {
+  user           User         @relation(fields: [userId], references: [id])
+  userId         String
+  chartCommentId String
+  chartComment   ChartComment @relation(fields: [chartCommentId], references: [id])
+  value          Int
+  CoinComment    CoinComment? @relation(fields: [coinCommentId], references: [id])
+  coinCommentId  String?
+
+  @@id([userId, chartCommentId])
+}
+
+model CoinCommentVote {
+  user          User        @relation(fields: [userId], references: [id])
+  userId        String
+  coinCommentId String
+  coinComment   CoinComment @relation(fields: [coinCommentId], references: [id])
+  value         Int
+
+  @@id([userId, coinCommentId])
+}
+
+model CoinComment {
+  id               String             @id @default(uuid())
+  content          String             @db.Text
+  coin             Coin               @relation(references: [id], fields: [coinId])
+  coinId           String             @db.VarChar(255)
+  userId           String
+  User             User               @relation(fields: [userId], references: [id])
+  CoinCommentVote  CoinCommentVote[]
+  ChartCommentVote ChartCommentVote[]
+}
+
+model CoinFavourite {
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+  coinId String
+  coin   Coin   @relation(fields: [coinId], references: [id])
+
+  @@id([userId, coinId])
+}

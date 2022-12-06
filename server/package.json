@@ -15,6 +15,7 @@
   "dependencies": {
     "@apollo/server": "^4.1.1",
     "@graphql-tools/schema": "^9.0.10",
+    "@prisma/client": "^4.7.1",
     "apollo-server-express": "^3.10.3",
     "aws-sdk": "^2.1246.0",
     "bcrypt": "^5.1.0",
@@ -33,6 +34,7 @@
     "ws": "^8.11.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.20"
+    "nodemon": "^2.0.20",
+    "prisma": "^4.7.1"
   }
 }
