@@ -80,7 +80,7 @@ const startApolloServer = async (typeDefs, resolvers, context) => {
     res.sendFile(file);
   });
 
-  db.once("open", async () => {
+  db.$connect().then(async () => {
     await new Promise((resolve) => httpServer.listen({ port: PORT }, resolve));
     console.log(`Server listening on port ${PORT}`);
   });
