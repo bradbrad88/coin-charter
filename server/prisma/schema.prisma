@@ -26,18 +26,20 @@ model User {
   CoinFavourite    CoinFavourite[]
   ChartCommentVote ChartCommentVote[]
   CoinCommentVote  CoinCommentVote[]
+  UserFriends      Friend[]           @relation(name: "user")
+  friends          Friend[]           @relation(name: "friends")
 }
 
 model VerifiedEmail {
   id     String @id @default(uuid())
-  user   User   @relation(references: [id], fields: [userId])
+  user   User   @relation(references: [id], fields: [userId], onDelete: Cascade)
   userId String
   email  String
 }
 
 model UserVerification {
   id             String @id @default(uuid())
-  user           User   @relation(references: [id], fields: [userId])
+  user           User   @relation(references: [id], fields: [userId], onDelete: Cascade)
   userId         String
   email          String @db.VarChar(255)
   code           String @db.VarChar(6)
@@ -47,10 +49,21 @@ model UserVerification {
 
 model UserIdentity {
   id     String @id @default(uuid())
-  user   User   @relation(references: [id], fields: [userId])
+  user   User   @relation(references: [id], fields: [userId], onDelete: Cascade)
   userId String @db.VarChar(255)
   method String @db.VarChar(255)
   lookup String @db.VarChar(255)
+}
+
+model Friend {
+  userId    String
+  friendId  String
+  user      User     @relation(name: "user", references: [id], fields: [userId], onDelete: Cascade)
+  friend    User     @relation(name: "friends", references: [id], fields: [friendId], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  verified  Boolean  @default(false)
+
+  @@id([userId, friendId])
 }
 
 model Coin {
@@ -70,8 +83,8 @@ model Chart {
   coinId           String
   title            String         @db.VarChar(255)
   description      String         @db.VarChar(255)
-  user             User           @relation(references: [id], fields: [userId])
-  userId           String
+  user             User?          @relation(references: [id], fields: [userId], onDelete: SetNull)
+  userId           String?
   originalUsername String         @db.VarChar(255)
   imageThumbnail   String         @db.VarChar(255)
   imageMedium      String         @db.VarChar(255)
@@ -83,40 +96,40 @@ model Chart {
 model ChartComment {
   id               String             @id @default(uuid())
   content          String             @db.Text
-  chart            Chart              @relation(references: [id], fields: [chartId])
+  chart            Chart              @relation(references: [id], fields: [chartId], onDelete: Cascade)
   chartId          String             @db.VarChar(255)
   userId           String
-  User             User               @relation(fields: [userId], references: [id])
+  User             User               @relation(fields: [userId], references: [id], onDelete: Cascade)
   ChartCommentVote ChartCommentVote[]
 }
 
 model ChartVote {
-  user         User   @relation(fields: [userId], references: [id])
+  user         User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId       String
   chartId      String
-  chartComment Chart  @relation(fields: [chartId], references: [id])
+  chartComment Chart  @relation(fields: [chartId], references: [id], onDelete: Cascade)
   value        Int
 
   @@id([userId, chartId])
 }
 
 model ChartCommentVote {
-  user           User         @relation(fields: [userId], references: [id])
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId         String
   chartCommentId String
-  chartComment   ChartComment @relation(fields: [chartCommentId], references: [id])
+  chartComment   ChartComment @relation(fields: [chartCommentId], references: [id], onDelete: Cascade)
   value          Int
-  CoinComment    CoinComment? @relation(fields: [coinCommentId], references: [id])
+  CoinComment    CoinComment? @relation(fields: [coinCommentId], references: [id], onDelete: Cascade)
   coinCommentId  String?
 
   @@id([userId, chartCommentId])
 }
 
 model CoinCommentVote {
-  user          User        @relation(fields: [userId], references: [id])
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId        String
   coinCommentId String
-  coinComment   CoinComment @relation(fields: [coinCommentId], references: [id])
+  coinComment   CoinComment @relation(fields: [coinCommentId], references: [id], onDelete: Cascade)
   value         Int
 
   @@id([userId, coinCommentId])
@@ -125,19 +138,19 @@ model CoinCommentVote {
 model CoinComment {
   id               String             @id @default(uuid())
   content          String             @db.Text
-  coin             Coin               @relation(references: [id], fields: [coinId])
+  coin             Coin               @relation(references: [id], fields: [coinId], onDelete: Cascade)
   coinId           String             @db.VarChar(255)
   userId           String
-  User             User               @relation(fields: [userId], references: [id])
+  User             User               @relation(fields: [userId], references: [id], onDelete: Cascade)
   CoinCommentVote  CoinCommentVote[]
   ChartCommentVote ChartCommentVote[]
 }
 
 model CoinFavourite {
   userId String
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   coinId String
-  coin   Coin   @relation(fields: [coinId], references: [id])
+  coin   Coin   @relation(fields: [coinId], references: [id], onDelete: Cascade)
 
   @@id([userId, coinId])
 }
