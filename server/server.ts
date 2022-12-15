@@ -14,11 +14,16 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
 import { makeExecutableSchema } from "@graphql-tools/schema";
-import { typeDefs, resolvers } from "./schemas/index.js";
+import { resolvers } from "./schemas/index.js";
+import { readFileSync } from "fs";
 import router from "./routes/index.js";
 
 const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
 const { json } = bodyParser;
+
+const typeDefs = readFileSync("./schemas/schema.graphql", {
+  encoding: "utf-8",
+});
 
 // Create express app
 const app = express();
