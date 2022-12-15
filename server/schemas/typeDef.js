@@ -3,11 +3,18 @@ const { gql } = require("apollo-server-express");
 const typeDefs = gql`
   scalar DateTime
 
-  type User {
-    _id: ID
+  type UserBasic {
+    id: ID
     username: String
-    subTitle: String
-    email: String
+    subtitle: String
+    bio: String
+    image: String
+  }
+
+  type User {
+    id: ID
+    username: String
+    subtitle: String
     bio: String
     comments: [Comment]
     friends: [Friend]
@@ -22,8 +29,8 @@ const typeDefs = gql`
   }
 
   type Friend {
-    friend: User
-    createdAt: String
+    friend: UserBasic
+    createdAt: DateTime
   }
 
   type FavouriteCoin {
