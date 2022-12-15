@@ -4,4 +4,4 @@ const applyMiddleware = (prisma) => {
   });
 };
 
-module.exports = applyMiddleware;
+export default applyMiddleware;

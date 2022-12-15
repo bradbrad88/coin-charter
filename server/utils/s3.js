@@ -1,4 +1,6 @@
-const { S3 } = require("aws-sdk");
+// const { S3 } = require("aws-sdk");
+import pkg from "aws-sdk";
+const { S3 } = pkg;
 const { AWS_KEY, AWS_SECRET, AWS_BUCKET, AWS_REGION } = process.env;
 
 const s3 = new S3({
@@ -18,4 +20,4 @@ const upload = async (image, key) => {
   return res.Location;
 };
 
-module.exports = upload;
+export default upload;

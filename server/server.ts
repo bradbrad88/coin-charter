@@ -1,21 +1,24 @@
-require("dotenv").config();
-const path = require("path");
-const { createServer } = require("http");
-const { WebSocketServer } = require("ws");
-const { ApolloServer } = require("@apollo/server");
-const { useServer } = require("graphql-ws/lib/use/ws");
-const db = require("./config/connection");
-const express = require("express");
-const { expressMiddleware } = require("@apollo/server/express4");
-const { gqlAuthMiddleware, wsAuthMiddleware } = require("./utils/auth");
-const cors = require("cors");
-const { json } = require("body-parser");
-const {
-  ApolloServerPluginDrainHttpServer,
-} = require("@apollo/server/plugin/drainHttpServer");
-const { makeExecutableSchema } = require("@graphql-tools/schema");
-const { typeDefs, resolvers } = require("./schemas");
-const router = require("./routes");
+import "dotenv/config";
+import * as url from "url";
+import path from "path";
+import { createServer } from "http";
+import { WebSocketServer } from "ws";
+import { ApolloServer } from "@apollo/server";
+import { useServer } from "graphql-ws/lib/use/ws";
+import db from "./config/connection.js";
+import express from "express";
+import { expressMiddleware } from "@apollo/server/express4";
+import { gqlAuthMiddleware, wsAuthMiddleware } from "./utils/auth.js";
+import cors from "cors";
+import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
+import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
+import { makeExecutableSchema } from "@graphql-tools/schema";
+import { typeDefs, resolvers } from "./schemas/index.js";
+import router from "./routes/index.js";
+
+const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
+const { json } = bodyParser;
 
 // Create express app
 const app = express();
@@ -34,11 +37,15 @@ const PORT = process.env.PORT || 3001;
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use(require("cookie-parser")());
+app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "../client/dist")));
 
 // Function for starting the apollo server
-const startApolloServer = async (typeDefs, resolvers, context) => {
+const startApolloServer = async (
+  typeDefs: any,
+  resolvers: any,
+  context: any,
+) => {
   //
   const schema = makeExecutableSchema({ typeDefs, resolvers });
 
@@ -81,7 +88,9 @@ const startApolloServer = async (typeDefs, resolvers, context) => {
   });
 
   db.$connect().then(async () => {
-    await new Promise((resolve) => httpServer.listen({ port: PORT }, resolve));
+    await new Promise((resolve: any) =>
+      httpServer.listen({ port: PORT }, resolve),
+    );
     console.log(`Server listening on port ${PORT}`);
   });
 };

@@ -1,4 +1,4 @@
-const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
 
 const secret = process.env.JWT_SECRET;
 const TOKEN_AGE = 1000 * 60 * 60 * 24;
@@ -33,29 +33,31 @@ const authMiddleware = (req, res) => {
   return req;
 };
 
-module.exports = {
-  gqlAuthMiddleware: function ({ req, res }) {
-    authMiddleware(req, res);
-    return req;
-  },
-  expressAuthMiddleware: function (req, res, next) {
-    authMiddleware(req, res);
-    if (!req.user) return res.sendStatus(401);
-    next();
-  },
-  wsAuthMiddleware: async function (ctx) {
-    // Set connectionParams in link on client then access them on ctx.connectionParams
+export const gqlAuthMiddleware = ({ req, res }) => {
+  authMiddleware(req, res);
+  return req;
+};
 
-    return { user: null };
-  },
-  signToken: function ({ _id }) {
-    const payload = { _id };
-    return jwt.sign({ data: payload }, secret, { expiresIn: expiration });
-  },
-  setCookie: function (res, token) {
-    res.cookie("token", token, {
-      httpOnly: true,
-      maxAge: TOKEN_AGE,
-    });
-  },
+export const expressAuthMiddleware = (req, res, next) => {
+  authMiddleware(req, res);
+  if (!req.user) return res.sendStatus(401);
+  next();
+};
+
+export const wsAuthMiddleware = (ctx) => {
+  // Set connectionParams in link on client then access them on ctx.connectionParams
+
+  return { user: null };
+};
+
+export const signToken = ({ _id }) => {
+  const payload = { _id };
+  return jwt.sign({ data: payload }, secret, { expiresIn: expiration });
+};
+
+export const setCookie = (res, token) => {
+  res.cookie("token", token, {
+    httpOnly: true,
+    maxAge: TOKEN_AGE,
+  });
 };

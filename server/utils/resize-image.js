@@ -1,7 +1,7 @@
-const sharp = require("sharp");
+import sharp from "sharp";
 const IMG_SIZE = 300;
 
-const resizeImage = async (
+export const resizeImage = async (
   imageBuffer,
   imgWidth = IMG_SIZE,
   imgHeight = IMG_SIZE,
@@ -20,7 +20,7 @@ const resizeImage = async (
   return await sharp(resizedImage).avif().toBuffer();
 };
 
-const cropImage = async (imageBuffer, crop) => {
+export const cropImage = async (imageBuffer, crop) => {
   // Get height and width metadata
   const { height, width } = await sharp(imageBuffer).metadata();
 
@@ -35,5 +35,3 @@ const cropImage = async (imageBuffer, crop) => {
   // Crop the image
   return await sharp(imageBuffer).extract(cropAbsolute).toBuffer();
 };
-
-module.exports = { resizeImage, cropImage };

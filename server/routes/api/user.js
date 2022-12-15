@@ -1,10 +1,16 @@
-const router = require("express").Router({ mergeParams: true });
-const multer = require("multer")().single("image");
-const upload = require("../../utils/s3");
-const { resizeImage, cropImage } = require("../../utils/resize-image");
-const { v4: uuidv4 } = require("uuid");
+import { Router } from "express";
+import multer from "multer";
+import upload from "../../utils/s3.js";
 
-router.post("/upload-image", multer, async (req, res) => {
+const router = Router({ mergeParams: true });
+const imageParser = multer().single("image");
+
+// const { resizeImage, cropImage } = require("../../utils/resize-image");
+import { resizeImage, cropImage } from "../../utils/resize-image.js";
+// const { v4: uuidv4 } = require("uuid");
+import { v4 as uuidv4 } from "uuid";
+
+router.post("/upload-image", imageParser, async (req, res) => {
   try {
     const { userId } = req.params;
     const crop = JSON.parse(req.body.crop);
@@ -18,7 +24,7 @@ router.post("/upload-image", multer, async (req, res) => {
   }
 });
 
-router.post("/chart/:symbol", multer, async (req, res) => {
+router.post("/chart/:symbol", imageParser, async (req, res) => {
   const imageSizes = [
     {
       size: "thumbnail",
@@ -64,4 +70,4 @@ router.post("/chart/:symbol", multer, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

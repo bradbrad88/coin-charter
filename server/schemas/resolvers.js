@@ -1,8 +1,12 @@
-const { Charts, Coins, Comments, Users, FavCoin } = require("../models");
-const { AuthenticationError } = require("apollo-server-express");
-const { signToken, setCookie } = require("../utils/auth");
-const { GraphQLScalarType, Kind } = require("graphql");
-const { PubSub, withFilter } = require("graphql-subscriptions");
+import db from "../config/connection.js";
+// const { AuthenticationError } = require("apollo-server-express");
+import { AuthenticationError } from "apollo-server-express";
+// const { signToken, setCookie } = require("../utils/auth");
+import { signToken, setCookie } from "../utils/auth.js";
+// const { GraphQLScalarType, Kind } = require("graphql");
+import { GraphQLScalarType, Kind } from "graphql";
+// const { PubSub, withFilter } = require("graphql-subscriptions");
+import { PubSub, withFilter } from "graphql-subscriptions";
 
 const pubsub = new PubSub();
 
@@ -34,18 +38,22 @@ const resolvers = {
     },
   }),
 
+  Friend: {
+    friend: (friend) => {
+      return db.user.findUnique({ where: { id: friend.friendId } });
+    },
+  },
+
   Query: {
     users: async () => {
-      const users = await Users.find({})
-        .populate("comments")
-        .populate({ path: "favCoins", populate: "coin" })
-        .populate({ path: "friends", populate: "friend" });
+      const users = await db.user.findMany({ include: { friends: true } });
       return users;
     },
     user: async (parent, args) => {
-      const user = await Users.findById(args.id)
-        .populate("comments")
-        .populate({ path: "favCoins", populate: "coin" });
+      const user = await db.user.findUnique(args.id);
+      // const user = await Users.findById(args.id)
+      //   .populate("comments")
+      //   .populate({ path: "favCoins", populate: "coin" });
       return user;
     },
     comment: async (parent, args) => {
@@ -92,10 +100,12 @@ const resolvers = {
         .populate("upVotes");
     },
     chart: async (parent, { chartId }) => {
-      return await Charts.findById(chartId)
-        .populate("chartComments")
-        .populate({ path: "chartComments", populate: "userId" })
-        .populate("upVotes");
+      return await db.chart.findUnique({ where: { id: chartId } });
+
+      // return await Charts.findById(chartId)
+      //   .populate("chartComments")
+      //   .populate({ path: "chartComments", populate: "userId" })
+      //   .populate("upVotes");
     },
     userCharts: async (parent, { userId }) => {
       const user = await Users.findById(userId).populate("charts");
@@ -144,10 +154,12 @@ const resolvers = {
   },
   Mutation: {
     addUser: async (parent, { username, email, password }, { res }) => {
-      const user = await Users.create({ username, email, password });
-      const token = signToken(user);
-      setCookie(res, token);
-      return user.populate({ path: "favCoins", populate: "coin" });
+      const user = await db.user.create({ data: { username } });
+      return user;
+      // const user = await Users.create({ username, email, password });
+      // const token = signToken(user);
+      // setCookie(res, token);
+      // return user.populate({ path: "favCoins", populate: "coin" });
     },
     loginUser: async (parent, { username, password }, { res }) => {
       const user = await Users.findOne({ username });
@@ -472,4 +484,4 @@ async function addRecentActivity(userId, item) {
   return updatedUser;
 }
 
-module.exports = resolvers;
+export default resolvers;
