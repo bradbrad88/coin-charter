@@ -1,12 +1,13 @@
-import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import useUserContext from "contexts/UserContext";
-import FormField from "common/FormField";
-import Button from "common/Button";
+import Password from "src/components/features/login/Password";
+import SignupLink from "src/components/features/login/SignupLink";
+import GoogleOAuth from "src/components/features/login/GoogleOAuth";
+import MagicLink from "src/components/features/login/MagicLink";
 
 const Login = () => {
-  const [formState, setFormState] = useState({ username: "", password: "" });
-  const { isLoggedIn, loginUser } = useUserContext();
+  const { isLoggedIn } = useUserContext();
   const nav = useNavigate();
 
   // If the user is already logged in then navigate to dashboard
@@ -14,49 +15,26 @@ const Login = () => {
     if (isLoggedIn) nav("/profile");
   }, [isLoggedIn]);
 
-  const inputChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    setFormState((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
-  const onLogin: React.PointerEventHandler<HTMLButtonElement> = (e) => {
-    loginUser({ ...formState });
-  };
-
   return (
-    <div className="p-3 md:w-96 md:mx-auto">
-      <div className="flex justify-between">
-        <h2 className="text-lg font-bold">Login</h2>
-      </div>
-      <form className="flex flex-col gap-3">
-        <FormField
-          label="Username"
-          name="username"
-          onChange={inputChange}
-          value={formState.username}
-          placeholder="Username..."
-        />
-        <FormField
-          label="Password"
-          name="password"
-          type="password"
-          onChange={inputChange}
-          value={formState.password}
-          placeholder="Password..."
-        />
-        <Button onClick={onLogin}>Login</Button>
-        <div>
-          Don't already have an account?{" "}
-          <Link
-            to={"/signup"}
-            className="hover:text-indigo-700 transition-colors font-bold"
-          >
-            Sign Up
-          </Link>
-        </div>
-      </form>
+    <div className="flex flex-col p-3 md:w-96 md:mx-auto gap-3">
+      <h2 className="text-lg font-bold -mb-2">Login</h2>
+      <MagicLink />
+      <Or />
+      <GoogleOAuth />
+      <Or />
+      <Password />
+      <SignupLink />
+    </div>
+  );
+};
+
+const Or = () => {
+  return (
+    <div className="relative my-3">
+      <hr />
+      <span className="bg-white absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 px-5 text-slate-300">
+        or
+      </span>
     </div>
   );
 };
