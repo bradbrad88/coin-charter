@@ -19,13 +19,7 @@ interface Ctx {
   user: User | null;
   isLoggedIn: boolean;
   loading: boolean;
-  loginUser: ({
-    username,
-    password,
-  }: {
-    username: string;
-    password: string;
-  }) => void;
+  loginUser: ({ email, password }: { email: string; password: string }) => void;
   logoutUser: () => void;
   signUpUser: (newUser: NewUser) => void;
   updateImage: (image: File, crop: Crop) => void;
@@ -122,13 +116,13 @@ export const Provider = ({ children }: Prototypes) => {
 
   // Function exposed to context consumer for logging in
   const loginUser = ({
-    username,
+    email,
     password,
   }: {
-    username: string;
+    email: string;
     password: string;
   }) => {
-    loginUserMutation({ variables: { username, password } });
+    loginUserMutation({ variables: { email, password } });
   };
 
   // Function exposed to context consumer for logging out
