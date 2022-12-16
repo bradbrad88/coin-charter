@@ -1,2 +1,8 @@
+import { readFileSync } from "fs";
 import resolvers from "./resolvers.js";
-export { resolvers };
+
+const typeDefs = readFileSync("./schemas/schema.graphql", {
+  encoding: "utf-8",
+});
+
+export { resolvers, typeDefs };

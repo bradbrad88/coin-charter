@@ -8,22 +8,20 @@ import { useServer } from "graphql-ws/lib/use/ws";
 import db from "./config/connection.js";
 import express from "express";
 import { expressMiddleware } from "@apollo/server/express4";
-import { gqlAuthMiddleware, wsAuthMiddleware } from "./utils/auth.js";
+import {
+  gqlAuthMiddleware as context,
+  wsAuthMiddleware,
+} from "./utils/auth.js";
 import cors from "cors";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
 import { makeExecutableSchema } from "@graphql-tools/schema";
-import { resolvers } from "./schemas/index.js";
-import { readFileSync } from "fs";
+import { resolvers, typeDefs } from "./schemas/index.js";
 import router from "./routes/index.js";
 
+// __dirname does not exist in ESM ecmascript modules - recreate with the following:
 const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
-const { json } = bodyParser;
-
-const typeDefs = readFileSync("./schemas/schema.graphql", {
-  encoding: "utf-8",
-});
 
 // Create express app
 const app = express();
@@ -40,64 +38,60 @@ const wsServer = new WebSocketServer({
 // Default to port 3001 if not port specified in env variables
 const PORT = process.env.PORT || 3001;
 
+// Define express app middleware
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "../client/dist")));
 
-// Function for starting the apollo server
-const startApolloServer = async (
-  typeDefs: any,
-  resolvers: any,
-  context: any,
-) => {
-  //
-  const schema = makeExecutableSchema({ typeDefs, resolvers });
+// Create Apollo schema from typeDefs and resolvers
+const schema = makeExecutableSchema({ typeDefs, resolvers });
 
-  // Handle  shutdown of webserver
-  const serverCleanup = useServer(
-    { schema, context: wsAuthMiddleware },
-    wsServer,
-  );
+// Handle graceful shutdown of webserver
+const serverCleanup = useServer(
+  { schema, context: wsAuthMiddleware },
+  wsServer,
+);
 
-  // Create apollo server with typeDefs, resolvers and context middleware
-  const server = new ApolloServer({
-    schema,
-    plugins: [
-      ApolloServerPluginDrainHttpServer({ httpServer }),
-      {
-        async serverWillStart() {
-          return {
-            async drainServer() {
-              await serverCleanup.dispose();
-            },
-          };
-        },
+// Create Apollo server with typeDefs, resolvers and context middleware
+const server = new ApolloServer({
+  schema,
+  plugins: [
+    ApolloServerPluginDrainHttpServer({ httpServer }),
+    {
+      async serverWillStart() {
+        return {
+          async drainServer() {
+            await serverCleanup.dispose();
+          },
+        };
       },
-    ],
-  });
+    },
+  ],
+});
 
-  // Apollo server must be started before passing to expressMiddleware
-  await server.start();
+// Apollo server must be started before passing to expressMiddleware
+await server.start();
 
-  // Serve graphql queries
-  app.use("/graphql", cors(), json(), expressMiddleware(server, { context }));
+// Serve graphql queries
+app.use(
+  "/graphql",
+  cors(),
+  bodyParser.json(),
+  expressMiddleware(server, { context }),
+);
 
-  // Serve the custom api routes
-  app.use(router);
+// Serve the custom api routes
+app.use(router);
 
-  // Serve the react client
-  app.get("*", (req, res) => {
-    const file = path.join(__dirname, "../client/dist/index.html");
-    res.sendFile(file);
-  });
+// Serve the react client
+app.get("*", (req, res) => {
+  const file = path.join(__dirname, "../client/dist/index.html");
+  res.sendFile(file);
+});
 
-  db.$connect().then(async () => {
-    await new Promise((resolve: any) =>
-      httpServer.listen({ port: PORT }, resolve),
-    );
-    console.log(`Server listening on port ${PORT}`);
-  });
-};
+await db.$connect();
 
-startApolloServer(typeDefs, resolvers, gqlAuthMiddleware);
+httpServer.listen({ port: PORT }, () =>
+  console.log("Server listening on port ", PORT),
+);
