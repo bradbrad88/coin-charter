@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"nodemon --esm server.ts\" \"npm run generate -w\"",
+    "dev": "concurrently \"nodemon --esm server.ts\" \"npm run generate --watch \"schemas/schema.graphql\"\"",
     "generate": "graphql-codegen-esm --config codegen.yml",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index",
