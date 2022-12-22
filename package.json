@@ -12,7 +12,8 @@
     "seed": "cd server && npm run seed",
     "test": "echo \"Error: no test specified\" && exit 1",
     "install": "cd client && npm i && cd ../server && npm i",
-    "start": "cd server && npm start"
+    "start": "cd server && npm start",
+    "sync-email-templates": "cd server && npm run sync-email-templates"
   },
   "repository": {
     "type": "git",

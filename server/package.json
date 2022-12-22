@@ -7,19 +7,21 @@
   "scripts": {
     "dev": "concurrently \"nodemon --esm server.ts\" \"npm run generate --watch \"schemas/schema.graphql\"\"",
     "generate": "graphql-codegen-esm --config codegen.yml",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "ts-node-esm utils/test.ts",
     "start": "node index",
-    "seed": "node utils/seed"
+    "seed": "node utils/seed",
+    "sync-email-templates": "ts-node-esm templates/sync-templates.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@apollo/server": "^4.1.1",
+    "@aws-sdk/client-ses": "^3.231.0",
     "@graphql-tools/schema": "^9.0.10",
     "@prisma/client": "^4.7.1",
     "apollo-server-express": "^3.10.3",
-    "aws-sdk": "^2.1246.0",
+    "aws-sdk": "^2.1277.0",
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.1",
     "cookie-parser": "^1.4.6",
@@ -41,7 +43,7 @@
     "@graphql-codegen/typescript-resolvers": "^2.7.10",
     "@types/cookie-parser": "^1.4.3",
     "@types/express": "^4.17.15",
-    "@types/node": "^18.11.15",
+    "@types/node": "^18.11.17",
     "@types/ws": "^8.5.3",
     "concurrently": "^7.6.0",
     "nodemon": "^2.0.20",
