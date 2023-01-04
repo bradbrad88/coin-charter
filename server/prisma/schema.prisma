@@ -11,33 +11,35 @@ datasource db {
 }
 
 model User {
-  id               String             @id @default(uuid())
-  username         String             @db.VarChar(20)
-  subtitle         String?            @db.VarChar(24)
-  bio              String?            @db.VarChar(255)
-  image            String?            @db.VarChar(255)
-  VerifiedEmails   VerifiedEmail[]
-  UserVerification UserVerification[]
-  UserIdentity     UserIdentity[]
-  Chart            Chart[]
-  CoinComment      CoinComment[]
-  ChartComment     ChartComment[]
-  ChartVote        ChartVote[]
-  CoinFavourite    CoinFavourite[]
-  ChartCommentVote ChartCommentVote[]
-  CoinCommentVote  CoinCommentVote[]
-  UserFriends      Friend[]           @relation(name: "user")
-  friends          Friend[]           @relation(name: "friends")
+  id                String                 @id @default(uuid())
+  username          String                 @db.VarChar(20)
+  subtitle          String?                @db.VarChar(24)
+  bio               String?                @db.VarChar(255)
+  image             String?                @db.VarChar(255)
+  primaryEmail      String?                @db.VarChar(255)
+  VerifiedEmails    VerifiedEmail[]
+  UserVerification  IdentityVerification[]
+  UserIdentity      UserIdentity[]
+  Chart             Chart[]
+  CoinComment       CoinComment[]
+  ChartComment      ChartComment[]
+  ChartVote         ChartVote[]
+  CoinFavourite     CoinFavourite[]
+  ChartCommentVote  ChartCommentVote[]
+  CoinCommentVote   CoinCommentVote[]
+  friends           Friend[]               @relation(name: "user")
+  User              Friend[]               @relation(name: "friends")
+  EmailVerification EmailVerification[]
 }
 
 model VerifiedEmail {
   id     String @id @default(uuid())
   user   User   @relation(references: [id], fields: [userId], onDelete: Cascade)
   userId String
-  email  String
+  email  String @unique
 }
 
-model UserVerification {
+model IdentityVerification {
   id             String @id @default(uuid())
   user           User   @relation(references: [id], fields: [userId], onDelete: Cascade)
   userId         String
@@ -45,6 +47,14 @@ model UserVerification {
   code           String @db.VarChar(6)
   provider       String @db.VarChar(255)
   providerUserId String @db.VarChar(255)
+}
+
+model EmailVerification {
+  id      String   @id @default(uuid())
+  user    User     @relation(references: [id], fields: [userId], onDelete: Cascade)
+  userId  String
+  email   String   @unique
+  expires DateTime @default(now())
 }
 
 model UserIdentity {
