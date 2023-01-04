@@ -54,7 +54,7 @@ const serverCleanup = useServer(
 );
 
 // Create Apollo server with typeDefs, resolvers and context middleware
-const server = new ApolloServer({
+const graphqlServer = new ApolloServer({
   schema,
   plugins: [
     ApolloServerPluginDrainHttpServer({ httpServer }),
@@ -71,14 +71,14 @@ const server = new ApolloServer({
 });
 
 // Apollo server must be started before passing to expressMiddleware
-await server.start();
+await graphqlServer.start();
 
 // Serve graphql queries
 app.use(
   "/graphql",
   cors(),
   bodyParser.json(),
-  expressMiddleware(server, { context }),
+  expressMiddleware(graphqlServer, { context }),
 );
 
 // Serve the custom api routes
