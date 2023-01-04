@@ -1,9 +1,26 @@
 import db from "../config/connection.js";
-import { AuthenticationError } from "apollo-server-express";
+import { AuthenticationError, UserInputError } from "apollo-server-express";
 import { signToken, setCookie } from "../utils/auth.js";
-import { GraphQLScalarType, Kind } from "graphql";
+import {
+  GraphQLScalarType,
+  Kind,
+  GraphQLScalarValueParser,
+  GraphQLError,
+} from "graphql";
 import { PubSub, withFilter } from "graphql-subscriptions";
 import { Resolvers } from "./__generated__/resolvers-types.js";
+import {
+  SendEmailCommand,
+  SendTemplatedEmailCommand,
+  SESClient,
+} from "@aws-sdk/client-ses";
+import client from "../config/ses.js";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+
+const { JWT_SECRET } = process.env;
+
+if (!JWT_SECRET) throw new Error("Missing environment variable: JWT_SECRET");
 
 const pubsub = new PubSub();
 
@@ -16,39 +33,84 @@ const resolvers: Resolvers = {
         const date = new Date(value);
         return date;
       }
+      throw new UserInputError("Bad input");
     },
     parseLiteral(ast) {
+      console.log("Parse literal", typeof ast);
       if (ast.kind === Kind.INT) {
         return new Date(parseInt(ast.value, 10));
       }
       return null;
     },
     serialize(value) {
-      if (typeof value === "string") {
-        const date = new Date(value);
-        return new Intl.DateTimeFormat("en-au", { dateStyle: "short" }).format(
-          date,
-        );
+      if (value instanceof Date) {
+        return value.getTime();
       }
+      // return new Intl.DateTimeFormat("en-au", { dateStyle: "short" }).format(
+      //   date,
+      // );
     },
   }),
 
-  Friend: {
-    friend: (friend) => {
-      const id = friend.friend?.id;
-      if (!id) return null;
-      return db.user.findUnique({ where: { id } });
+  // Friend: {
+  //   friend: (friend) => {
+  //     console.log(friend);
+  //     const id = friend?.friendId;
+  //     if (!id) return null;
+  //     return db.user.findUnique({ where: { id } });
+  //   },
+  // },
+
+  User: {
+    friends: async (user) => {
+      if (!user.id) return [];
+      const userWithFriends = await db.user.findUnique({
+        where: { id: user.id },
+        include: {
+          friends: {
+            select: {
+              friend: {
+                select: {
+                  id: true,
+                  bio: true,
+                  image: true,
+                  username: true,
+                  subtitle: true,
+                },
+              },
+              createdAt: true,
+              verified: true,
+            },
+          },
+        },
+      });
+      return (
+        userWithFriends?.friends.map((friend) => ({
+          ...friend.friend,
+          createdAt: friend.createdAt,
+          verified: friend.verified,
+        })) || []
+      );
+    },
+    friendCount: async (user) => {
+      if (!user.id) return 0;
+      const friendCount = await db.friend.aggregate({
+        _count: { _all: true },
+        where: { userId: user.id },
+      });
+      console.log(friendCount);
+      return friendCount._count._all || 0;
     },
   },
 
   Query: {
     users: async () => {
-      const users = await db.user.findMany({ include: { friends: true } });
+      const users = await db.user.findMany({});
       return users;
     },
     user: async (parent, args) => {
-      if (!args.id) return null;
       const user = await db.user.findUnique({ where: { id: args.id } });
+      if (!user) throw new GraphQLError("Ahhhhh");
       return user;
     },
     // comment: async (parent, args) => {
@@ -149,22 +211,47 @@ const resolvers: Resolvers = {
   },
   Mutation: {
     addUser: async (parent, { username, email, password }, { res }) => {
-      const user = await db.user.create({ data: { username } });
+      const user = await db.$transaction(async (tx) => {
+        const user = await db.user.create({ data: { username } });
+        const emailVerificationRecord = await db.emailVerification.create({
+          data: { userId: user.id, email },
+        });
+        const hash = await bcrypt.hash(password, 10);
+        await db.userIdentity.create({
+          data: { userId: user.id, method: "PASSWORD", lookup: hash },
+        });
+        return { ...user, emailVerificationRecord: emailVerificationRecord.id };
+      });
+      const token = jwt.sign({ id: user.emailVerificationRecord }, JWT_SECRET, {
+        expiresIn: 60 * 15,
+      });
+      const verifyLink = `http://localhost:3000/api/verify-email/${token}`;
+      const command = new SendTemplatedEmailCommand({
+        Destination: { ToAddresses: [email] },
+        Source: "verify@bradteague.com",
+        Template: "VerifyEmail",
+        TemplateData: JSON.stringify({ user: username, verifyLink }),
+      });
+      await client.send(command);
       return user;
-      // const user = await Users.create({ username, email, password });
-      // const token = signToken(user);
-      // setCookie(res, token);
-      // return user.populate({ path: "favCoins", populate: "coin" });
     },
-    // loginUser: async (parent, { username, password }, { res }) => {
-    //   const user = await Users.findOne({ username });
-    //   if (!user) throw new AuthenticationError();
-    //   if (!(await user.isCorrectPassword(password)))
-    //     throw new AuthenticationError();
-    //   const token = signToken(user);
-    //   setCookie(res, token);
-    //   return user.populate({ path: "favCoins", populate: "coin" });
-    // },
+    loginUser: async (parent, { email, password }, { res }) => {
+      const error = new AuthenticationError("Unable to login");
+      const user = await db.user.findFirst({
+        where: { VerifiedEmails: { some: { email } } },
+        include: { UserIdentity: { where: { method: "PASSWORD" } } },
+      });
+      if (!user) throw error;
+      console.log(user);
+      if (user?.UserIdentity.length < 1) throw error;
+      const success = await bcrypt.compare(
+        password,
+        user.UserIdentity[0].lookup,
+      );
+      if (!success) throw error;
+      const accessToken = signToken(user);
+      return { user, accessToken };
+    },
     logoutUser: async (parent, args, { res, user }) => {
       if (!user) {
         return false;
