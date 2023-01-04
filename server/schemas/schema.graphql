@@ -1,13 +1,5 @@
 scalar DateTime
 
-type UserBasic {
-  id: ID
-  username: String
-  subtitle: String
-  bio: String
-  image: String
-}
-
 type User {
   id: ID
   username: String
@@ -25,8 +17,17 @@ type User {
   image: String
 }
 
+type Authentication {
+  accessToken: String
+  user: User
+}
+
 type Friend {
-  friend: UserBasic
+  id: ID
+  username: String
+  subtitle: String
+  bio: String
+  image: String
   createdAt: DateTime
 }
 
@@ -118,7 +119,7 @@ type Query {
 
 type Mutation {
   addUser(username: String!, password: String!, email: String!): User
-  loginUser(username: String!, password: String!): User
+  loginUser(email: String!, password: String!): Authentication
   logoutUser: Boolean
   addImage(image: String!): String
   addBio(bio: String!): String
