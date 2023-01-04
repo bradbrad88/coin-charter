@@ -10,6 +10,8 @@ import { resizeImage, cropImage } from "../../utils/resize-image.js";
 // const { v4: uuidv4 } = require("uuid");
 import { v4 as uuidv4 } from "uuid";
 
+router.get("");
+
 router.post("/upload-image", imageParser, async (req, res) => {
   try {
     const { userId } = req.params;

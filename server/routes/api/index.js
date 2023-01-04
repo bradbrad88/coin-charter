@@ -1,6 +1,8 @@
 import { Router } from "express";
 import { expressAuthMiddleware } from "../../utils/auth.js";
 import userRouter from "./user.js";
+import verifyEmailRouter from "./verify-email.js";
+
 const router = Router();
 
 // const { expressAuthMiddleware } = require("../../utils/auth");
@@ -14,6 +16,8 @@ const authUser = (req, res, next) => {
   }
   next();
 };
+
+router.use("/verify-email", verifyEmailRouter);
 
 router.use("/user/:userId", expressAuthMiddleware, authUser, userRouter);
 
