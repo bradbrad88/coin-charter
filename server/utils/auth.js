@@ -50,8 +50,8 @@ export const wsAuthMiddleware = (ctx) => {
   return { user: null };
 };
 
-export const signToken = ({ _id }) => {
-  const payload = { _id };
+export const signToken = ({ id }) => {
+  const payload = { id };
   return jwt.sign({ data: payload }, secret, { expiresIn: expiration });
 };
 
